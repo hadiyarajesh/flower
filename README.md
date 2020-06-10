@@ -24,7 +24,7 @@ dependencies {
 **Prerequisite**
 - Your Dao method must return ```Flow<YourModelClass>```
 - Your api method must return ```Flow<ApiResponse<YourModelClass>>```
-- Add **FlowCallAdapterFactory** as addCallAdapterFactory in your retrofit instance
+- Add *FlowCallAdapterFactory* as CallAdapterFactory in your retrofit builder
 
 
 **1. In repository class**
