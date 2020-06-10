@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library")
+    id("maven-publish")
     kotlin("android")
     kotlin("android.extensions")
 }
@@ -40,6 +41,19 @@ android {
     }
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                groupId = "com.github.hadiyarajesh"
+                artifactId = "final"
+                version = "1.0"
+
+                from(components["release"])
+            }
+        }
+    }
+}
 dependencies {
 
     val coroutinesVersion = "1.3.4"
