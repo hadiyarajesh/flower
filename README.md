@@ -27,14 +27,16 @@ dependencies {
 - Add **FlowCallAdapterFactory** as addCallAdapterFactory in your retrofit instance
 
 
-1. In repository class, return the *networkBoundResource()* function. This function takes following function as parameter 
+**1. In repository class**
+
+return the *networkBoundResource()* function. This function takes following functions as parameter 
 
 - *fetchFromLocal* - It fecth data from local database
-- *shouldFetchFromRemote* - It decide whether need to do network request or use local persistent data
+- *shouldFetchFromRemote* - It decide whether network request should be made or use local persistent data if available
 - *fetchFromRemote* - It perform network request operation
-- *processRemoteResponse* - It process result of network response (if needed)
+- *processRemoteResponse* - It process result of network response (if requires)
 - *saveRemoteData* - It saves result of network request to local persistent database
-- *onFetchFailed* - It executes if network request fails
+- *onFetchFailed* - It handle network request failure scenario (Non HTTP 200..300 response, exceptions etc)
 
 Sample call to *networkBoundResource()* should look like this
 
@@ -51,7 +53,9 @@ fun getSomething(): Flow<Resource<YourModelClass>> {
 }
 ```
 
-2. In view model class, collect or transform flow to get 3 different state of on-going request, LOADING, SUCESS or ERROR
+**2. In view model class**
+
+collect or transform flow to get 3 different state of on-going request, LOADING, SUCESS or ERROR
 ```
 val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething().map {
   when (it.status) {
