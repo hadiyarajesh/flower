@@ -42,14 +42,14 @@ return the *networkBoundResource()* function. This function takes following func
 
 Sample call to *networkBoundResource()* should look like this
 
-![repository](https://user-images.githubusercontent.com/12107428/86232500-a92b1580-bbb1-11ea-8083-0cde6a743dbb.png)
+![repository](https://user-images.githubusercontent.com/12107428/86233737-83067500-bbb3-11ea-96b6-76eb199fbef4.png)
 
 
 **2. In view model class**
 
 Collect or transform flow to get 3 different state of on-going request, LOADING, SUCESS or ERROR
 
-![viewmodel](https://user-images.githubusercontent.com/12107428/86232603-ce1f8880-bbb1-11ea-956a-fecf3b9484b8.png)
+![viewmodel](https://user-images.githubusercontent.com/12107428/86233783-99143580-bbb3-11ea-96c5-77fa00bdf21e.png)
 
 Now you can observe it in your Activity/Fragment.
 
