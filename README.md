@@ -5,21 +5,10 @@ You can find companion medium article [here](https://medium.com/@hadiyarajesh/an
 
 ## Installation
 Add JitPack to your project level build.gradle file
-```
-allprojects {
-    repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
+![project_level_build_file](https://user-images.githubusercontent.com/12107428/86232749-0aeb7f80-bbb2-11ea-8740-2e1f6815ed9b.png)
 
-Add Gradle dependency as 
-```
-dependencies {
-    implementation 'com.github.hadiyarajesh:flower:1.0.0'
-}
-```
+Add Gradle dependency as
+![app_level_build_file](https://user-images.githubusercontent.com/12107428/86232882-3ec6a500-bbb2-11ea-9100-bee693685640.png)
 
 ## Usage
 
@@ -42,37 +31,14 @@ return the *networkBoundResource()* function. This function takes following func
 
 Sample call to *networkBoundResource()* should look like this
 
-```
-fun getSomething(): Flow<Resource<YourModelClass>> {
-    return networkBoundResource(
-      fetchFromLocal = { yourDaoClass.getFromDatabase() },
-      shouldFetchFromRemote = { it == null },
-      fetchFromRemote = { apiInterface.getFromRemote() },
-      processRemoteResponse = { },
-      saveRemoteData = { yourDaoClass.saveYourData(it) },
-      onFetchFailed = { _, _ -> }
-      ).flowOn(Dispatchers.IO)
-}
-```
+![repository](https://user-images.githubusercontent.com/12107428/86232500-a92b1580-bbb1-11ea-8083-0cde6a743dbb.png)
+
 
 **2. In view model class**
 
-collect or transform flow to get 3 different state of on-going request, LOADING, SUCESS or ERROR
-```
-val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething().map {
-  when (it.status) {
-    Resource.Status.LOADING -> {
-        Resource.loading(null)
-    }
-    Resource.Status.SUCCESS -> {
-        Resource.success(it.data)
-    }
-    Resource.Status.ERROR -> {
-        Resource.error(it.message!!, null)
-    }
- }
-}.asLiveData(viewModelScope.coroutineContext)
-```
+Collect or transform flow to get 3 different state of on-going request, LOADING, SUCESS or ERROR
+
+![viewmodel](https://user-images.githubusercontent.com/12107428/86232603-ce1f8880-bbb1-11ea-956a-fecf3b9484b8.png)
 
 Now you can observe it in your Activity/Fragment.
 
