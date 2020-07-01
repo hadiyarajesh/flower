@@ -5,10 +5,21 @@ You can find companion medium article [here](https://medium.com/@hadiyarajesh/an
 
 ## Installation
 Add JitPack to your project level build.gradle file
-![project_level_build_file](https://user-images.githubusercontent.com/12107428/86232749-0aeb7f80-bbb2-11ea-8740-2e1f6815ed9b.png)
+```
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
 
 Add Gradle dependency as
-![app_level_build_file](https://user-images.githubusercontent.com/12107428/86232882-3ec6a500-bbb2-11ea-9100-bee693685640.png)
+```
+dependencies {
+    implementation 'com.github.hadiyarajesh:flower:1.0.0'
+}
+```
 
 ## Usage
 
