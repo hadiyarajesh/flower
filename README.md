@@ -51,7 +51,10 @@ Collect or transform flow to get 3 different state of on-going request, LOADING,
 
 ![viewmodel](https://user-images.githubusercontent.com/12107428/86233783-99143580-bbb3-11ea-96c5-77fa00bdf21e.png)
 
-Now you can observe it in your Activity/Fragment.
+Now you can observe it in your Activity/Fragment as 
+
+![activity](https://user-images.githubusercontent.com/12107428/89804480-dd4f0a00-db51-11ea-9cc6-b3c20c523672.png)
+
 
 ## Sample
 Sample app is provided in this repository. You can find it [here](https://github.com/hadiyarajesh/flower/tree/master/app/src/main/java/com/hadiyarajesh/flowersample).
