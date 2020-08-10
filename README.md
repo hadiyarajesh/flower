@@ -24,9 +24,9 @@ dependencies {
 ## Usage
 
 **Prerequisite**
-- Your Dao method must return ```Flow<YourModelClass>```
-- Your api method must return ```Flow<ApiResponse<YourModelClass>>```
-- Add *FlowCallAdapterFactory* as CallAdapterFactory in your retrofit builder
+- Your Room Dao method must return ```Flow<YourModelClass>```
+- Your Retrofit API method must return ```Flow<ApiResponse<YourModelClass>>```
+- Add ```FlowCallAdapterFactory``` as *CallAdapterFactory* in your retrofit builder
 
 
 **1. In repository class**
@@ -53,7 +53,7 @@ Collect or transform flow to get 3 different state of on-going request, LOADING,
 
 Now you can observe it in your Activity/Fragment as 
 
-![activity](https://user-images.githubusercontent.com/12107428/89804480-dd4f0a00-db51-11ea-9cc6-b3c20c523672.png)
+![activity](https://user-images.githubusercontent.com/12107428/89805013-9ca3c080-db52-11ea-9f03-6147c13e0574.png)
 
 
 ## Sample
