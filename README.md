@@ -56,7 +56,7 @@ Collect or transform flow to get 3 different state of on-going request, LOADING,
 
 Now you can observe it in your Activity/Fragment as 
 
-![activity](https://user-images.githubusercontent.com/12107428/89805013-9ca3c080-db52-11ea-9f03-6147c13e0574.png)
+![activity](https://user-images.githubusercontent.com/12107428/101353954-6dac1a00-38ba-11eb-9550-9d563d23ce02.png)
 
 
 ## Sample
