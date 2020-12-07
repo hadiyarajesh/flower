@@ -60,7 +60,7 @@ Now you can observe it in your Activity/Fragment as
 
 
 ## Sample
-Sample app is provided in this repository. You can find it [here](https://github.com/hadiyarajesh/flower/tree/master/app/src/main/java/com/hadiyarajesh/flowersample).
+Sample app is provided [here](https://github.com/hadiyarajesh/flower/tree/master/app/src/main/java/com/hadiyarajesh/flowersample).
 It fetch random quote from remote api and save it to local persistent database in order to display it on UI.
 
 ## License
