@@ -47,7 +47,7 @@ Sample call to *networkBoundResource()* should look like this
 
 **2. In view model class**
 
-Collect or transform flow to get 3 different state of on-going request, LOADING, SUCESS or ERROR
+Collect or transform flow to get 3 different state of on-going request, LOADING, SUCCESS or ERROR
 
 ![viewmodel](https://user-images.githubusercontent.com/12107428/86233783-99143580-bbb3-11ea-96c5-77fa00bdf21e.png)
 
