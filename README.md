@@ -29,9 +29,9 @@ dependencies {
 - Add ```FlowCallAdapterFactory``` as *CallAdapterFactory* in your retrofit builder
 
 
-**1. In repository class**
+**1. In Repository class**
 
-return the *networkBoundResource()* function. This function takes following functions as parameter 
+Return the *networkBoundResource()* function from repository. This function takes following functions as parameter 
 
 - *fetchFromLocal* - It fecth data from local database
 - *shouldFetchFromRemote* - It decide whether network request should be made or use local persistent data if available
@@ -40,24 +40,59 @@ return the *networkBoundResource()* function. This function takes following func
 - *saveRemoteData* - It saves result of network request to local persistent database
 - *onFetchFailed* - It handle network request failure scenario (Non HTTP 200..300 response, exceptions etc)
 
-Sample call to *networkBoundResource()* should look like this
+```kotlin
+fun getSomething(): Flow<Resource<YourModelclass>> {
+    return networkBoundResources(
+        fetchFromLocal = { yourDaoclass.getFromDatabase() },
+        shouldFetchFromRemote = { it == null },
+        fetchFromRemote = { apiInterface.getFromRemote() },
+        processRemoteResponse = { },
+        saveRemoteData = { yourDaoclass.saveYourData(it) },
+        onFetchFailed {-, _ -> }
+    ).flowon(Dispatchers.10)
+}
 
-![repository](https://user-images.githubusercontent.com/12107428/86233737-83067500-bbb3-11ea-96b6-76eb199fbef4.png)
+```
 
+**2. In View Model class**
 
-**2. In view model class**
+Collect/transform flow to get 3 different state of request: LOADING, SUCCESS or ERROR
 
-Collect or transform flow to get 3 different state of on-going request, LOADING, SUCCESS or ERROR
+```kotlin
+val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething().map {
+    when (it.status) {
+        Resource.Status.LOADING -> {
+            Resource.loading(null)
+        }
+        Resource.Status.SUCCESS -> {
+            Resource.success(it.data)
+        }
+        Resource.Status.ERROR -> {
+            Resource.error(it.message!!, null)
+        }
+}.asLiveData(viewModelScope.coroutineContext)
 
-![viewmodel](https://user-images.githubusercontent.com/12107428/86233783-99143580-bbb3-11ea-96c5-77fa00bdf21e.png)
-
+```
 
 **3. In Activity/Fragment class**
 
-Now you can observe it in your Activity/Fragment as 
+Observe it in your Activity/Fragment as 
 
-![activity](https://user-images.githubusercontent.com/12107428/101354294-e8753500-38ba-11eb-999a-280aef9bf79c.png)
-
+```kotlin
+viewModel.someVariable.observer(this, Observer {
+    when (it.status) {
+        Resource.Status.LOADING -> {
+            //Show loading message
+        }
+        Resource.Status.SUCCESS -> {
+            //Show success message
+        }
+        Resource.Status.ERROR -> {
+            //Show error message
+        }
+    }
+})
+```
 
 ## Sample
 Sample app is provided [here](https://github.com/hadiyarajesh/flower/tree/master/app/src/main/java/com/hadiyarajesh/flowersample).
