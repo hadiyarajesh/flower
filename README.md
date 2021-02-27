@@ -49,7 +49,7 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
         processRemoteResponse = { },
         saveRemoteData = { yourDaoclass.saveYourData(it) },
         onFetchFailed {-, _ -> }
-    ).flowon(Dispatchers.10)
+    ).flowOn(Dispatchers.IO)
 }
 
 ```
