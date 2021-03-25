@@ -16,13 +16,23 @@ class QuoteRepository(
 ) {
 
     @ExperimentalCoroutinesApi
-    fun getRandomQuote(): Flow<Resource<Quote>> {
+    fun getRandomQuote(pageNo: Int): Flow<Resource<Quote>> {
         return networkBoundResource(
-            fetchFromLocal = { quoteDao.getQuote() },
-            shouldFetchFromRemote = { true },
-            fetchFromRemote = { apiInterface.getRandomQuote() },
-            processRemoteResponse = { },
-            saveRemoteData = { quoteDao.insertOrUpdateQuote(it) },
+            fetchFromLocal = {
+                quoteDao.getQuote(pageNo)
+            },
+            shouldFetchFromRemote = {
+                it == null
+            },
+            fetchFromRemote = {
+                apiInterface.getRandomQuote(pageNo)
+            },
+            processRemoteResponse = { response ->
+                response.body?.map { it.copy(pageId = pageNo) }
+            },
+            saveRemoteData = { quotes ->
+                quotes.forEach { quoteDao.insertOrUpdateQuote(it) }
+            },
             onFetchFailed = { _, _ -> }
         ).flowOn(Dispatchers.IO)
     }
