@@ -26,7 +26,7 @@ class FlowCallAdapterFactory : CallAdapter.Factory() {
         Call::class.java -> {
             val callType = getParameterUpperBound(0, returnType as ParameterizedType)
             when (getRawType(callType)) {
-                Result::class.java -> {
+                ApiResponse::class.java -> {
                     val resultType = getParameterUpperBound(0, callType as ParameterizedType)
                     ResultAdapter(resultType)
                 }
