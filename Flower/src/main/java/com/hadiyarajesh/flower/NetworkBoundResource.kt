@@ -11,9 +11,9 @@ inline fun <DB, REMOTE> networkBoundResource(
     crossinline fetchFromLocal: suspend () -> Flow<DB>,
     crossinline shouldFetchFromRemote: suspend (DB?) -> Boolean = { true },
     crossinline fetchFromRemote: suspend () -> Flow<ApiResponse<REMOTE>>,
-    crossinline processRemoteResponse: suspend (response: ApiSuccessResponse<REMOTE>) -> Unit = { Unit },
+    crossinline processRemoteResponse: (response: ApiSuccessResponse<REMOTE>) -> Unit = { Unit },
     crossinline saveRemoteData: suspend (REMOTE) -> Unit = { Unit },
-    crossinline onFetchFailed: suspend (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> Unit }
+    crossinline onFetchFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> Unit }
 ) = flow<Resource<DB>> {
 
     emit(Resource.loading(null))
