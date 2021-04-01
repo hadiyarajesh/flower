@@ -17,7 +17,7 @@ allprojects {
 Add Gradle dependency as
 ```
 dependencies {
-    implementation 'com.github.hadiyarajesh:flower:1.0.0'
+    implementation 'com.github.hadiyarajesh:flower:1.1.0'
 }
 ```
 
