@@ -2,34 +2,22 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9870d28e269050c89db3131fca5e1b88",
+    "identityHash": "02559865dc7e0f6b6349399679823867",
     "entities": [
       {
         "tableName": "quote",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `_internalId` TEXT NOT NULL, `quote_id` TEXT NOT NULL, `title` TEXT NOT NULL, `author` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_internalId` INTEGER NOT NULL, `pageId` INTEGER NOT NULL, `author` TEXT NOT NULL, `quote` TEXT NOT NULL, `authorId` INTEGER NOT NULL, PRIMARY KEY(`pageId`))",
         "fields": [
           {
-            "fieldPath": "quoteId",
-            "columnName": "id",
+            "fieldPath": "_internalId",
+            "columnName": "_internalId",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "_internalId",
-            "columnName": "_internalId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "quote_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "title",
-            "columnName": "title",
-            "affinity": "TEXT",
+            "fieldPath": "pageId",
+            "columnName": "pageId",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -37,11 +25,23 @@
             "columnName": "author",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "quote",
+            "columnName": "quote",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "authorId",
+            "columnName": "authorId",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "pageId"
           ],
           "autoGenerate": false
         },
@@ -52,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9870d28e269050c89db3131fca5e1b88')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '02559865dc7e0f6b6349399679823867')"
     ]
   }
 }

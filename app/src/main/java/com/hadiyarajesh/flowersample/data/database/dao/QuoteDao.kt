@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.hadiyarajesh.flowersample.data.database.entity.ID
 import com.hadiyarajesh.flowersample.data.database.entity.Quote
 import kotlinx.coroutines.flow.Flow
 
@@ -14,6 +13,6 @@ interface QuoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdateQuote(quote: Quote)
 
-    @Query("SELECT * from quote where id = $ID")
-    fun getQuote(): Flow<Quote>
+    @Query("SELECT * from quote where pageId = :pageNo")
+    fun getQuote(pageNo: Int): Flow<Quote>
 }

@@ -15,7 +15,7 @@ class MainActivityViewModel(
 ) : ViewModel() {
 
     @ExperimentalCoroutinesApi
-    val randomQuote: LiveData<Resource<Quote>> = quoteRepository.getRandomQuote().map {
+    val randomQuote: LiveData<Resource<Quote>> = quoteRepository.getRandomQuote(1).map {
         when (it.status) {
             Resource.Status.LOADING -> {
                 Resource.loading(null)
