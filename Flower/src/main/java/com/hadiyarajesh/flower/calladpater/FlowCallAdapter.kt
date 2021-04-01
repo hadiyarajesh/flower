@@ -10,14 +10,14 @@ import retrofit2.CallAdapter
 import retrofit2.awaitResponse
 import java.lang.reflect.Type
 
-class FlowCallAdapter<T>(
+class FlowCallAdapter(
     private val responseType: Type
-) : CallAdapter<T, Flow<ApiResponse<T>>> {
+) : CallAdapter<Type, Flow<ApiResponse<Type>>> {
 
     override fun responseType() = responseType
 
     @ExperimentalCoroutinesApi
-    override fun adapt(call: Call<T>): Flow<ApiResponse<T>> = flow {
+    override fun adapt(call: Call<Type>): Flow<ApiResponse<Type>> = flow {
 
         val response = call.awaitResponse()
         emit(ApiResponse.create(response))

@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.*
  */
 @ExperimentalCoroutinesApi
 inline fun <DB, REMOTE> networkBoundResource(
-    crossinline fetchFromLocal: () -> Flow<DB>,
-    crossinline shouldFetchFromRemote: (DB?) -> Boolean = { true },
-    crossinline fetchFromRemote: () -> Flow<ApiResponse<REMOTE>>,
+    crossinline fetchFromLocal: suspend () -> Flow<DB>,
+    crossinline shouldFetchFromRemote: suspend (DB?) -> Boolean = { true },
+    crossinline fetchFromRemote: suspend () -> Flow<ApiResponse<REMOTE>>,
     crossinline processRemoteResponse: (response: ApiSuccessResponse<REMOTE>) -> Unit = { Unit },
-    crossinline saveRemoteData: (REMOTE) -> Unit = { Unit },
+    crossinline saveRemoteData: suspend (REMOTE) -> Unit = { Unit },
     crossinline onFetchFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> Unit }
 ) = flow<Resource<DB>> {
 
@@ -43,6 +43,8 @@ inline fun <DB, REMOTE> networkBoundResource(
                         )
                     })
                 }
+
+                else -> { }
             }
         }
     } else {

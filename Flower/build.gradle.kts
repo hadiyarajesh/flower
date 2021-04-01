@@ -64,7 +64,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.3.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}")
-    implementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
+    api("com.squareup.retrofit2:retrofit:${retrofitVersion}")
 
     testImplementation("junit:junit:4.13")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")

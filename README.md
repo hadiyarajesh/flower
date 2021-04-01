@@ -48,7 +48,7 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
         fetchFromRemote = { apiInterface.getFromRemote() },
         processRemoteResponse = { },
         saveRemoteData = { yourDaoclass.saveYourData(it) },
-        onFetchFailed {-, _ -> }
+        onFetchFailed {_, _ -> }
     ).flowOn(Dispatchers.IO)
 }
 
@@ -70,6 +70,7 @@ val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething()
         Resource.Status.ERROR -> {
             Resource.error(it.message!!, null)
         }
+    }
 }.asLiveData(viewModelScope.coroutineContext)
 
 ```
