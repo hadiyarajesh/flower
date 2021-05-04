@@ -13,6 +13,6 @@ interface QuoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdateQuote(quote: Quote)
 
-    @Query("SELECT * from quote where pageId = :pageNo")
+    @Query("SELECT * from quote where id = :pageNo")
     fun getQuote(pageNo: Int): Flow<Quote>
 }

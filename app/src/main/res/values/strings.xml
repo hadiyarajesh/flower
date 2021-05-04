@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">FlowerSample</string>
     <string name="quote">Quote</string>
+    <string name="author">Author</string>
+    <string name="previous">Prev</string>
+    <string name="next">Next</string>
 </resources>
