@@ -1,14 +1,20 @@
 package com.hadiyarajesh.flowersample.ui
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.hadiyarajesh.flower.Resource
 import com.hadiyarajesh.flowersample.data.database.entity.Quote
 import com.hadiyarajesh.flowersample.data.repository.QuoteRepository
+import com.hadiyarajesh.flowersample.extensions.foldApiStates
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -44,9 +50,10 @@ class MainActivityViewModel(
         flow {
             when (command) {
                 is Command.ChangePageCommand -> {
-                    getQuotesForPage(command.page).fold({ quote ->
-                        delay(250);emit(State.UIState(quote, currentPageNo.value ?: 1))
-                    }, {emit(it) }, {emit(it) })
+                    getQuotesForPage(command.page).foldApiStates({ quote ->
+                        delay(250)
+                        emit(State.UIState(quote, currentPageNo.value ?: 1))
+                    }, { emit(it) }, { emit(it) })
                 }
             }
 
@@ -57,27 +64,6 @@ class MainActivityViewModel(
         viewModelScope.launch {
             currentPageNo.value = page
             commandsChannel.send(Command.ChangePageCommand(page))
-        }
-    }
-
-    private suspend fun <T> Flow<Resource<T>>.fold(
-        onSuccess: suspend (T) -> Unit,
-        onLoading: suspend (State.LoadingState) -> Unit,
-        onError: suspend (State.ErrorState) -> Unit
-    ) {
-        this.collect { resource: Resource<T> ->
-            when (resource.status) {
-                Resource.Status.LOADING -> {
-                    onLoading(State.LoadingState())
-                }
-                Resource.Status.SUCCESS -> {
-                    resource.data?.let { onSuccess(it) }
-                    State.SuccessState(resource)
-                }
-                Resource.Status.ERROR -> {
-                    onError(State.ErrorState(resource.message ?: ""))
-                }
-            }
         }
     }
 

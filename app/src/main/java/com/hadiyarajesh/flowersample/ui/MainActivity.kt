@@ -1,19 +1,20 @@
 package com.hadiyarajesh.flowersample.ui
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.View
-import android.view.ViewAnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
-import com.google.android.material.circularreveal.cardview.CircularRevealCardView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.hadiyarajesh.flowersample.R
+import com.hadiyarajesh.flowersample.extensions.hide
+import com.hadiyarajesh.flowersample.extensions.show
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.currentPageNo.observe(this, Observer {
+        viewModel.currentPageNo.observe(this, {
             currentPageNoTv.text = it.toString()
         })
         viewModel.events.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).onEach {
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.launchIn(lifecycleScope)
-        viewModel.quotes.observe(this, Observer {
+        viewModel.quotes.observe(this, {
             when (it) {
                 is MainActivityViewModel.State.LoadingState -> {
                     quoteCard.hide { animator -> updateQuoteCardAnimator(animator) }
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
                     nextBtn.isEnabled = true
                     prevBtn.isEnabled = it.currentPage > 1
 
+                    @Suppress("DEPRECATION")
                     quoteTv.text = Html.fromHtml(it.quote.quote)
                     quoteAuthorTv.text = it.quote.title
                 }
@@ -75,71 +77,6 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         anim?.cancel()
-    }
-
-    fun View.hide() {
-        this.visibility = View.INVISIBLE
-    }
-
-    fun View.show() {
-        this.visibility = View.VISIBLE
-    }
-
-    fun CircularRevealCardView.hide(updateCurrentAnimator:(Animator?) -> Unit) {
-        this.post {
-            // Check if the runtime version is at least Lollipop
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-                // get the center for the clipping circle
-                val cx = this@hide.width / 2
-                val cy = this@hide.height / 2
-
-                // get the initial radius for the clipping circle
-                val initialRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
-
-                // create the animation (the final radius is zero)
-                val anim = ViewAnimationUtils.createCircularReveal(this@hide, cx, cy, initialRadius, 0f)
-                updateCurrentAnimator(anim)
-
-                // make the view invisible when the animation is done
-                anim?.addListener(object : AnimatorListenerAdapter() {
-
-                    override fun onAnimationEnd(animation: Animator) {
-                        super.onAnimationEnd(animation)
-                        this@hide.visibility = View.INVISIBLE
-                    }
-                })
-
-                // start the animation
-                anim?.start()
-            } else {
-                // set the view to visible without a circular reveal animation below Lollipop
-                this@hide.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    fun CircularRevealCardView.show(updateCurrentAnimator:(Animator?) -> Unit) {
-        this.post {
-            // Check if the runtime version is at least Lollipop
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                // get the center for the clipping circle
-                val cx = this@show.width / 2
-                val cy = this@show.height / 2
-
-                // get the final radius for the clipping circle
-                val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
-
-                // create the animator for this view (the start radius is zero)
-                val anim = ViewAnimationUtils.createCircularReveal(this@show, cx, cy, 0f, finalRadius)
-                updateCurrentAnimator(anim)
-                // make the view visible and start the animation
-                this@show.visibility = View.VISIBLE
-                anim?.start()
-            } else {
-                // set the view to invisible without a circular reveal animation below Lollipop
-                this@show.visibility = View.INVISIBLE
-            }
-        }
     }
 
     private fun showError(msg: String) {
