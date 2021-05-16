@@ -52,27 +52,29 @@ android {
 
 dependencies {
 
-    val lifecycleVersion = "2.3.0"
-    val lifecycleExtVersion = "2.2.0"
+    val lifecycleVersion = "2.4.0-alpha01"
     val roomVersion = "2.2.6"
     val retrofitVersion = "2.9.0"
     val moshiVersion = "1.11.0"
     val koinVersion = "2.1.5"
+    val materialVersion = "1.2.0"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.31")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.32")
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("com.google.android.material:material:${materialVersion}")
 
     implementation(project(":Flower"))
 
     implementation("androidx.annotation:annotation:1.2.0")
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-extensions:${lifecycleExtVersion}")
+//    implementation("androidx.lifecycle:lifecycle-extensions:${lifecycleExtVersion}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${lifecycleVersion}")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleVersion}")
 
     implementation("androidx.room:room-ktx:${roomVersion}")
     kapt("androidx.room:room-compiler:${roomVersion}")
