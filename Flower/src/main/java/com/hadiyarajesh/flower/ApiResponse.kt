@@ -4,14 +4,12 @@ import retrofit2.Response
 
 sealed class ApiResponse<T> {
     companion object {
-
         fun <T> create(error: Throwable): ApiErrorResponse<T> {
             return ApiErrorResponse(
                 error.message ?: "Unknown error",
                 0
             )
         }
-
 
         fun <T> create(response: Response<T>): ApiResponse<T> {
             return if (response.isSuccessful) {

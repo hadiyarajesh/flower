@@ -13,15 +13,12 @@ import java.lang.reflect.Type
 class FlowCallAdapter(
     private val responseType: Type
 ) : CallAdapter<Type, Flow<ApiResponse<Type>>> {
-
     override fun responseType() = responseType
 
     @ExperimentalCoroutinesApi
     override fun adapt(call: Call<Type>): Flow<ApiResponse<Type>> = flow {
-
         val response = call.awaitResponse()
         emit(ApiResponse.create(response))
-
     }.catch { error ->
         emit(ApiResponse.create(error))
     }

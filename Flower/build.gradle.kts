@@ -2,18 +2,16 @@ plugins {
     id("com.android.library")
     id("maven-publish")
     kotlin("android")
-    kotlin("android.extensions")
+//    kotlin("android.extensions")
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdk = 30
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(30)
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 21
+        targetSdk = 30
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles(
@@ -45,9 +43,9 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                groupId = "com.github.hadiyarajesh"
-                artifactId = "final"
-                version = "1.0"
+                groupId = "com.hadiyarajesh"
+                artifactId = "flower"
+                version = "1.2.0"
 
                 from(components["release"])
             }
@@ -60,14 +58,14 @@ dependencies {
     val retrofitVersion = "2.9.0"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.31")
-    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
+    implementation("androidx.core:core-ktx:1.6.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}")
     api("com.squareup.retrofit2:retrofit:${retrofitVersion}")
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
 }
