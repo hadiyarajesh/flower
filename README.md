@@ -54,6 +54,20 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
 
 ```
 
+OR
+
+Return the *networkResource()* function from repository if you only want to use network resources (ie, not caching into local database) 
+
+```kotlin
+fun getSomething(): Flow<Resource<YourModelclass>> {
+    return networkBoundResources(
+        fetchFromRemote = { apiInterface.getFromRemote() },
+        onFetchFailed {_, _ -> }
+    ).flowOn(Dispatchers.IO)
+}
+
+```
+
 **2. In View Model class**
 
 Collect/transform flow to get 3 different state of request: LOADING, SUCCESS or ERROR
