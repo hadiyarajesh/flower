@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     id("maven-publish")
     kotlin("android")
-//    kotlin("android.extensions")
 }
 
 android {
@@ -43,7 +42,7 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                groupId = "com.hadiyarajesh"
+                groupId = "com.github.hadiyarajesh"
                 artifactId = "flower"
                 version = "1.2.0"
 
@@ -53,7 +52,6 @@ afterEvaluate {
     }
 }
 dependencies {
-
     val coroutinesVersion = "1.3.4"
     val retrofitVersion = "2.9.0"
 
@@ -67,5 +65,4 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-
 }
