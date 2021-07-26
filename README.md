@@ -56,7 +56,7 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
 
 OR
 
-Return the *networkResource()* function from repository if you only want to use network resources (ie, not caching into local database) 
+Return the *networkResource()* function from repository if you want to use network resources on-the-fly without caching them into local database
 
 ```kotlin
 fun getSomething(): Flow<Resource<YourModelclass>> {
