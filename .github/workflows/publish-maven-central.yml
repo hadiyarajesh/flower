@@ -18,6 +18,8 @@ jobs:
           distribution: adopt
           java-version: 11
 
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
         # Builds the release artifacts of the library
       - name: Release build
         run: ./gradlew :flower:assembleRelease
