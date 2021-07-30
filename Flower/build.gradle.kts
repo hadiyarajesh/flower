@@ -1,6 +1,5 @@
 plugins {
     id("com.android.library")
-    id("maven-publish")
     kotlin("android")
 }
 
@@ -38,19 +37,10 @@ android {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                groupId = "com.github.hadiyarajesh"
-                artifactId = "flower"
-                version = "1.2.0"
+tasks.register("sourceJar", Jar::class) {
 
-                from(components["release"])
-            }
-        }
-    }
 }
+
 dependencies {
     val coroutinesVersion = "1.3.4"
     val retrofitVersion = "2.9.0"
@@ -66,3 +56,9 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }
+
+val PUBLISH_GROUP_ID by extra("io.github.hadiyarajesh")
+val PUBLISH_VERSION by extra("1.2.0")
+val PUBLISH_ARTIFACT_ID by extra("flower")
+
+apply(from = "${rootDir}/scripts/publish-module.gradle")

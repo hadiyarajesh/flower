@@ -1,0 +1,88 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+//apply plugin: 'org.jetbrains.dokka'
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        // For Android libraries
+        from android.sourceSets.main.java.srcDirs
+        from android.sourceSets.main.kotlin.srcDirs
+    } else {
+        // For pure Kotlin libraries, in case you have them
+        from sourceSets.main.java.srcDirs
+        from sourceSets.main.kotlin.srcDirs
+    }
+}
+
+//tasks.withType(dokkaHtmlPartial.getClass()).configureEach {
+//    pluginsMapConfiguration.set(
+//            ["org.jetbrains.dokka.base.DokkaBase": """{ "separateInheritedMembers": true}"""]
+//    )
+//}
+//
+//task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+//    archiveClassifier.set('javadoc')
+//    from dokkaJavadoc.outputDirectory
+//}
+
+artifacts {
+    archives androidSourcesJar
+//    archives javadocJar
+}
+
+group = PUBLISH_GROUP_ID
+version = PUBLISH_VERSION
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId PUBLISH_GROUP_ID
+                artifactId PUBLISH_ARTIFACT_ID
+                version PUBLISH_VERSION
+                if (project.plugins.findPlugin("com.android.library")) {
+                    from components.release
+                } else {
+                    from components.java
+                }
+
+                artifact androidSourcesJar
+//                artifact javadocJar
+
+                pom {
+                    name = PUBLISH_ARTIFACT_ID
+                    description = 'Android library to manage networking and database caching with ease. It helps developers to handle all scenario of API request(loading/success/error) in single place along with database caching.'
+                    url = 'https://github.com/hadiyarajesh/flower'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://github.com/hadiyarajesh/flower/blob/master/LICENSE'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'hadiyarajesh'
+                            name = 'Rajesh Hadiya'
+                            email = 'hadiarajesh007@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:github.com/hadiyarajesh/flower.git'
+                        developerConnection = 'scm:git:ssh://github.com/hadiyarajesh/flower.git'
+                        url = 'https://github.com/hadiyarajesh/flower'
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    useInMemoryPgpKeys(
+            rootProject.ext["signing.keyId"],
+            rootProject.ext["signing.key"],
+            rootProject.ext["signing.password"],
+    )
+    sign publishing.publications
+}
