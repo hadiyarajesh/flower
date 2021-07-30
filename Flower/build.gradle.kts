@@ -42,11 +42,11 @@ tasks.register("sourceJar", Jar::class) {
 }
 
 dependencies {
-    val coroutinesVersion = "1.3.4"
+    val coroutinesVersion = "1.5.1"
     val retrofitVersion = "2.9.0"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
     implementation("androidx.core:core-ktx:1.6.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}")
@@ -58,7 +58,7 @@ dependencies {
 }
 
 val PUBLISH_GROUP_ID by extra("io.github.hadiyarajesh")
-val PUBLISH_VERSION by extra("1.2.0")
+val PUBLISH_VERSION by extra("2.0.0")
 val PUBLISH_ARTIFACT_ID by extra("flower")
 
 apply(from = "${rootDir}/scripts/publish-module.gradle")

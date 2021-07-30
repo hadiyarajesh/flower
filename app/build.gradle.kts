@@ -58,14 +58,14 @@ android {
 dependencies {
 
     val lifecycleVersion = "2.4.0-alpha01"
-    val roomVersion = "2.2.6"
+    val roomVersion = "2.3.0"
     val retrofitVersion = "2.9.0"
-    val moshiVersion = "1.11.0"
+    val moshiVersion = "1.12.0"
     val koinVersion = "3.1.2"
-    val materialVersion = "1.2.0"
+    val materialVersion = "1.4.0"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
     implementation("androidx.core:core-ktx:1.6.0")
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
