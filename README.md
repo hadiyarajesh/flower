@@ -1,44 +1,54 @@
 # Flower
-Super cool library for Android to manage database caching and networking with ease. It helps you to handle all scenario of API request(success/error/loading) in one place along with database caching. It's inspired from [Google's Github Browser Sample](https://github.com/android/architecture-components-samples/tree/master/GithubBrowserSample/). It's built on top of [Retrofit](https://github.com/square/retrofit) and use powerful and elegant kotlin flow api.
+Super cool Android library to manage networking and database caching with ease. It allows developers to use remote resources on-the-fly OR Combine remote resources and local persistence data caching in single place with fault tolerant architecture. It's built on top of [Retrofit](https://github.com/square/retrofit) and [Kotlin Flow](https://kotlinlang.org/docs/flow.html).
+
+## Why do we even need this library?
+- It helps you to handle different states of resources (LOADING, SUCCESS, FAILURE) efficiently.
+- It does not block main thread while accessing network/database resources, thus providing fluid experience for your users.
+- It leverage Kotlin idiomatic api, thus doing all hard stuffs behind a simple function call.
 
 You can find companion medium article [here](https://medium.com/@hadiyarajesh/android-networking-and-database-caching-in-2020-mvvm-retrofit-room-flow-35b4f897d46a)
 
-## Installation
-Add JitPack to your project level build.gradle file
-```
-allprojects {
-    repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
 
-Add Gradle dependency as
+
+## Installation
+
+Add Gradle dependency as below
 ```
 dependencies {
-    implementation 'com.github.hadiyarajesh:flower:1.1.0'
+    //Groovy DSL
+    implementation "io.github.hadiyarajesh:flower:2.0.0"
+    Kotlin DSL
+    implementation("io.github.hadiyarajesh:flower:2.0.0")
 }
 ```
 
 ## Usage
 
 **Prerequisite**
-- Your Room Dao method must return ```Flow<YourModelClass>```
+- Your Room DAO method must return ```Flow<YourModelClass>``` (If you're using database caching)
 - Your Retrofit API method must return ```Flow<ApiResponse<YourModelClass>>```
-- Add ```FlowCallAdapterFactory``` as *CallAdapterFactory* in your retrofit builder
 
+<br></br>
+**1. Add ```FlowCallAdapterFactory``` as *CallAdapterFactory* in Retrofit builder**
 
-**1. In Repository class**
+```kotlin
+Retrofit.Builder()
+    .baseUrl(BASE_API_URL)
+    .client(okHttpClient)
+    .addCallAdapterFactory(FlowCallAdapterFactory.create())
+    .build()
+```
 
-Return the *networkBoundResource()* function from repository. This function takes following functions as parameter 
+<br></br>
+**2. Inside Repository**
 
-- *fetchFromLocal* - It fecth data from local database
+If you want to use remote resources backed by local database caching, use *networkBoundResource()* function. This function takes following functions as lambda parameter 
+- *fetchFromLocal* - It retrieve data from local database
 - *shouldFetchFromRemote* - It decide whether network request should be made or use local persistent data if available
-- *fetchFromRemote* - It perform network request operation
-- *processRemoteResponse* - It process result of network response (if requires)
+- *fetchFromRemote* - It retrieve data from network request
+- *processRemoteResponse* - It process process result of network request. (e.g., save response headers)
 - *saveRemoteData* - It saves result of network request to local persistent database
-- *onFetchFailed* - It handle network request failure scenario (Non HTTP 200..300 response, exceptions etc)
+- *onFetchFailed* - It perform provided actions when network request fails (Non HTTP 200..300 response, exceptions etc)
 
 ```kotlin
 fun getSomething(): Flow<Resource<YourModelclass>> {
@@ -54,9 +64,9 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
 
 ```
 
-OR
+**OR**
 
-Return the *networkResource()* function from repository if you want to use network resources on-the-fly without caching them into local database
+If you want to use remote resources on-the-fly (without caching into local database), use *networkResource()* function
 
 ```kotlin
 fun getSomething(): Flow<Resource<YourModelclass>> {
@@ -68,9 +78,10 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
 
 ```
 
-**2. In View Model class**
+<br></br>
+**2. Inside ViewModel**
 
-Collect/transform flow to get 3 different state of request: LOADING, SUCCESS or ERROR
+Collect/transform flow to get different state of resources: LOADING, SUCCESS or ERROR
 
 ```kotlin
 val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething().map {
@@ -89,9 +100,10 @@ val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething()
 
 ```
 
-**3. In Activity/Fragment class**
+<br></br>
+**3. Inside Activity/Fragment**
 
-Observe it in your Activity/Fragment as 
+Observe it in Activity/Fragment to make UI changes
 
 ```kotlin
 viewModel.someVariable.observer(this, Observer {
@@ -110,7 +122,7 @@ viewModel.someVariable.observer(this, Observer {
 ```
 
 ## Sample
-Sample app is provided [here](https://github.com/hadiyarajesh/flower/tree/master/app/src/main/java/com/hadiyarajesh/flowersample).
+Sample app is provided [in this repository](https://github.com/hadiyarajesh/flower/tree/master/app/src/main/java/com/hadiyarajesh/flowersample).
 It fetch random quote from remote api and save it to local persistent database in order to display it on UI.
 
 ## License
