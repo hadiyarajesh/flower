@@ -79,7 +79,7 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
 ```
 
 <br></br>
-**2. Inside ViewModel**
+**3. Inside ViewModel**
 
 Collect/transform flow to get different state of resources: LOADING, SUCCESS or ERROR
 
@@ -101,7 +101,7 @@ val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething()
 ```
 
 <br></br>
-**3. Inside Activity/Fragment**
+**4. Inside Activity/Fragment**
 
 Observe it in Activity/Fragment to make UI changes
 
