@@ -70,7 +70,7 @@ If you want to use remote resources on-the-fly (without caching into local datab
 
 ```kotlin
 fun getSomething(): Flow<Resource<YourModelclass>> {
-    return networkBoundResources(
+    return networkResource(
         fetchFromRemote = { apiInterface.getFromRemote() },
         onFetchFailed {_, _ -> }
     ).flowOn(Dispatchers.IO)
