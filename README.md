@@ -17,7 +17,7 @@ Add Gradle dependency as below
 dependencies {
     //Groovy DSL
     implementation "io.github.hadiyarajesh:flower:2.0.0"
-    Kotlin DSL
+    //Kotlin DSL
     implementation("io.github.hadiyarajesh:flower:2.0.0")
 }
 ```
