@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.flowersample"
         minSdk = 21
-        targetSdk = 30
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
 
@@ -57,29 +57,31 @@ android {
 
 dependencies {
 
-    val lifecycleVersion = "2.4.0-alpha01"
-    val roomVersion = "2.3.0"
+    val lifecycleVersion = "2.4.0"
+    val roomVersion = "2.4.0-alpha04"
     val retrofitVersion = "2.9.0"
     val moshiVersion = "1.12.0"
     val koinVersion = "3.1.2"
     val materialVersion = "1.4.0"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.4.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
     implementation("com.google.android.material:material:${materialVersion}")
 
     implementation(project(":Flower"))
 
-    implementation("androidx.annotation:annotation:1.2.0")
+    implementation("androidx.annotation:annotation:1.3.0")
 
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycleVersion}")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${lifecycleVersion}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleVersion}")
+    // Coroutine Lifecycle Scopes
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
 
+    implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:${roomVersion}")
     kapt("androidx.room:room-compiler:${roomVersion}")
 
@@ -93,4 +95,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+}
+
+kapt {
+    correctErrorTypes = true
 }
