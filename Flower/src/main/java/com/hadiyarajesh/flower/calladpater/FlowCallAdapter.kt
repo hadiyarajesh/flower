@@ -1,6 +1,5 @@
 package com.hadiyarajesh.flower.calladpater
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import com.hadiyarajesh.flower.ApiResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -15,7 +14,6 @@ class FlowCallAdapter(
 ) : CallAdapter<Type, Flow<ApiResponse<Type>>> {
     override fun responseType() = responseType
 
-    @ExperimentalCoroutinesApi
     override fun adapt(call: Call<Type>): Flow<ApiResponse<Type>> = flow {
         val response = call.awaitResponse()
         emit(ApiResponse.create(response))

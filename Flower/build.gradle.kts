@@ -42,7 +42,7 @@ tasks.register("sourceJar", Jar::class) {
 }
 
 dependencies {
-    val coroutinesVersion = "1.5.2"
+    val coroutinesVersion = "1.6.0"
     val retrofitVersion = "2.9.0"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))

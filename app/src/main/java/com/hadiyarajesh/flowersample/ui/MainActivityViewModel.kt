@@ -17,9 +17,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel(
-    quoteRepository: QuoteRepository
-) : ViewModel() {
+class MainActivityViewModel(quoteRepository: QuoteRepository) : ViewModel() {
 
     val currentPageNo: MutableLiveData<Int> = MutableLiveData(1)
 

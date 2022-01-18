@@ -1,6 +1,5 @@
 package com.hadiyarajesh.flower
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
 /**
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.*
  * @param saveRemoteData - Save result of network request
  * @param onFetchFailed - Perform action when network request fails
  */
-@ExperimentalCoroutinesApi
 inline fun <DB, REMOTE> networkBoundResource(
     crossinline fetchFromLocal: suspend () -> Flow<DB>,
     crossinline shouldFetchFromRemote: suspend (DB?) -> Boolean = { true },
