@@ -60,8 +60,8 @@ dependencies {
     val lifecycleVersion = "2.4.0"
     val roomVersion = "2.4.1"
     val retrofitVersion = "2.9.0"
-    val moshiVersion = "1.12.0"
-    val koinVersion = "3.1.2"
+    val moshiVersion = "1.13.0"
+    val koinVersion = "3.1.5"
     val materialVersion = "1.5.0"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
