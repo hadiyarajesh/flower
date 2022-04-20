@@ -1,10 +1,10 @@
 package com.hadiyarajesh.flower
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
 /**
  * It will handle performing network request, getting result of it and caching it to local database
+ * * @author Rajesh Hadiya
  * @param fetchFromLocal - Retrieve data from local database
  * @param shouldFetchFromRemote - Whether or not make network request
  * @param fetchFromRemote - Retrieve data from network request
@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.*
  * @param saveRemoteData - Save result of network request
  * @param onFetchFailed - Perform action when network request fails
  */
-@ExperimentalCoroutinesApi
 inline fun <DB, REMOTE> networkBoundResource(
     crossinline fetchFromLocal: suspend () -> Flow<DB>,
     crossinline shouldFetchFromRemote: suspend (DB?) -> Boolean = { true },

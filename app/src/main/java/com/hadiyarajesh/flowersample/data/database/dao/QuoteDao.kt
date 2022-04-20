@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface QuoteDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdateQuote(quote: Quote)
 

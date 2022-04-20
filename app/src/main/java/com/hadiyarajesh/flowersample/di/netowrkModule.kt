@@ -10,7 +10,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 val networkModule = module {
-
     val apiURL = "https://quotesondesign.com/wp-json/wp/v2/"
 
     val okHttpClient = OkHttpClient.Builder()

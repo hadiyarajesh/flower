@@ -9,7 +9,6 @@ import com.hadiyarajesh.flowersample.data.database.entity.Quote
 
 @Database(entities = [Quote::class], version = 1, exportSchema = true)
 abstract class QuoteDatabase : RoomDatabase() {
-
     abstract fun quoteDao(): QuoteDao
 
     companion object {

@@ -55,24 +55,19 @@ fun CircularRevealCardView.hide(updateCurrentAnimator: (Animator?) -> Unit) {
 fun CircularRevealCardView.show(updateCurrentAnimator: (Animator?) -> Unit) {
     this.post {
         // Check if the runtime version is at least Lollipop
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // get the center for the clipping circle
-            val cx = this@show.width / 2
-            val cy = this@show.height / 2
+        // get the center for the clipping circle
+        val cx = this@show.width / 2
+        val cy = this@show.height / 2
 
-            // get the final radius for the clipping circle
-            val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
+        // get the final radius for the clipping circle
+        val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
 
-            // create the animator for this view (the start radius is zero)
-            val anim = ViewAnimationUtils.createCircularReveal(this@show, cx, cy, 0f, finalRadius)
-            updateCurrentAnimator(anim)
-            // make the view visible and start the animation
-            this@show.visibility = View.VISIBLE
-            anim?.start()
-        } else {
-            // set the view to invisible without a circular reveal animation below Lollipop
-            this@show.visibility = View.INVISIBLE
-        }
+        // create the animator for this view (the start radius is zero)
+        val anim = ViewAnimationUtils.createCircularReveal(this@show, cx, cy, 0f, finalRadius)
+        updateCurrentAnimator(anim)
+        // make the view visible and start the animation
+        this@show.visibility = View.VISIBLE
+        anim?.start()
     }
 }
 

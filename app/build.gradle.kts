@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
@@ -56,24 +56,22 @@ android {
 }
 
 dependencies {
-
-    val lifecycleVersion = "2.4.0-alpha01"
+    val lifecycleVersion = "2.4.1"
     val roomVersion = "2.3.0"
     val retrofitVersion = "2.9.0"
-    val moshiVersion = "1.12.0"
+    val moshiVersion = "1.13.0"
     val koinVersion = "3.1.2"
-    val materialVersion = "1.4.0"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation("com.google.android.material:material:${materialVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.4.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
+    implementation("com.google.android.material:material:1.5.0")
 
     implementation(project(":Flower"))
 
-    implementation("androidx.annotation:annotation:1.2.0")
+    implementation("androidx.annotation:annotation:1.3.0")
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycleVersion}")

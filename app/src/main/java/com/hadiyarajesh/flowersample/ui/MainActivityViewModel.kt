@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 class MainActivityViewModel(
     quoteRepository: QuoteRepository
 ) : ViewModel() {
-
     val currentPageNo: MutableLiveData<Int> = MutableLiveData(1)
 
     private val commandsChannel = Channel<Command>()
@@ -33,7 +32,6 @@ class MainActivityViewModel(
         changePage(1)
     }
 
-    @ExperimentalCoroutinesApi
     private val getQuotesForPage = { page: Int ->
         quoteRepository.getRandomQuote(page, onFailed = { errorBody, statusCode ->
             Log.i("getRandomQuote", "onFailure => $errorBody ,$statusCode")
@@ -45,7 +43,6 @@ class MainActivityViewModel(
     }
 
 
-    @ExperimentalCoroutinesApi
     val quotes = commands.flatMapLatest { command ->
         flow {
             when (command) {
@@ -82,4 +79,3 @@ class MainActivityViewModel(
         data class Error(val message: String) : Event()
     }
 }
-

@@ -5,7 +5,6 @@ data class Resource<out T>(
     val data: T?,
     val message: String?
 ) {
-
     enum class Status {
         SUCCESS,
         ERROR,
@@ -14,27 +13,15 @@ data class Resource<out T>(
 
     companion object {
         fun <T> success(data: T?): Resource<T> {
-            return Resource(
-                Status.SUCCESS,
-                data,
-                null
-            )
+            return Resource(status = Status.SUCCESS, data = data, message = null)
         }
 
         fun <T> error(msg: String, data: T? = null): Resource<T> {
-            return Resource(
-                Status.ERROR,
-                data,
-                msg
-            )
+            return Resource(status = Status.ERROR, data = data, message = msg)
         }
 
         fun <T> loading(data: T? = null): Resource<T> {
-            return Resource(
-                Status.LOADING,
-                data,
-                null
-            )
+            return Resource(status = Status.LOADING, data = data, message = null)
         }
     }
 }

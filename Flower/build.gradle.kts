@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
@@ -42,15 +42,11 @@ tasks.register("sourceJar", Jar::class) {
 }
 
 dependencies {
-    val coroutinesVersion = "1.5.1"
-    val retrofitVersion = "2.9.0"
-
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
-    implementation("androidx.core:core-ktx:1.6.0")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}")
-    api("com.squareup.retrofit2:retrofit:${retrofitVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    api("com.squareup.retrofit2:retrofit:2.9.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")

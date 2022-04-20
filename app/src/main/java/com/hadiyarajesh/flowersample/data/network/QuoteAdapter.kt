@@ -5,7 +5,6 @@ import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.ToJson
 
-
 class QuoteAdapter  {
     @ToJson
     fun toJson(_quote: Quote): QuoteJson {

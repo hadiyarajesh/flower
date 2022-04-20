@@ -5,10 +5,7 @@ import retrofit2.Response
 sealed class ApiResponse<T> {
     companion object {
         fun <T> create(error: Throwable): ApiErrorResponse<T> {
-            return ApiErrorResponse(
-                error.message ?: "Unknown error",
-                0
-            )
+            return ApiErrorResponse(errorMessage = error.message ?: "Unknown error", statusCode = 0)
         }
 
         fun <T> create(response: Response<T>): ApiResponse<T> {
@@ -18,10 +15,7 @@ sealed class ApiResponse<T> {
                 if (body == null || response.code() == 204) {
                     ApiEmptyResponse()
                 } else {
-                    ApiSuccessResponse(
-                        body,
-                        headers
-                    )
+                    ApiSuccessResponse(body, headers)
                 }
             } else {
                 val msg = response.errorBody()?.string()
@@ -31,8 +25,8 @@ sealed class ApiResponse<T> {
                     msg
                 }
                 ApiErrorResponse(
-                    errorMsg ?: "Unknown error",
-                    response.code()
+                    errorMessage = errorMsg ?: "Unknown error",
+                    statusCode = response.code()
                 )
             }
         }

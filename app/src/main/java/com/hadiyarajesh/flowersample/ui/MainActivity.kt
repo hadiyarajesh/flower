@@ -22,16 +22,15 @@ class MainActivity : AppCompatActivity() {
     private var anim: Animator? = null
     private val viewModel: MainActivityViewModel by viewModel()
 
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.currentPageNo.observe(this, {
+        viewModel.currentPageNo.observe(this) {
             binding.currentPageNoTv.text = it.toString()
-        })
+        }
 
         viewModel.events.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).onEach {
             when (it) {
@@ -40,7 +39,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.launchIn(lifecycleScope)
-        viewModel.quotes.observe(this, {
+
+        viewModel.quotes.observe(this) {
             when (it) {
                 is MainActivityViewModel.State.LoadingState -> {
                     binding.quoteCard.hide { animator -> updateQuoteCardAnimator(animator) }
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                 }
             }
-        })
+        }
     }
 
     private fun updateQuoteCardAnimator(animator: Animator?) {

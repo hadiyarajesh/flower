@@ -15,12 +15,10 @@ class QuoteRepository(
         private val apiInterface: ApiInterface,
         private val quoteDao: QuoteDao
 ) {
-
     companion object {
         const val TAG = "Repository"
     }
 
-    @ExperimentalCoroutinesApi
     fun getRandomQuote(pageNo: Int, onFailed: (String?,Int) -> Unit = { _: String?, _: Int -> }): Flow<Resource<Quote>> {
         val networkBoundFlow = networkBoundResource(
                 fetchFromLocal = {
