@@ -1,10 +1,9 @@
 # Flower
-Super cool Android library to manage networking and database caching with ease. It allows developers to use remote resources on-the-fly OR Combine remote resources and local persistence data caching in single place with fault tolerant architecture. It's built on top of [Retrofit](https://github.com/square/retrofit) and [Kotlin Flow](https://kotlinlang.org/docs/flow.html).
+Flower is an Android library that makes it simple to handle networking and database caching. It enables developers to fetch api resources on-the-fly OR combine api resources and local data at single place with fault tolerant architecture.
 
-## Why do we even need this library?
+## Why flower?
 - It helps you to handle different states of resources (LOADING, SUCCESS, FAILURE) efficiently.
-- It does not block main thread while accessing network/database resources, thus providing fluid experience for your users.
-- It leverage Kotlin idiomatic api, thus doing all hard stuffs behind a simple function call.
+- It does not block main thread while accessing network/database resources, and provide fluid app experience.
 
 You can find companion medium article [here](https://medium.com/@hadiyarajesh/android-networking-and-database-caching-in-2020-mvvm-retrofit-room-flow-35b4f897d46a)
 
@@ -15,9 +14,6 @@ You can find companion medium article [here](https://medium.com/@hadiyarajesh/an
 Add Gradle dependency as below
 ```
 dependencies {
-    //Groovy DSL
-    implementation "io.github.hadiyarajesh:flower:2.0.0"
-    Kotlin DSL
     implementation("io.github.hadiyarajesh:flower:2.0.0")
 }
 ```
@@ -25,7 +21,7 @@ dependencies {
 ## Usage
 
 **Prerequisite**
-- Your Room DAO method must return ```Flow<YourModelClass>``` (If you're using database caching)
+- Your Room DAO method must return ```Flow<YourModelClass>``` (Only if you're using local database)
 - Your Retrofit API method must return ```Flow<ApiResponse<YourModelClass>>```
 
 <br></br>
@@ -70,7 +66,7 @@ If you want to use remote resources on-the-fly (without caching into local datab
 
 ```kotlin
 fun getSomething(): Flow<Resource<YourModelclass>> {
-    return networkBoundResources(
+    return networkResource(
         fetchFromRemote = { apiInterface.getFromRemote() },
         onFetchFailed {_, _ -> }
     ).flowOn(Dispatchers.IO)
@@ -79,7 +75,7 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
 ```
 
 <br></br>
-**2. Inside ViewModel**
+**3. Inside ViewModel**
 
 Collect/transform flow to get different state of resources: LOADING, SUCCESS or ERROR
 
@@ -101,7 +97,7 @@ val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething()
 ```
 
 <br></br>
-**3. Inside Activity/Fragment**
+**4. Inside Activity/Fragment**
 
 Observe it in Activity/Fragment to make UI changes
 
