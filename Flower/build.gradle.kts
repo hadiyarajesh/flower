@@ -19,7 +19,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -42,11 +42,9 @@ tasks.register("sourceJar", Jar::class) {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
-    api("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
@@ -54,7 +52,7 @@ dependencies {
 }
 
 val PUBLISH_GROUP_ID by extra("io.github.hadiyarajesh")
-val PUBLISH_VERSION by extra("2.0.0")
+val PUBLISH_VERSION by extra("2.0.1")
 val PUBLISH_ARTIFACT_ID by extra("flower")
 
 apply(from = "${rootDir}/scripts/publish-module.gradle")
