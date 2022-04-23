@@ -1,8 +1,14 @@
+//val kotlin_version: String by extra
 plugins {
     id("com.android.application")
-    kotlin("android")
+    id("kotlin-android")
+    id("dagger.hilt.android.plugin")
     kotlin("kapt")
 }
+
+//apply {
+//    plugin("kotlin-android")
+//}
 
 android {
     compileSdk = 31
@@ -17,14 +23,11 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments(
-                    mapOf(
-                        "room.schemaLocation" to "$projectDir/schemas",
-                        "room.incremental" to "true",
-                        "room.expandProjection" to "true"
-                    )
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true",
+                    "room.expandProjection" to "true"
                 )
-
             }
         }
 
@@ -33,7 +36,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -55,13 +58,14 @@ android {
     }
 }
 
-dependencies {
+object LibVersion {
     val lifecycleVersion = "2.4.1"
     val roomVersion = "2.3.0"
     val retrofitVersion = "2.9.0"
     val moshiVersion = "1.13.0"
-    val koinVersion = "3.1.2"
+}
 
+dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
     implementation("androidx.core:core-ktx:1.7.0")
@@ -74,21 +78,30 @@ dependencies {
     implementation("androidx.annotation:annotation:1.3.0")
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycleVersion}")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${lifecycleVersion}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleVersion}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${LibVersion.lifecycleVersion}")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${LibVersion.lifecycleVersion}")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibVersion.lifecycleVersion}")
 
-    implementation("androidx.room:room-ktx:${roomVersion}")
-    kapt("androidx.room:room-compiler:${roomVersion}")
+    implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
+    kapt("androidx.room:room-compiler:${LibVersion.roomVersion}")
 
-    implementation("com.squareup.retrofit2:converter-moshi:${retrofitVersion}")
+    implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
 
-    implementation("com.squareup.moshi:moshi:${moshiVersion}")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:${moshiVersion}")
+    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
 
-    implementation("io.insert-koin:koin-android:${koinVersion}")
+    implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
+    kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+}
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
+
+repositories {
+    mavenCentral()
 }

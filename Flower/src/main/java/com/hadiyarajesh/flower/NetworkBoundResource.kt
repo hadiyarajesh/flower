@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.*
 
 /**
  * It will handle performing network request, getting result of it and caching it to local database
- * * @author Rajesh Hadiya
+ * @author Rajesh Hadiya
  * @param fetchFromLocal - Retrieve data from local database
  * @param shouldFetchFromRemote - Whether or not make network request
  * @param fetchFromRemote - Retrieve data from network request

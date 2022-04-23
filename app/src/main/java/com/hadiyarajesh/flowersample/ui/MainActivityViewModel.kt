@@ -9,15 +9,17 @@ import com.hadiyarajesh.flower.Resource
 import com.hadiyarajesh.flowersample.data.database.entity.Quote
 import com.hadiyarajesh.flowersample.data.repository.QuoteRepository
 import com.hadiyarajesh.flowersample.extensions.foldApiStates
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainActivityViewModel(
+@HiltViewModel
+class MainActivityViewModel @Inject constructor(
     quoteRepository: QuoteRepository
 ) : ViewModel() {
     val currentPageNo: MutableLiveData<Int> = MutableLiveData(1)
@@ -41,7 +43,6 @@ class MainActivityViewModel(
             currentPageNo.postValue(currentPageNo.value?.minus(1))
         })
     }
-
 
     val quotes = commands.flatMapLatest { command ->
         flow {

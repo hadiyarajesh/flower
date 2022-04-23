@@ -1,26 +1,27 @@
 package com.hadiyarajesh.flowersample.data.repository
 
 import android.util.Log
-import com.hadiyarajesh.flower.*
+import com.hadiyarajesh.flower.Resource
+import com.hadiyarajesh.flower.networkBoundResource
 import com.hadiyarajesh.flowersample.data.database.dao.QuoteDao
 import com.hadiyarajesh.flowersample.data.database.entity.Quote
-import com.hadiyarajesh.flowersample.data.network.ApiInterface
+import com.hadiyarajesh.flowersample.data.network.QuoteApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class QuoteRepository(
-        private val apiInterface: ApiInterface,
-        private val quoteDao: QuoteDao
+class QuoteRepository @Inject constructor(
+    private val quoteApi: QuoteApi,
+    private val quoteDao: QuoteDao
 ) {
     companion object {
         const val TAG = "Repository"
     }
 
     fun getRandomQuote(pageNo: Int, onFailed: (String?,Int) -> Unit = { _: String?, _: Int -> }): Flow<Resource<Quote>> {
-        val networkBoundFlow = networkBoundResource(
+        return networkBoundResource(
                 fetchFromLocal = {
                     Log.i(TAG, "Fetching from local cache")
                     val localResult = quoteDao.getQuote(pageNo)
@@ -32,7 +33,7 @@ class QuoteRepository(
                 },
                 fetchFromRemote = {
                     Log.i(TAG, "Fetching from remote server")
-                    apiInterface.getRandomQuote(pageNo)
+                    quoteApi.getRandomQuote(pageNo)
                 },
                 processRemoteResponse = {},
                 saveRemoteData = { quotes ->
@@ -54,7 +55,6 @@ class QuoteRepository(
                     Resource.error(it.message!!, null)
                 }
             }
-        }
-        return networkBoundFlow.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO)
     }
 }

@@ -45,7 +45,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
     api("com.squareup.retrofit2:retrofit:2.9.0")
 
     testImplementation("junit:junit:4.13.2")

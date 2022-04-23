@@ -5,23 +5,19 @@ import android.os.Bundle
 import android.text.Html
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import com.hadiyarajesh.flowersample.databinding.ActivityMainBinding
 import com.hadiyarajesh.flowersample.extensions.hide
 import com.hadiyarajesh.flowersample.extensions.show
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainActivityViewModel
     private var anim: Animator? = null
-    private val viewModel: MainActivityViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +25,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.currentPageNo.observe(this) {
+        viewModel =
+            ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
+        viewModel.currentPageNo.observe(this, Observer {
             binding.currentPageNoTv.text = it.toString()
-        }
+        })
 
         viewModel.events.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).onEach {
             when (it) {
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             }
         }.launchIn(lifecycleScope)
 
-        viewModel.quotes.observe(this) {
+        viewModel.quotes.observe(this, Observer {
             when (it) {
                 is MainActivityViewModel.State.LoadingState -> {
                     binding.quoteCard.hide { animator -> updateQuoteCardAnimator(animator) }
@@ -70,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                 }
             }
-        }
+        })
     }
 
     private fun updateQuoteCardAnimator(animator: Animator?) {
