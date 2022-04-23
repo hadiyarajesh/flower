@@ -36,9 +36,9 @@ Retrofit.Builder()
 ```
 
 <br></br>
-**2. Inside Repository**
+**2. In Repository**
 
-If you want to use remote resources backed by local database caching, use *networkBoundResource()* function. This function takes following functions as lambda parameter 
+If you wants to fetch api resources and store into local database, use *networkBoundResource()* function. This function takes following functions as parameter 
 - *fetchFromLocal* - It retrieve data from local database
 - *shouldFetchFromRemote* - It decide whether network request should be made or use local persistent data if available
 - *fetchFromRemote* - It retrieve data from network request
@@ -62,7 +62,7 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
 
 **OR**
 
-If you want to use remote resources on-the-fly (without caching into local database), use *networkResource()* function
+If you just wants to fetch api resources, use *networkResource()* function
 
 ```kotlin
 fun getSomething(): Flow<Resource<YourModelclass>> {
@@ -75,7 +75,7 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
 ```
 
 <br></br>
-**3. Inside ViewModel**
+**3. In ViewModel**
 
 Collect/transform flow to get different state of resources: LOADING, SUCCESS or ERROR
 
@@ -97,7 +97,7 @@ val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething()
 ```
 
 <br></br>
-**4. Inside Activity/Fragment**
+**4. In Activity/Fragment**
 
 Observe it in Activity/Fragment to make UI changes
 
