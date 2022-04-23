@@ -23,6 +23,7 @@ class FlowCallAdapterFactory : CallAdapter.Factory() {
             val bodyType = getParameterUpperBound(0, observableType)
             FlowCallAdapter(bodyType)
         }
+
         Call::class.java -> {
             val callType = getParameterUpperBound(0, returnType as ParameterizedType)
             when (getRawType(callType)) {
@@ -33,6 +34,7 @@ class FlowCallAdapterFactory : CallAdapter.Factory() {
                 else -> null
             }
         }
+        
         else -> null
     }
 

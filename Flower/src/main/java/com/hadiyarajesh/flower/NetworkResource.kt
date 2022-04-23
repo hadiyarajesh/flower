@@ -2,10 +2,10 @@ package com.hadiyarajesh.flower
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.collect
 
 /**
  * It will handle performing network request and getting result of it
+ * @author Rajesh Hadiya
  * @param fetchFromRemote - Retrieve data from network request
  * @param onFetchFailed - Perform action when network request fails
  */
@@ -19,15 +19,15 @@ inline fun <REMOTE> networkResource(
         when (apiResponse) {
             is ApiSuccessResponse -> {
                 apiResponse.body?.let {
-                    emit(Resource.success(it))
+                    emit(Resource.success(data = it))
                 }
             }
             is ApiErrorResponse -> {
                 onFetchFailed(apiResponse.errorMessage, apiResponse.statusCode)
-                emit(Resource.error(apiResponse.errorMessage, null))
+                emit(Resource.error(msg = apiResponse.errorMessage, data = null))
             }
             is ApiEmptyResponse -> {
-                emit(Resource.success(null))
+                emit(Resource.success(data = null))
             }
         }
     }

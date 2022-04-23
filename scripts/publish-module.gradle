@@ -52,7 +52,7 @@ afterEvaluate {
 
                 pom {
                     name = PUBLISH_ARTIFACT_ID
-                    description = 'Android library to manage networking and database caching with ease. It helps developers to handle all scenario of API request(loading/success/error) in single place along with database caching.'
+                    description = 'Flower is an Android library that makes it simple to handle networking and database caching. It enables developers to fetch api resources on-the-fly OR combine api resources and local data at single place with fault tolerant architecture.'
                     url = 'https://github.com/hadiyarajesh/flower'
                     licenses {
                         license {

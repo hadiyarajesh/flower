@@ -30,25 +30,29 @@ inline fun <DB, REMOTE> networkBoundResource(
                 is ApiSuccessResponse -> {
                     processRemoteResponse(apiResponse)
                     apiResponse.body?.let { saveRemoteData(it) }
-                    emitAll(fetchFromLocal().map { dbData ->
-                        Resource.success(dbData)
-                    })
+                    emitAll(
+                        fetchFromLocal().map { dbData ->
+                            Resource.success(data = dbData)
+                        }
+                    )
                 }
                 is ApiErrorResponse -> {
                     onFetchFailed(apiResponse.errorMessage, apiResponse.statusCode)
-                    emitAll(fetchFromLocal().map { dbData ->
-                        Resource.error(
-                            apiResponse.errorMessage,
-                            dbData
-                        )
-                    })
+                    emitAll(
+                        fetchFromLocal().map { dbData ->
+                            Resource.error(
+                                msg = apiResponse.errorMessage,
+                                data = dbData
+                            )
+                        }
+                    )
                 }
                 is ApiEmptyResponse -> {
-                    emit(Resource.success(null))
+                    emit(Resource.success(data = null))
                 }
             }
         }
     } else {
-        emitAll(fetchFromLocal().map { Resource.success(it) })
+        emitAll(fetchFromLocal().map { Resource.success(data = it) })
     }
 }
