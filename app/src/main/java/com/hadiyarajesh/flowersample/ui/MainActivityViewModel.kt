@@ -72,7 +72,7 @@ class MainActivityViewModel @Inject constructor(
     sealed class State {
         data class UIState(val quote: Quote, val currentPage: Int) : State()
         data class SuccessState(val resource: Resource<*>) : State()
-        data class ErrorState(val errorMessage: String) : State()
+        data class ErrorState(val errorMessage: String, val statusCode: Int) : State()
         data class LoadingState(val loading: Boolean = true) : State()
     }
 

@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                     binding.quoteCard.hide { animator -> updateQuoteCardAnimator(animator) }
                     binding.nextBtn.isEnabled = true
                     binding.prevBtn.isEnabled = true
-                    showError(it.errorMessage)
+                    showError("StatusCode ${it.statusCode}: ${it.errorMessage}")
                 }
                 else -> {
                 }

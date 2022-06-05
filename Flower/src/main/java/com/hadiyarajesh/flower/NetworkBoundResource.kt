@@ -42,6 +42,7 @@ inline fun <DB, REMOTE> networkBoundResource(
                         fetchFromLocal().map { dbData ->
                             Resource.error(
                                 msg = apiResponse.errorMessage,
+                                statusCode = apiResponse.statusCode,
                                 data = dbData
                             )
                         }

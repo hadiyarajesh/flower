@@ -51,8 +51,9 @@ class QuoteRepository @Inject constructor(
                     val quote = it.data
                     Resource.success(quote)
                 }
-                Resource.Status.ERROR -> {
-                    Resource.error(it.message!!, null)
+                is Resource.Status.ERROR -> {
+                    val error = it.status as Resource.Status.ERROR
+                    Resource.error(error.message, error.statusCode, it.data)
                 }
             }
         }.flowOn(Dispatchers.IO)
