@@ -20,10 +20,30 @@ dependencies {
 ```
 
 ## Usage
+Sample model class
+```kotlin
+data class MyModel(
+    val id: Long,
+    val data: String
+)
+```
 
-**Prerequisite**
-- Return type of `Room` DAO method must be `Flow<YourModelClass>` (Only if you're caching network resources using a local database)
-- Return type of `Retrofit` api interface method must be `Flow<ApiResponse<YourModelClass>>`
+### Prerequisite
+- Return type of `Room` DAO function must be `Flow<MyModel>` (Only if you're caching network resources using a local database)
+```kotlin
+@Dao
+interface MyDao {
+    @Query("SELECT * FROM Data")
+    fun getLocalData(): Flow<MyModel>
+}
+```
+
+- Return type of `Retrofit` api interface function must be `Flow<ApiResponse<MyModel>>`
+```kotlin
+interface MyApi {
+    fun getRemoteData(): Flow<ApiResponse<MyModel>>
+}
+```
 
 <br></br>
 **1. Add `FlowCallAdapterFactory` as *CallAdapterFactory* in Retrofit builder**
@@ -46,73 +66,99 @@ Retrofit.Builder()
 - *shouldFetchFromRemote* - It decide whether network request should be made or use local data
 - *fetchFromRemote* - It fetch data from network
 - *processRemoteResponse* - It process response of network request. (e.g., save response headers)
-- *saveRemoteData* - It saves result of network request (`YourModelClass`) to local database
+- *saveRemoteData* - It saves result of network request (`MyModel`) to local database
 - *onFetchFailed* - It perform provided action when network request fails (e.g., Non HTTP 200..300 response, exceptions etc)
 
 ```kotlin
-fun getSomething(): Flow<Resource<YourModelclass>> {
+fun getMyData(): Flow<Resource<MyModel>> {
     return networkBoundResources(
-        fetchFromLocal = { yourDaoclass.getFromDatabase() },
-        shouldFetchFromRemote = { it == null },
-        fetchFromRemote = { apiInterface.getFromRemote() },
+        fetchFromLocal = { myDao.getLocalData() },
+        shouldFetchFromRemote = { localData -> localData == null },
+        fetchFromRemote = { myApi.getRemoteData() },
         processRemoteResponse = { },
-        saveRemoteData = { yourDaoclass.saveYourData(it) },
-        onFetchFailed {_, _ -> }
+        saveRemoteData = { myDao.saveMyData(it) },
+        onFetchFailed { errorMessage, statusCode -> }
     ).flowOn(Dispatchers.IO)
 }
 ```
 
 **OR**
 
-2.2 If you only wants to fetch network resources, use `networkResource()` function
+2.2 If you only wants to fetch network resources, use `networkResource()` higher order function
 
 ```kotlin
-fun getSomething(): Flow<Resource<YourModelclass>> {
+fun getMyData(): Flow<Resource<MyModel>> {
     return networkResource(
-        fetchFromRemote = { apiInterface.getFromRemote() },
-        onFetchFailed {_, _ -> }
+        fetchFromRemote = { myApi.getRemoteData() },
+        onFetchFailed { errorMessage, statusCode -> }
     ).flowOn(Dispatchers.IO)
 }
 ```
 
 <br></br>
 **3. In ViewModel**
-Collect/transform `flow` to observe different state of resources (`Loading`, `Success`, `Error`)
+<br>
+Collect/transform `Flow` to observe different state of resources (`Loading`, `Success`, `Error`)
 
 ```kotlin
-val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething().map {
-    when (it.status) {
+sealed class UiState<out T> {
+    object Empty : UiState<Nothing>()
+    object Loading : UiState<Nothing>()
+    data class Success<out T>(val data: T?) : UiState<T>()
+    data class Error(val data: String?) : UiState<Nothing>()
+}
+```
+
+```kotlin
+private val _myData: MutableStateFlow<UiState<MyModel>> = MutableStateFlow(UiState.Empty)
+val myData: StateFlow<UiState<MyModel>> = _myData
+
+init {
+    viewModelScope.launch {
+        getMyData()
+    }
+}
+
+suspend fun getMyData() = repository.getMyData().collect { response ->
+    when (response.status) {
         Resource.Status.LOADING -> {
-            Resource.loading(null)
+            _myData.value = UiState.Loading
         }
         Resource.Status.SUCCESS -> {
-            Resource.success(it.data)
+            _myData.value = UiState.Success(response.data)
         }
         Resource.Status.ERROR -> {
-            Resource.error(it.message!!, null)
+            _myData.value = UiState.Error(response.message)
         }
     }
-}.asLiveData(viewModelScope.coroutineContext)
+}
 ```
 
 <br></br>
 **4. In Activity/Fragment**
-Observe view model data in Activity/Fragment to decide UI changes
+<br>
+Observe view model data in Activity/Fragment/Composable function to decide UI changes
 
 ```kotlin
-viewModel.someVariable.observer(this, Observer {
-    when (it.status) {
-        Resource.Status.LOADING -> {
-            //Show loading message
-        }
-        Resource.Status.SUCCESS -> {
-            //Show success message
-        }
-        Resource.Status.ERROR -> {
-            //Show error message
+lifecycleScope.launch {
+    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.myData.collect { data ->
+            when (data) {
+                is UiState.Loading -> {
+                    // Show loading
+                }
+                is UiState.Success -> {
+                    // Show success
+                }
+                is UiState.Error -> {
+                    // Show error
+                }
+                else -> { }
+
+            }
         }
     }
-})
+}
 ```
 
 ## Sample
