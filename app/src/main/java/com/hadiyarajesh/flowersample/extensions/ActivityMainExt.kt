@@ -85,8 +85,9 @@ suspend fun <T> Flow<Resource<T>>.foldApiStates(
                 resource.data?.let { onSuccess(it) }
                 MainActivityViewModel.State.SuccessState(resource)
             }
-            Resource.Status.ERROR -> {
-                onError(MainActivityViewModel.State.ErrorState(resource.message ?: ""))
+            is Resource.Status.ERROR -> {
+                val error = resource.status as Resource.Status.ERROR
+                onError(MainActivityViewModel.State.ErrorState(error.message, error.statusCode))
             }
         }
     }

@@ -24,7 +24,7 @@ inline fun <REMOTE> networkResource(
             }
             is ApiErrorResponse -> {
                 onFetchFailed(apiResponse.errorMessage, apiResponse.statusCode)
-                emit(Resource.error(msg = apiResponse.errorMessage, data = null))
+                emit(Resource.error(msg = apiResponse.errorMessage, statusCode = apiResponse.statusCode, data = null))
             }
             is ApiEmptyResponse -> {
                 emit(Resource.success(data = null))
