@@ -1,9 +1,10 @@
 # Flower
-Flower is an Android library that makes it simple to handle networking and database caching. It enables developers to fetch api resources on-the-fly OR combine api resources and local data at single place with fault tolerant architecture.
+Flower is an Android library that makes networking and database caching easy. It enables developers to fetch network resources and use them as is OR combine them with local database at single place with fault tolerant architecture.
 
-## Why flower?
-- It helps you to handle different states of resources (LOADING, SUCCESS, FAILURE) efficiently.
-- It does not block main thread while accessing network/database resources, and provide fluid app experience.
+## Why Flower?
+- It helps you to handle different states (`Loading`, `Success`, `Error`) of resources efficiently.
+- It helps you to use local data in case of network unavailability.
+- It provides a fluid app experience by not blocking the `main thread` when accessing network/database resources.
 
 You can find companion medium article [here](https://medium.com/@hadiyarajesh/android-networking-and-database-caching-in-2020-mvvm-retrofit-room-flow-35b4f897d46a)
 
@@ -21,15 +22,15 @@ dependencies {
 ## Usage
 
 **Prerequisite**
-- Your Room DAO method must return ```Flow<YourModelClass>``` (Only if you're using local database)
-- Your Retrofit API method must return ```Flow<ApiResponse<YourModelClass>>```
+- Return type of `Room` DAO method must be `Flow<YourModelClass>` (Only if you're caching network resources using a local database)
+- Return type of `Retrofit` api interface method must be `Flow<ApiResponse<YourModelClass>>`
 
 <br></br>
-**1. Add ```FlowCallAdapterFactory``` as *CallAdapterFactory* in Retrofit builder**
+**1. Add `FlowCallAdapterFactory` as *CallAdapterFactory* in Retrofit builder**
 
 ```kotlin
 Retrofit.Builder()
-    .baseUrl(BASE_API_URL)
+    .baseUrl(BASE_URL)
     .client(okHttpClient)
     .addCallAdapterFactory(FlowCallAdapterFactory.create())
     .build()
@@ -37,14 +38,16 @@ Retrofit.Builder()
 
 <br></br>
 **2. In Repository**
+<br>
 
-If you wants to fetch api resources and store into local database, use *networkBoundResource()* function. This function takes following functions as parameter 
-- *fetchFromLocal* - It retrieve data from local database
-- *shouldFetchFromRemote* - It decide whether network request should be made or use local persistent data if available
-- *fetchFromRemote* - It retrieve data from network request
-- *processRemoteResponse* - It process process result of network request. (e.g., save response headers)
-- *saveRemoteData* - It saves result of network request to local persistent database
-- *onFetchFailed* - It perform provided actions when network request fails (Non HTTP 200..300 response, exceptions etc)
+2.1. If you wants to fetch netwrok resources and cache into local database, use `networkBoundResource()` higher order function. It takes following functions as parameters
+
+- *fetchFromLocal* - It fetch data from local database
+- *shouldFetchFromRemote* - It decide whether network request should be made or use local data
+- *fetchFromRemote* - It fetch data from network
+- *processRemoteResponse* - It process response of network request. (e.g., save response headers)
+- *saveRemoteData* - It saves result of network request (`YourModelClass`) to local database
+- *onFetchFailed* - It perform provided action when network request fails (e.g., Non HTTP 200..300 response, exceptions etc)
 
 ```kotlin
 fun getSomething(): Flow<Resource<YourModelclass>> {
@@ -57,12 +60,11 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
         onFetchFailed {_, _ -> }
     ).flowOn(Dispatchers.IO)
 }
-
 ```
 
 **OR**
 
-If you just wants to fetch api resources, use *networkResource()* function
+2.2 If you only wants to fetch network resources, use `networkResource()` function
 
 ```kotlin
 fun getSomething(): Flow<Resource<YourModelclass>> {
@@ -71,13 +73,11 @@ fun getSomething(): Flow<Resource<YourModelclass>> {
         onFetchFailed {_, _ -> }
     ).flowOn(Dispatchers.IO)
 }
-
 ```
 
 <br></br>
 **3. In ViewModel**
-
-Collect/transform flow to get different state of resources: LOADING, SUCCESS or ERROR
+Collect/transform `flow` to observe different state of resources (`Loading`, `Success`, `Error`)
 
 ```kotlin
 val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething().map {
@@ -93,13 +93,11 @@ val someVariable: LiveData<Resource<YourModelClass>> = repository.getSomething()
         }
     }
 }.asLiveData(viewModelScope.coroutineContext)
-
 ```
 
 <br></br>
 **4. In Activity/Fragment**
-
-Observe it in Activity/Fragment to make UI changes
+Observe view model data in Activity/Fragment to decide UI changes
 
 ```kotlin
 viewModel.someVariable.observer(this, Observer {
