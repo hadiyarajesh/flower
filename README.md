@@ -1,14 +1,15 @@
 # Flower
 Flower is an Android library that makes networking and database caching easy. It enables developers to fetch network resources and use them as is OR combine them with local database at single place with fault tolerant architecture.
 
+![release](https://img.shields.io/github/v/release/hadiyarajesh/flower)
+![contributors](https://img.shields.io/github/contributors/hadiyarajesh/flower)
+
 ## Why Flower?
 - It helps you to handle different states (`Loading`, `Success`, `Error`) of resources efficiently.
 - It helps you to use local data in case of network unavailability.
 - It provides a fluid app experience by not blocking the `main thread` when accessing network/database resources.
 
 You can find companion medium article [here](https://medium.com/@hadiyarajesh/android-networking-and-database-caching-in-2020-mvvm-retrofit-room-flow-35b4f897d46a)
-
-
 
 ## Installation
 
