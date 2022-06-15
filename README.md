@@ -28,7 +28,7 @@ dependencies {
 ```
 
 ## Usage
-Sample model class
+Let's say you have a model class `MyModel` which you are fetching from network
 ```kotlin
 data class MyModel(
     val id: Long,
@@ -68,7 +68,7 @@ Retrofit.Builder()
 **2. In Repository**
 <br>
 
-2.1. If you wants to fetch netwrok resources and cache into local database, use `networkBoundResource()` higher order function. It takes following functions as parameters
+2.1. If you want to fetch netwrok resources and cache into local database, use `networkBoundResource()` higher order function. It takes following functions as parameters
 
 - *fetchFromLocal* - It fetch data from local database
 - *shouldFetchFromRemote* - It decide whether network request should be made or use local data
@@ -92,7 +92,7 @@ fun getMyData(): Flow<Resource<MyModel>> {
 
 **OR**
 
-2.2 If you only wants to fetch network resources, use `networkResource()` higher order function
+2.2 If you only want to fetch network resources, use `networkResource()` higher order function
 
 ```kotlin
 fun getMyData(): Flow<Resource<MyModel>> {
@@ -143,13 +143,12 @@ suspend fun getMyData() = repository.getMyData().collect { response ->
 ```
 
 <br></br>
-**4. In Activity/Fragment**
+**4. In Activity/Fragment/Composable**
 <br>
-Observe view model data in Activity/Fragment/Composable function to decide UI changes
+Observe view model data in Activity/Fragment/Composable function to drive UI changes
 
 ```kotlin
-lifecycleScope.launch {
-    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+lifecycleScope.launchWhenCreated {
         viewModel.myData.collect { data ->
             when (data) {
                 is UiState.Loading -> {
@@ -165,7 +164,6 @@ lifecycleScope.launch {
 
             }
         }
-    }
 }
 ```
 
