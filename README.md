@@ -1,4 +1,11 @@
-# Flower
+<p align="center">
+  <img 
+    width="300"
+    height="300"
+    src="https://github.com/hadiyarajesh/flower/blob/master/asset/flower-logo_black.png"
+  >
+</p>
+
 Flower is an Android library that makes networking and database caching easy. It enables developers to fetch network resources and use them as is OR combine them with local database at single place with fault tolerant architecture.
 
 ![release](https://img.shields.io/github/v/release/hadiyarajesh/flower)
