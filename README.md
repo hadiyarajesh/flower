@@ -15,7 +15,7 @@ You can find companion medium article [here](https://medium.com/@hadiyarajesh/an
 Add Gradle dependency as below
 ```gradle
 dependencies {
-    implementation("io.github.hadiyarajesh:flower:2.0.0")
+    implementation("io.github.hadiyarajesh:flower:2.0.3")
 }
 ```
 
