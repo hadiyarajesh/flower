@@ -1,34 +1,20 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-//apply plugin: 'org.jetbrains.dokka'
 
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     if (project.plugins.findPlugin("com.android.library")) {
         // For Android libraries
         from android.sourceSets.main.java.srcDirs
-        from android.sourceSets.main.kotlin.srcDirs
     } else {
-        // For pure Kotlin libraries, in case you have them
+        // For java libraries (if any)
         from sourceSets.main.java.srcDirs
         from sourceSets.main.kotlin.srcDirs
     }
 }
 
-//tasks.withType(dokkaHtmlPartial.getClass()).configureEach {
-//    pluginsMapConfiguration.set(
-//            ["org.jetbrains.dokka.base.DokkaBase": """{ "separateInheritedMembers": true}"""]
-//    )
-//}
-//
-//task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-//    archiveClassifier.set('javadoc')
-//    from dokkaJavadoc.outputDirectory
-//}
-
 artifacts {
     archives androidSourcesJar
-//    archives javadocJar
 }
 
 group = PUBLISH_GROUP_ID
@@ -41,36 +27,37 @@ afterEvaluate {
                 groupId PUBLISH_GROUP_ID
                 artifactId PUBLISH_ARTIFACT_ID
                 version PUBLISH_VERSION
+
+                // Two artifacts, the `aar` (or `jar`) and the sources
                 if (project.plugins.findPlugin("com.android.library")) {
                     from components.release
                 } else {
-                    from components.java
+                    artifact("$buildDir/libs/${project.getName()}-${version}.jar")
                 }
 
                 artifact androidSourcesJar
-//                artifact javadocJar
 
                 pom {
                     name = PUBLISH_ARTIFACT_ID
-                    description = 'Flower is an Android library that makes it simple to handle networking and database caching. It enables developers to fetch api resources on-the-fly OR combine api resources and local data at single place with fault tolerant architecture.'
-                    url = 'https://github.com/hadiyarajesh/flower'
+                    description = PUBLISH_DESCRIPTION
+                    url = PUBLISH_URL
                     licenses {
                         license {
-                            name = 'MIT License'
-                            url = 'https://github.com/hadiyarajesh/flower/blob/master/LICENSE'
+                            name = PUBLISH_LICENSE_NAME
+                            url = PUBLISH_LICENSE_URL
                         }
                     }
                     developers {
                         developer {
-                            id = 'hadiyarajesh'
-                            name = 'Rajesh Hadiya'
-                            email = 'hadiarajesh007@gmail.com'
+                            id = PUBLISH_DEVELOPER_ID
+                            name = PUBLISH_DEVELOPER_NAME
+                            email = PUBLISH_DEVELOPER_EMAIL
                         }
                     }
                     scm {
-                        connection = 'scm:git:github.com/hadiyarajesh/flower.git'
-                        developerConnection = 'scm:git:ssh://github.com/hadiyarajesh/flower.git'
-                        url = 'https://github.com/hadiyarajesh/flower'
+                        connection = PUBLISH_SCM_CONNECTION
+                        developerConnection = PUBLISH_SCM_DEVELOPER_CONNECTION
+                        url = PUBLISH_SCM_URL
                     }
                 }
             }

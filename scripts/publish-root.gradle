@@ -7,6 +7,7 @@ ext["signing.password"] = ''
 ext["signing.key"] = ''
 
 File secretPropsFile = project.rootProject.file('local.properties')
+
 if (secretPropsFile.exists()) {
     // Read local.properties file first if it exists
     Properties p = new Properties()

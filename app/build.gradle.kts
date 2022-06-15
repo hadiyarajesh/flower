@@ -1,4 +1,3 @@
-//val kotlin_version: String by extra
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -7,13 +6,14 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    namespace = "com.hadiyarajesh.flowersample"
+    compileSdk = 32
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.flowersample"
         minSdk = 21
-        targetSdk = 30
+        targetSdk = 32
         versionCode = 1
         versionName = "1.0"
 
@@ -62,20 +62,23 @@ object LibVersion {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
-    implementation("com.google.android.material:material:1.5.0")
+    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.android.material:material:1.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${LibVersion.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${LibVersion.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibVersion.lifecycleVersion}")
-    implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
-    kapt("androidx.room:room-compiler:${LibVersion.roomVersion}")
-    implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
-    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
     kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
+
+    implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
+    kapt("androidx.room:room-compiler:${LibVersion.roomVersion}")
+
+    implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
+
+    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
 
     implementation(project(":Flower"))
 
