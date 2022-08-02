@@ -18,14 +18,8 @@ sealed class ApiResponse<T> {
                     ApiSuccessResponse(body, headers)
                 }
             } else {
-                val msg = response.description
-                val errorMsg = if (msg.isNullOrEmpty()) {
-                    "Unknown"
-                } else {
-                    msg
-                }
                 ApiErrorResponse(
-                    errorMessage = errorMsg,
+                    errorMessage = response.description,
                     statusCode = response.code
                 )
             }

@@ -11,7 +11,7 @@ internal fun <T> retrofit2.Response<T>.toCommonResponse(): Response<T> {
             get() = this@toCommonResponse.code()
 
         override val description: String
-            get() = this@toCommonResponse.errorBody()?.string()?.toString() ?: this@toCommonResponse.message().toString()
+            get() = this@toCommonResponse.errorBody()?.string() ?: this@toCommonResponse.message()
 
         override fun body(): T? {
             return this@toCommonResponse.body()
