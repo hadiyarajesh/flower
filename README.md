@@ -2,7 +2,7 @@
   <img 
     width="300"
     height="300"
-    src="https://github.com/hadiyarajesh/flower/blob/master/asset/flower-logo_black.png"
+    src="asset/flower-logo_black.png"
   >
 </p>
 

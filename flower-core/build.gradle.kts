@@ -1,30 +1,5 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    kotlin("multiplatform") version "1.7.10"
-}
-
-buildscript {
-    allprojects {
-        repositories {
-            google()
-            mavenLocal()
-            mavenCentral()
-            gradlePluginPortal()
-        }
-    }
-
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath("com.vanniktech:gradle-maven-publish-plugin:0.20.0")
-        classpath("com.android.tools.build:gradle:7.2.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
-    }
+    kotlin("multiplatform")
 }
 
 repositories {
@@ -41,7 +16,6 @@ kotlin {
     js(BOTH) {
         browser()
     }
-
     val hostOs = System.getProperty("os.name")
     val isMingwX64 = hostOs.startsWith("Windows")
     val nativeTarget = when {
@@ -52,7 +26,11 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
