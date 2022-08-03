@@ -6,16 +6,16 @@ import kotlinx.coroutines.flow.flow
 /**
  * It will handle performing network request and getting result of it
  * @author Rajesh Hadiya
- * @param fetchFromRemote - Retrieve data from network request
- * @param onFetchFailed - Perform action when network request fails
+ * @param makeNetworkRequest - Retrieve data from network request
+ * @param onRequestFailed - Perform action when network request fails
  */
 inline fun <REMOTE> networkResource(
-    crossinline fetchFromRemote: suspend () -> Flow<ApiResponse<REMOTE>>,
-    crossinline onFetchFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
+    crossinline makeNetworkRequest: suspend () -> Flow<ApiResponse<REMOTE>>,
+    crossinline onRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
 ) = flow<Resource<REMOTE>> {
     emit(Resource.loading(null))
 
-    fetchFromRemote().collect { apiResponse ->
+    makeNetworkRequest().collect { apiResponse ->
         when (apiResponse) {
             is ApiSuccessResponse -> {
                 apiResponse.body?.let {
@@ -23,7 +23,7 @@ inline fun <REMOTE> networkResource(
                 }
             }
             is ApiErrorResponse -> {
-                onFetchFailed(apiResponse.errorMessage, apiResponse.statusCode)
+                onRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
                 emit(Resource.error(msg = apiResponse.errorMessage, statusCode = apiResponse.statusCode, null))
             }
             is ApiEmptyResponse -> {
