@@ -28,11 +28,18 @@ android {
 }
 
 kotlin {
-    android()
+    android {
+        publishLibraryVariants("release", "debug")
+    }
     iosX64()
     iosArm64()
     iosSimulatorArm64()
     jvm()
+    js(IR) {
+        browser()
+        nodejs()
+        binaries.executable()
+    }
     val hostOs = System.getProperty("os.name")
     val isMingwX64 = hostOs.startsWith("Windows")
     val nativeTarget = when {
@@ -49,15 +56,9 @@ kotlin {
                 implementation("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta09")
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
         val jvmMain by getting
-        val jvmTest by getting
         val nativeMain by getting
-        val nativeTest by getting
+        val jsMain by getting
 
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -68,15 +69,6 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
         }
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
     }
 }
 
@@ -85,5 +77,6 @@ dependencies {
     add("kspAndroid","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
     add("kspIosX64","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
     add("kspJvm","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
+    add("kspJs","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
     add("kspIosSimulatorArm64","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
 }
