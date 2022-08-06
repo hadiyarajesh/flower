@@ -1,9 +1,8 @@
 <p align="center">
-  <img 
-    width="300"
-    height="300"
-    src="asset/flower-logo_black.png"
-  >
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="asset/flower-logo_white.png">
+      <img width="300" height="300" src="asset/flower-logo_black.png">
+    </picture>
 </p>
 
 Flower is an Android library that makes networking and database caching easy. It enables developers to fetch network resources and use them as is OR combine them with local database at single place with fault tolerant architecture.
