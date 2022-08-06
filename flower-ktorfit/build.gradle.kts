@@ -53,7 +53,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":flower-core"))
-                implementation("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta09")
+                api("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta09")
             }
         }
         val jvmMain by getting

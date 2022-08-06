@@ -5,6 +5,7 @@ plugins {
 
 buildscript {
     val hiltVersion by extra("2.43")
+    val composeUiVersion by extra("1.2.0")
 
     allprojects {
         repositories {
