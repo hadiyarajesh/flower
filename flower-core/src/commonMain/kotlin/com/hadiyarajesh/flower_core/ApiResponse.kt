@@ -8,7 +8,7 @@ sealed class ApiResponse<T> {
             return ApiErrorResponse(errorMessage = error.message ?: "Unknown error", statusCode = 0)
         }
 
-        fun <T> create(response: Response<T>): ApiResponse<T> {
+        suspend fun <T> create(response: Response<T>): ApiResponse<T> {
             return if (response.isSuccessful) {
                 val body = response.body()
                 val headers = response.headers()

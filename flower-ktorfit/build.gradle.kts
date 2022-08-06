@@ -1,13 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-}
-
-repositories {
-    google()
-    mavenLocal()
-    mavenCentral()
-    gradlePluginPortal()
+    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
 }
 
 android {
@@ -39,10 +33,6 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
     jvm()
-    js(BOTH) {
-        browser()
-        nodejs()
-    }
     val hostOs = System.getProperty("os.name")
     val isMingwX64 = hostOs.startsWith("Windows")
     val nativeTarget = when {
@@ -55,7 +45,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
+                api(project(":flower-core"))
+                implementation("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta09")
             }
         }
         val commonTest by getting {
@@ -65,8 +56,6 @@ kotlin {
         }
         val jvmMain by getting
         val jvmTest by getting
-        val jsMain by getting
-        val jsTest by getting
         val nativeMain by getting
         val nativeTest by getting
 
@@ -89,4 +78,12 @@ kotlin {
             iosSimulatorArm64Test.dependsOn(this)
         }
     }
+}
+
+dependencies {
+    add("kspCommonMainMetadata", "de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
+    add("kspAndroid","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
+    add("kspIosX64","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
+    add("kspJvm","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
+    add("kspIosSimulatorArm64","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
 }

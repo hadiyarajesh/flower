@@ -10,7 +10,7 @@ import retrofit2.CallAdapter
 import retrofit2.awaitResponse
 import java.lang.reflect.Type
 
-class FlowCallAdapter(
+class FlowerCallAdapter(
     private val responseType: Type
 ) : CallAdapter<Type, Flow<ApiResponse<Type>>> {
     override fun responseType() = responseType

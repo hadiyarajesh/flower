@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="flower-ktorfit-jvm">
+    <output-path>$PROJECT_DIR$/flower-ktorfit/build/libs</output-path>
+    <root id="archive" name="flower-ktorfit-jvm.jar">
+      <element id="module-output" name="FlowerSample.flower-ktorfit.jvmMain" />
+    </root>
+  </artifact>
+</component>
