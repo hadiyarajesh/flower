@@ -1,7 +1,6 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
 }
 
 android {
@@ -70,13 +69,4 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
         }
     }
-}
-
-dependencies {
-    add("kspCommonMainMetadata", "de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
-    add("kspAndroid","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
-    add("kspIosX64","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
-    add("kspJvm","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
-    add("kspJs","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
-    add("kspIosSimulatorArm64","de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
 }
