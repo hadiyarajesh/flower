@@ -6,7 +6,9 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.reflect.*
 
-internal fun <T> HttpResponse.toCommonResponse(typeInfo: TypeInfo): Response<T> {
+internal suspend fun <T> HttpResponse.toCommonResponse(typeInfo: TypeInfo): Response<T> {
+    val responseBody: T? = this.body(typeInfo)
+
     return object : Response<T> {
         override val isSuccessful: Boolean
             get() = this@toCommonResponse.status.isSuccess()
@@ -17,8 +19,8 @@ internal fun <T> HttpResponse.toCommonResponse(typeInfo: TypeInfo): Response<T> 
         override val description: String
             get() = this@toCommonResponse.status.description
 
-        override suspend fun body(): T? {
-            return this@toCommonResponse.body(typeInfo)
+        override fun body(): T? {
+            return responseBody
         }
 
         override fun headers(): Set<Map.Entry<String, List<String>>> {

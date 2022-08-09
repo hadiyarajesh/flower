@@ -5,6 +5,6 @@ interface Response<T> {
     val code: Int
     val description: String
 
-    suspend fun body(): T?
+    fun body(): T?
     fun headers(): Set<Map.Entry<String, List<String>>>
 }

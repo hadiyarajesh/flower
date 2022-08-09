@@ -13,7 +13,7 @@ internal fun <T> retrofit2.Response<T>.toCommonResponse(): Response<T> {
         override val description: String
             get() = this@toCommonResponse.errorBody()?.string() ?: this@toCommonResponse.message()
 
-        override suspend fun body(): T? {
+        override fun body(): T? {
             return this@toCommonResponse.body()
         }
 

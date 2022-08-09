@@ -1,8 +1,6 @@
 package com.hadiyarajesh.flower_retrofit
 
 import com.hadiyarajesh.flower_core.ApiResponse
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.CallAdapter
@@ -10,9 +8,7 @@ import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-class FlowerCallAdapterFactory @JvmOverloads constructor(
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-) : CallAdapter.Factory() {
+class FlowerCallAdapterFactory : CallAdapter.Factory() {
 
     override fun get(
         returnType: Type,
@@ -33,7 +29,7 @@ class FlowerCallAdapterFactory @JvmOverloads constructor(
             when (getRawType(callType)) {
                 ApiResponse::class.java -> {
                     val resultType = getParameterUpperBound(0, callType as ParameterizedType)
-                    ResultAdapter(resultType, scope)
+                    ResultAdapter(resultType)
                 }
                 else -> null
             }
@@ -44,7 +40,6 @@ class FlowerCallAdapterFactory @JvmOverloads constructor(
 
     companion object {
         @JvmStatic
-        @JvmOverloads
-        fun create(scope: CoroutineScope = CoroutineScope(Dispatchers.IO)) = FlowerCallAdapterFactory(scope)
+        fun create() = FlowerCallAdapterFactory()
     }
 }
