@@ -28,7 +28,7 @@ class FlowerResponseConverter : ResponseConverter {
 
                 emit(ApiResponse.create(response.toCommonResponse(TypeInfo(modelClass, modelKType.platformType, modelKType))))
             } catch (e: Throwable) {
-                emit(ApiResponse.Companion.create(e))
+                emit(ApiResponse.create(e))
             }
         }
     }
