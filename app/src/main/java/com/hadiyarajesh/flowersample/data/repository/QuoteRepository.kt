@@ -1,8 +1,8 @@
 package com.hadiyarajesh.flowersample.data.repository
 
 import android.util.Log
-import com.hadiyarajesh.flower.Resource
-import com.hadiyarajesh.flower.networkBoundResource
+import com.hadiyarajesh.flower_core.Resource
+import com.hadiyarajesh.flower_core.dbBoundResource
 import com.hadiyarajesh.flowersample.data.database.dao.QuoteDao
 import com.hadiyarajesh.flowersample.data.database.entity.Quote
 import com.hadiyarajesh.flowersample.data.network.QuoteApi
@@ -21,39 +21,42 @@ class QuoteRepository @Inject constructor(
     }
 
     fun getRandomQuote(pageNo: Int, onFailed: (String?,Int) -> Unit = { _: String?, _: Int -> }): Flow<Resource<Quote>> {
-        return networkBoundResource(
+        return dbBoundResource(
                 fetchFromLocal = {
                     Log.i(TAG, "Fetching from local cache")
                     val localResult = quoteDao.getQuote(pageNo)
                     localResult
                 },
-                shouldFetchFromRemote = {
+                shouldMakeNetworkRequest = {
                     Log.i(TAG, "Checking if remote fetch is needed")
                     it == null
                 },
-                fetchFromRemote = {
+                makeNetworkRequest = {
                     Log.i(TAG, "Fetching from remote server")
                     quoteApi.getRandomQuote(pageNo)
                 },
-                processRemoteResponse = {},
-                saveRemoteData = { quotes ->
+                processRequestResponse = {},
+                saveRequestData = { quotes ->
                     Log.i(TAG, "Saving from remote data to local cache")
                     val copiedQuotes = quotes.map { it.copy(primaryId = pageNo) }
                     copiedQuotes.forEach { quoteDao.insertOrUpdateQuote(it) }
                 },
-                onFetchFailed = { errorBody, statusCode -> onFailed(errorBody, statusCode) },
+                onRequestFailed = { errorBody, statusCode -> onFailed(errorBody, statusCode) },
         ).map {
             when (it.status) {
-                Resource.Status.LOADING -> {
+                is Resource.Status.LOADING -> {
                     Resource.loading(null)
                 }
-                Resource.Status.SUCCESS -> {
-                    val quote = it.data
+                is Resource.Status.SUCCESS -> {
+                    val quote = (it.status as Resource.Status.SUCCESS).data
                     Resource.success(quote)
                 }
                 is Resource.Status.ERROR -> {
                     val error = it.status as Resource.Status.ERROR
-                    Resource.error(error.message, error.statusCode, it.data)
+                    Resource.error(error.message, error.statusCode, error.data)
+                }
+                is Resource.Status.EMPTY -> {
+                    Resource.empty()
                 }
             }
         }.flowOn(Dispatchers.IO)

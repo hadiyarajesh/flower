@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     id("dagger.hilt.android.plugin")
     kotlin("kapt")
+    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
 }
 
 android {
@@ -55,8 +56,8 @@ android {
 }
 
 object LibVersion {
-    const val lifecycleVersion = "2.4.1"
-    const val roomVersion = "2.4.0"
+    const val lifecycleVersion = "2.5.1"
+    const val roomVersion = "2.4.2"
     const val retrofitVersion = "2.9.0"
     const val moshiVersion = "1.13.0"
 }
@@ -80,9 +81,16 @@ dependencies {
     implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
 
-    implementation(project(":Flower"))
+    implementation(project(":flower-retrofit"))
+    implementation(project(":flower-ktorfit"))
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+
+    implementation("io.ktor:ktor-client-core:2.0.3")
+    implementation("io.ktor:ktor-client-cio:2.0.3")
+    implementation("io.ktor:ktor-client-content-negotiation:2.0.3")
+    implementation("com.hypercubetools:ktor-moshi-client:2.1.0")
+    ksp("de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
 }

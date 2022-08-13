@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FlowerSample-jslegacy">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="FlowerSample-jslegacy.jar">
+      <element id="module-output" name="FlowerSample.jsMain" />
+    </root>
+  </artifact>
+</component>

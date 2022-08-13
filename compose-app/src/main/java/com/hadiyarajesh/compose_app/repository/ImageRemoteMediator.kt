@@ -9,8 +9,6 @@ import com.hadiyarajesh.compose_app.database.FlowerDatabase
 import com.hadiyarajesh.compose_app.database.entity.Image
 import com.hadiyarajesh.compose_app.database.entity.ImageRemoteKey
 import com.hadiyarajesh.compose_app.network.ImageApi
-import retrofit2.HttpException
-import java.io.IOException
 
 @ExperimentalPagingApi
 class ImageRemoteMediator(
@@ -72,9 +70,7 @@ class ImageRemoteMediator(
                 imageDao.insertAllImages(images)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-        } catch (e: IOException) {
-            return MediatorResult.Error(e)
-        } catch (e: HttpException) {
+        } catch (e: Throwable) {
             return MediatorResult.Error(e)
         }
     }

@@ -2,11 +2,11 @@ package com.hadiyarajesh.compose_app.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Entity
-@JsonClass(generateAdapter = true)
+@Serializable
 data class Image(
     @PrimaryKey
     val id: String,
@@ -14,6 +14,6 @@ data class Image(
     val width: Int,
     val height: Int,
     val url: String,
-    @Json(name = "download_url")
+    @SerialName("download_url")
     val downloadUrl: String
 )

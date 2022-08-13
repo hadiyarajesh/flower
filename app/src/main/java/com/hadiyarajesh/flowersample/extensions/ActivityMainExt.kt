@@ -6,7 +6,7 @@ import android.os.Build
 import android.view.View
 import android.view.ViewAnimationUtils
 import com.google.android.material.circularreveal.cardview.CircularRevealCardView
-import com.hadiyarajesh.flower.Resource
+import com.hadiyarajesh.flower_core.Resource
 import com.hadiyarajesh.flowersample.ui.MainActivityViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -78,16 +78,19 @@ suspend fun <T> Flow<Resource<T>>.foldApiStates(
 ) {
     this.collect { resource: Resource<T> ->
         when (resource.status) {
-            Resource.Status.LOADING -> {
+            is Resource.Status.LOADING -> {
                 onLoading(MainActivityViewModel.State.LoadingState())
             }
-            Resource.Status.SUCCESS -> {
-                resource.data?.let { onSuccess(it) }
+            is Resource.Status.SUCCESS -> {
+                onSuccess((resource.status as Resource.Status.SUCCESS).data)
                 MainActivityViewModel.State.SuccessState(resource)
             }
             is Resource.Status.ERROR -> {
                 val error = resource.status as Resource.Status.ERROR
                 onError(MainActivityViewModel.State.ErrorState(error.message, error.statusCode))
+            }
+            is Resource.Status.EMPTY -> {
+                MainActivityViewModel.State.SuccessState(resource)
             }
         }
     }

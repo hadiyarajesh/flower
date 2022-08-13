@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.hadiyarajesh.flower.Resource
+import com.hadiyarajesh.flower_core.Resource
 import com.hadiyarajesh.flowersample.data.database.entity.Quote
 import com.hadiyarajesh.flowersample.data.repository.QuoteRepository
 import com.hadiyarajesh.flowersample.extensions.foldApiStates
