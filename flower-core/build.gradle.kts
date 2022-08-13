@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -12,6 +14,9 @@ repositories {
     mavenCentral()
     gradlePluginPortal()
 }
+
+group = "io.github.hadiyarajesh.flower-core"
+version = "3.0.0"
 
 android {
     compileSdk = 32
@@ -61,7 +66,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
             }
         }
         val jvmMain by getting
@@ -80,57 +85,33 @@ kotlin {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("default") {
-            artifact(tasks["sourcesJar"])
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
 
-            pom {
-                name.set(project.name)
-                description.set("Flower Core Library")
-                url.set("https://github.com/hadiyarajesh/flower")
+    pom {
+        name.set(project.name)
+        description.set("Flower Core Library")
+        url.set("https://github.com/hadiyarajesh/flower")
 
-                licenses {
-                    license {
-                        name.set("MIT")
-                        url.set("https://github.com/hadiyarajesh/flower/blob/master/LICENSE")
-                    }
-                }
-                scm {
-                    url.set("https://github.com/hadiyarajesh/flower")
-                    connection.set("scm:git:git://github.com/hadiyarajesh/flower.git")
-                }
-                developers {
-                    developer {
-                        name.set("Rajesh Hadiya")
-                        url.set("https://github.com/hadiyarajesh")
-                    }
-                    developer {
-                        name.set("Jeff Retz")
-                        url.set("https://github.com/DatL4g")
-                    }
-                }
+        licenses {
+            license {
+                name.set("MIT")
+                url.set("https://github.com/hadiyarajesh/flower/blob/master/LICENSE")
             }
         }
-    }
-
-    repositories {
-        if (
-            hasProperty("sonatypeUsername") &&
-            hasProperty("sonatypePassword") &&
-            hasProperty("sonatypeSnapshotUrl") &&
-            hasProperty("sonatypeReleaseUrl")
-        ) {
-            maven {
-                val url = when {
-                    "SNAPSHOT" in version.toString() -> property("sonatypeSnapshotUrl")
-                    else -> property("sonatypeReleaseUrl")
-                } as String
-                setUrl(url)
-                credentials {
-                    username = property("sonatypeUsername") as String
-                    password = property("sonatypePassword") as String
-                }
+        scm {
+            url.set("https://github.com/hadiyarajesh/flower")
+            connection.set("scm:git:git://github.com/hadiyarajesh/flower.git")
+        }
+        developers {
+            developer {
+                name.set("Rajesh Hadiya")
+                url.set("https://github.com/hadiyarajesh")
+            }
+            developer {
+                name.set("Jeff Retz")
+                url.set("https://github.com/DatL4g")
             }
         }
     }
