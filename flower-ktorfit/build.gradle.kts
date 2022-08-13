@@ -6,6 +6,9 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
+group = "io.github.hadiyarajesh.flower-ktorfit"
+version = "3.0.0"
+
 android {
     compileSdk = 32
 
@@ -74,57 +77,33 @@ kotlin {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("default") {
-            artifact(tasks["sourcesJar"])
+mavenPublishing {
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
+    signAllPublications()
 
-            pom {
-                name.set(project.name)
-                description.set("Flower Ktorfit Library")
-                url.set("https://github.com/hadiyarajesh/flower")
+    pom {
+        name.set(project.name)
+        description.set("Flower Ktorfit Library")
+        url.set("https://github.com/hadiyarajesh/flower")
 
-                licenses {
-                    license {
-                        name.set("MIT")
-                        url.set("https://github.com/hadiyarajesh/flower/blob/master/LICENSE")
-                    }
-                }
-                scm {
-                    url.set("https://github.com/hadiyarajesh/flower")
-                    connection.set("scm:git:git://github.com/hadiyarajesh/flower.git")
-                }
-                developers {
-                    developer {
-                        name.set("Rajesh Hadiya")
-                        url.set("https://github.com/hadiyarajesh")
-                    }
-                    developer {
-                        name.set("Jeff Retz")
-                        url.set("https://github.com/DatL4g")
-                    }
-                }
+        licenses {
+            license {
+                name.set("MIT")
+                url.set("https://github.com/hadiyarajesh/flower/blob/master/LICENSE")
             }
         }
-    }
-
-    repositories {
-        if (
-            hasProperty("sonatypeUsername") &&
-            hasProperty("sonatypePassword") &&
-            hasProperty("sonatypeSnapshotUrl") &&
-            hasProperty("sonatypeReleaseUrl")
-        ) {
-            maven {
-                val url = when {
-                    "SNAPSHOT" in version.toString() -> property("sonatypeSnapshotUrl")
-                    else -> property("sonatypeReleaseUrl")
-                } as String
-                setUrl(url)
-                credentials {
-                    username = property("sonatypeUsername") as String
-                    password = property("sonatypePassword") as String
-                }
+        scm {
+            url.set("https://github.com/hadiyarajesh/flower")
+            connection.set("scm:git:git://github.com/hadiyarajesh/flower.git")
+        }
+        developers {
+            developer {
+                name.set("Rajesh Hadiya")
+                url.set("https://github.com/hadiyarajesh")
+            }
+            developer {
+                name.set("Jeff Retz")
+                url.set("https://github.com/DatL4g")
             }
         }
     }
