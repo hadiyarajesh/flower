@@ -45,6 +45,9 @@ kotlin {
     android {
         publishLibraryVariants("release", "debug")
     }
+    macosX64()
+    watchosArm64()
+    watchosX64()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -54,13 +57,10 @@ kotlin {
         nodejs()
         binaries.executable()
     }
-    val hostOs = System.getProperty("os.name")
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" -> macosX64("native")
-        hostOs == "Linux" -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    linuxX64 {
+        binaries {
+            executable()
+        }
     }
 
     sourceSets {
@@ -69,9 +69,9 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
             }
         }
+        val linuxX64Main by getting
         val jvmMain by getting
         val jsMain by getting
-        val nativeMain by getting
 
         val iosX64Main by getting
         val iosArm64Main by getting
