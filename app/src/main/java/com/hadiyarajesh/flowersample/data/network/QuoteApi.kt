@@ -8,6 +8,5 @@ import retrofit2.http.Query
 
 interface QuoteApi {
     @GET("posts/?orderby=id&per_page=1")
-    @de.jensklingenberg.ktorfit.http.GET("posts/?orderby=id&per_page=1")
-    fun getRandomQuote(@Query("page") @de.jensklingenberg.ktorfit.http.Query("page") pageNo: Int): Flow<ApiResponse<List<Quote>>>
+    fun getRandomQuote(@Query("page") pageNo: Int): Flow<ApiResponse<List<Quote>>>
 }
