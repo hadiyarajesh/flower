@@ -78,18 +78,18 @@ suspend fun <T> Flow<Resource<T>>.foldApiStates(
 ) {
     this.collect { resource: Resource<T> ->
         when (resource.status) {
-            is Resource.Status.LOADING -> {
+            is Resource.Status.Loading -> {
                 onLoading(MainActivityViewModel.State.LoadingState())
             }
-            is Resource.Status.SUCCESS -> {
-                onSuccess((resource.status as Resource.Status.SUCCESS).data)
+            is Resource.Status.Success -> {
+                onSuccess((resource.status as Resource.Status.Success).data)
                 MainActivityViewModel.State.SuccessState(resource)
             }
-            is Resource.Status.ERROR -> {
-                val error = resource.status as Resource.Status.ERROR
+            is Resource.Status.Error -> {
+                val error = resource.status as Resource.Status.Error
                 onError(MainActivityViewModel.State.ErrorState(error.message, error.statusCode))
             }
-            is Resource.Status.EMPTY -> {
+            is Resource.Status.EmptySuccess -> {
                 MainActivityViewModel.State.SuccessState(resource)
             }
         }

@@ -44,18 +44,18 @@ class QuoteRepository @Inject constructor(
                 onRequestFailed = { errorBody, statusCode -> onFailed(errorBody, statusCode) },
         ).map {
             when (it.status) {
-                is Resource.Status.LOADING -> {
+                is Resource.Status.Loading -> {
                     Resource.loading(null)
                 }
-                is Resource.Status.SUCCESS -> {
-                    val quote = (it.status as Resource.Status.SUCCESS).data
+                is Resource.Status.Success -> {
+                    val quote = (it.status as Resource.Status.Success).data
                     Resource.success(quote)
                 }
-                is Resource.Status.ERROR -> {
-                    val error = it.status as Resource.Status.ERROR
+                is Resource.Status.Error -> {
+                    val error = it.status as Resource.Status.Error
                     Resource.error(error.message, error.statusCode, error.data)
                 }
-                is Resource.Status.EMPTY -> {
+                is Resource.Status.EmptySuccess -> {
                     Resource.empty()
                 }
             }
