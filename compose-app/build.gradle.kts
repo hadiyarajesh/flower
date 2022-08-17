@@ -79,7 +79,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:${LibVersion.composeVersion}")
     implementation("androidx.compose.material:material:${LibVersion.composeVersion}")
     implementation("androidx.navigation:navigation-compose:2.5.1")
-    implementation("androidx.paging:paging-compose:1.0.0-alpha15")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha16")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
@@ -98,9 +98,9 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${rootProject.extra["composeUiVersion"]}")
-    debugImplementation("androidx.compose.ui:ui-tooling:${rootProject.extra["composeUiVersion"]}")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:${rootProject.extra["composeUiVersion"]}")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${LibVersion.composeVersion}")
+    debugImplementation("androidx.compose.ui:ui-tooling:${LibVersion.composeVersion}")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:${LibVersion.composeVersion}")
 
     implementation("io.ktor:ktor-client-core:2.0.3")
     implementation("io.ktor:ktor-client-cio:2.0.3")
