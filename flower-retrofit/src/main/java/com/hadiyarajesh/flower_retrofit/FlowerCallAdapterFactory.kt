@@ -50,6 +50,11 @@ class FlowerCallAdapterFactory : CallAdapter.Factory() {
             }
         }
 
+        ApiResponse::class.java -> {
+            val resultType = getParameterUpperBound(0, returnType as ParameterizedType)
+            ResultAdapter(resultType)
+        }
+
         else -> null
     }
 

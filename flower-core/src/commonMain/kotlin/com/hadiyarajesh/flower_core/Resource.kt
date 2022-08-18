@@ -42,7 +42,7 @@ data class Resource<out T>(
             return Resource(status = Status.Success(data))
         }
 
-        fun <T> emptySuccess(): Resource<T> = Resource(status = Status.EmptySuccess())
+        fun emptySuccess(): Resource<Nothing> = Resource(status = Status.EmptySuccess())
 
         fun <T> error(msg: String, statusCode: Int, data: T?): Resource<T> {
             return Resource(status = Status.Error(msg, statusCode, data))
