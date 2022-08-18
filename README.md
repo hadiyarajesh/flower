@@ -172,4 +172,4 @@ Sample app is provided [in this repository](https://github.com/hadiyarajesh/flow
 It fetch random quote from remote api and save it to local persistent database in order to display it on UI.
 
 ## License
-[MIT License](https://github.com/hadiyarajesh/flower/blob/master/LICENSE)
+[Apache License 2.0](https://github.com/hadiyarajesh/flower/blob/master/LICENSE)
