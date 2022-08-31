@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.*
 inline fun <DB, REMOTE> dbBoundResource(
     crossinline fetchFromLocal: suspend () -> Flow<DB>,
     crossinline shouldMakeNetworkRequest: suspend (DB?) -> Boolean = { true },
-    crossinline makeNetworkRequest: suspend () -> Flow<ApiResponse<REMOTE>>,
+    crossinline makeNetworkRequest: suspend () -> ApiResponse<REMOTE>,
     crossinline processNetworkResponse: (response: ApiSuccessResponse<REMOTE>) -> Unit = { },
     crossinline saveResponseData: suspend (REMOTE) -> Unit = { },
     crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
@@ -43,8 +43,73 @@ inline fun <DB, REMOTE> dbBoundResource(
 
     if (shouldMakeNetworkRequest(localData)) {
         emit(Resource.loading(localData))
+        when (val apiResponse = makeNetworkRequest()) {
+            is ApiSuccessResponse -> {
+                processNetworkResponse(apiResponse)
+                apiResponse.body?.let { saveResponseData(it) }
+                emitAll(
+                    fetchFromLocal().map { dbData ->
+                        dbData?.let { Resource.success(data = dbData) }
+                            ?: Resource.emptySuccess()
+                    }
+                )
+            }
+
+            is ApiErrorResponse -> {
+                onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
+                emitAll(
+                    fetchFromLocal().map { dbData ->
+                        Resource.error(
+                            msg = apiResponse.errorMessage,
+                            statusCode = apiResponse.statusCode,
+                            data = dbData
+                        )
+                    }
+                )
+            }
+
+            is ApiEmptyResponse -> {
+                emit(Resource.emptySuccess())
+            }
+        }
+    } else {
+        emitAll(
+            fetchFromLocal().map { dbData ->
+                dbData?.let { Resource.success(it) } ?: Resource.emptySuccess()
+            }
+        )
+    }
+}
+
+
+/**
+ * Fetch the data from local database (if available), perform a network request (if instructed)
+ * and emit the response after saving it to local database. Additionally, takes an action to perform
+ * if a network request fails.
+ * @author Rajesh Hadiya
+ * @param fetchFromLocal - A function to retrieve data from local database
+ * @param shouldMakeNetworkRequest - Whether or not to make network request
+ * @param makeNetworkRequest - A function to make network request
+ * @param processNetworkResponse - A function to process network response (e.g., saving response headers before saving actual data)
+ * @param saveResponseData - A function to save network response
+ * @param onNetworkRequestFailed - An action to perform when a network request fails
+ */
+inline fun <DB, REMOTE> dbBoundResourceFlow(
+    crossinline fetchFromLocal: suspend () -> Flow<DB>,
+    crossinline shouldMakeNetworkRequest: suspend (DB?) -> Boolean = { true },
+    crossinline makeNetworkRequest: () -> Flow<ApiResponse<REMOTE>>,
+    crossinline processNetworkResponse: (response: ApiSuccessResponse<REMOTE>) -> Unit = { },
+    crossinline saveResponseData: suspend (REMOTE) -> Unit = { },
+    crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
+) = flow<Resource<DB>> {
+    emit(Resource.loading(null))
+    val localData = fetchFromLocal().first()
+
+    if (shouldMakeNetworkRequest(localData)) {
+        emit(Resource.loading(localData))
+
         makeNetworkRequest().collect { apiResponse ->
-            when (apiResponse) {
+            when (apiResponse ) {
                 is ApiSuccessResponse -> {
                     processNetworkResponse(apiResponse)
                     apiResponse.body?.let { saveResponseData(it) }

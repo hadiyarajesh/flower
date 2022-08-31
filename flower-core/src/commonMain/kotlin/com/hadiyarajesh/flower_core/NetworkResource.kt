@@ -27,7 +27,44 @@ import kotlinx.coroutines.flow.flow
  * @param onNetworkRequestFailed - An action to perform when a network request fails
  */
 inline fun <REMOTE> networkResource(
-    crossinline makeNetworkRequest: suspend () -> Flow<ApiResponse<REMOTE>>,
+    crossinline makeNetworkRequest: suspend () -> ApiResponse<REMOTE>,
+    crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
+) = flow<Resource<REMOTE>> {
+    emit(Resource.loading(null))
+
+    when (val apiResponse = makeNetworkRequest()) {
+        is ApiSuccessResponse -> {
+            apiResponse.body?.let {
+                emit(Resource.success(data = it))
+            }
+        }
+
+        is ApiErrorResponse -> {
+            onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
+            emit(
+                Resource.error(
+                    msg = apiResponse.errorMessage,
+                    statusCode = apiResponse.statusCode,
+                    null
+                )
+            )
+        }
+
+        is ApiEmptyResponse -> {
+            emit(Resource.emptySuccess())
+        }
+    }
+}
+
+/**
+ * Make a network request and emit the response. Additionally, takes an action to perform
+ * if a network request fails.
+ * @author Rajesh Hadiya
+ * @param makeNetworkRequest - A function to make network request
+ * @param onNetworkRequestFailed - An action to perform when a network request fails
+ */
+inline fun <REMOTE> networkResourceFlow(
+    crossinline makeNetworkRequest: () -> Flow<ApiResponse<REMOTE>>,
     crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
 ) = flow<Resource<REMOTE>> {
     emit(Resource.loading(null))

@@ -62,6 +62,7 @@ kotlin {
             executable()
         }
     }
+    mingwX64()
 
     sourceSets {
         val commonMain by getting {
@@ -71,8 +72,9 @@ kotlin {
         }
         val linuxX64Main by getting
         val jvmMain by getting
+        val androidMain by getting
         val jsMain by getting
-
+        val mingwX64Main by getting
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
