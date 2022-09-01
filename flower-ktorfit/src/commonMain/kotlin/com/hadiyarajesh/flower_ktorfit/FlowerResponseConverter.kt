@@ -18,15 +18,20 @@ package com.hadiyarajesh.flower_ktorfit
 
 import com.hadiyarajesh.flower_core.ApiResponse
 import com.hadiyarajesh.flower_ktorfit.common.toCommonResponse
-import de.jensklingenberg.ktorfit.adapter.ResponseConverter
+import de.jensklingenberg.ktorfit.converter.ResponseConverter
+import de.jensklingenberg.ktorfit.converter.SuspendResponseConverter
 import io.ktor.client.statement.*
 import io.ktor.util.reflect.*
 import kotlinx.coroutines.flow.flow
 import kotlin.reflect.KClass
 
-class FlowerResponseConverter : ResponseConverter {
-    override fun supportedType(returnTypeName: String): Boolean {
-        return returnTypeName == "kotlinx.coroutines.flow.Flow"
+class FlowerResponseConverter : ResponseConverter, SuspendResponseConverter {
+    override fun supportedType(returnTypeName: String, isSuspend: Boolean): Boolean {
+        return if (isSuspend) {
+            returnTypeName == "com.hadiyarajesh.flower_core.ApiResponse"
+        } else {
+            returnTypeName == "kotlinx.coroutines.flow.Flow"
+        }
     }
 
     override fun <PRequest : Any> wrapResponse(
@@ -62,6 +67,19 @@ class FlowerResponseConverter : ResponseConverter {
             } catch (e: Throwable) {
                 emit(ApiResponse.create(e))
             }
+        }
+    }
+
+    override suspend fun <PRequest : Any> wrapSuspendResponse(
+        returnTypeName: String,
+        requestFunction: suspend () -> Pair<TypeInfo, HttpResponse>
+    ): Any {
+        return try {
+            val (info, response) = requestFunction()
+
+            ApiResponse.create(response.toCommonResponse(info))
+        } catch (e: Throwable) {
+            ApiResponse.create<Any>(e)
         }
     }
 }
