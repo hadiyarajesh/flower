@@ -45,7 +45,7 @@ class FlowerResponseConverter : ResponseConverter, SuspendResponseConverter {
                 val kotlinType = info.kotlinType
                     ?: throw IllegalArgumentException("Type must match Flow<ApiResponse<YourModel>>")
                 val modelKTypeProjection =
-                    if (kotlinType.arguments.size >= 0) kotlinType.arguments[0] else throw IllegalArgumentException(
+                    if (kotlinType.arguments.isNotEmpty()) kotlinType.arguments[0] else throw IllegalArgumentException(
                         "Type must match Flow<ApiResponse<YourModel>>"
                     )
                 val modelKType = modelKTypeProjection.type
