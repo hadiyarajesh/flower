@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -57,7 +59,7 @@ tasks.register<Jar>("androidSourcesJar") {
 }
 
 mavenPublishing {
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
+    publishToMavenCentral(SonatypeHost.S01)
     signAllPublications()
 
     pom {
@@ -67,8 +69,8 @@ mavenPublishing {
 
         licenses {
             license {
-                name.set("MIT")
-                url.set("https://github.com/hadiyarajesh/flower/blob/master/LICENSE")
+                name.set("Apache License 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
         scm {

@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -37,7 +39,7 @@ android {
 
 kotlin {
     android {
-        publishLibraryVariants("release", "debug")
+        publishLibraryVariants("release")
     }
     macosX64()
     watchosArm64()
@@ -83,7 +85,7 @@ kotlin {
 }
 
 mavenPublishing {
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
+    publishToMavenCentral(SonatypeHost.S01)
     signAllPublications()
 
     pom {
@@ -93,8 +95,8 @@ mavenPublishing {
 
         licenses {
             license {
-                name.set("MIT")
-                url.set("https://github.com/hadiyarajesh/flower/blob/master/LICENSE")
+                name.set("Apache License 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
         scm {

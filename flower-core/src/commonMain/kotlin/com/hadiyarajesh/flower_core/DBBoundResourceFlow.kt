@@ -19,9 +19,11 @@ package com.hadiyarajesh.flower_core
 import kotlinx.coroutines.flow.*
 
 /**
- * Fetch the data from local database (if available), perform a network request (if instructed)
+ * Fetch the data from local database (if available), perform a network request (if instructed).
  * and emit the response after saving it to local database.
  * Additionally, takes an action to perform if a network request fails.
+ * Difference between this function and [dbBoundResource] is that, [dbBoundResource] emits the data only once, while this function will emit [Flow] of data.
+ * Moreover, the function called in [makeNetworkRequest] must NOT be a `suspend` function.
  * @author Rajesh Hadiya
  * @param fetchFromLocal - A function to retrieve data from local database
  * @param shouldMakeNetworkRequest - Whether or not to make network request
@@ -29,12 +31,12 @@ import kotlinx.coroutines.flow.*
  * @param processNetworkResponse - A function to process network response (e.g., saving response headers before saving actual data)
  * @param saveResponseData - A function to save network response
  * @param onNetworkRequestFailed - An action to perform when a network request fails
- * @return [DB] type
+ * @return [Flow] of [DB] type
  */
-inline fun <DB, REMOTE> dbBoundResource(
+inline fun <DB, REMOTE> dbBoundResourceFlow(
     crossinline fetchFromLocal: suspend () -> Flow<DB>,
     crossinline shouldMakeNetworkRequest: suspend (DB?) -> Boolean = { true },
-    crossinline makeNetworkRequest: suspend () -> ApiResponse<REMOTE>,
+    crossinline makeNetworkRequest: () -> Flow<ApiResponse<REMOTE>>,
     crossinline processNetworkResponse: (response: ApiSuccessResponse<REMOTE>) -> Unit = { },
     crossinline saveResponseData: suspend (REMOTE) -> Unit = { },
     crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
@@ -44,33 +46,36 @@ inline fun <DB, REMOTE> dbBoundResource(
 
     if (shouldMakeNetworkRequest(localData)) {
         emit(Resource.loading(localData))
-        when (val apiResponse = makeNetworkRequest()) {
-            is ApiSuccessResponse -> {
-                processNetworkResponse(apiResponse)
-                apiResponse.body?.let { saveResponseData(it) }
-                emitAll(
-                    fetchFromLocal().map { dbData ->
-                        dbData?.let { Resource.success(data = dbData) }
-                            ?: Resource.emptySuccess()
-                    }
-                )
-            }
 
-            is ApiErrorResponse -> {
-                onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
-                emitAll(
-                    fetchFromLocal().map { dbData ->
-                        Resource.error(
-                            msg = apiResponse.errorMessage,
-                            statusCode = apiResponse.statusCode,
-                            data = dbData
-                        )
-                    }
-                )
-            }
+        makeNetworkRequest().collect { apiResponse ->
+            when (apiResponse) {
+                is ApiSuccessResponse -> {
+                    processNetworkResponse(apiResponse)
+                    apiResponse.body?.let { saveResponseData(it) }
+                    emitAll(
+                        fetchFromLocal().map { dbData ->
+                            dbData?.let { Resource.success(data = dbData) }
+                                ?: Resource.emptySuccess()
+                        }
+                    )
+                }
 
-            is ApiEmptyResponse -> {
-                emit(Resource.emptySuccess())
+                is ApiErrorResponse -> {
+                    onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
+                    emitAll(
+                        fetchFromLocal().map { dbData ->
+                            Resource.error(
+                                msg = apiResponse.errorMessage,
+                                statusCode = apiResponse.statusCode,
+                                data = dbData
+                            )
+                        }
+                    )
+                }
+
+                is ApiEmptyResponse -> {
+                    emit(Resource.emptySuccess())
+                }
             }
         }
     } else {
