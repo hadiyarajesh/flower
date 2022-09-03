@@ -1,57 +1,62 @@
+/*
+ *  Copyright (C) 2022 Rajesh Hadiya
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
 package com.hadiyarajesh.compose_app.di
 
-import com.hadiyarajesh.compose_app.BuildConfig
 import com.hadiyarajesh.compose_app.network.ImageApi
 import com.hadiyarajesh.compose_app.utility.Constants
-import com.hadiyarajesh.flower.calladpater.FlowCallAdapterFactory
-import com.squareup.moshi.Moshi
+import com.hadiyarajesh.flower_ktorfit.FlowerResponseConverter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.create
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
-    private val moshi = Moshi.Builder().build()
-
-    private fun getLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
-            .setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
 
     @Provides
     @Singleton
-    fun getOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .followRedirects(true)
-            .followSslRedirects(true)
-            .retryOnConnectionFailure(true)
-            .also {
-                if (BuildConfig.DEBUG) {
-                    it.addInterceptor(getLoggingInterceptor())
-                }
+    fun provideHttpClient(): HttpClient {
+        return HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                })
             }
-            .build()
+        }
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(Constants.API_BASE_URL)
-            .client(okHttpClient)
-            .addCallAdapterFactory(FlowCallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
+    fun provideKtorfit(client: HttpClient): Ktorfit {
+        return Ktorfit(baseUrl = Constants.API_BASE_URL, httpClient = client).addResponseConverter(FlowerResponseConverter())
     }
 
     @Provides
     @Singleton
-    fun provideImageApi(retrofit: Retrofit): ImageApi = retrofit.create(ImageApi::class.java)
+    fun provideImageApi(ktorfit: Ktorfit): ImageApi = ktorfit.create<ImageApi>()
 }
