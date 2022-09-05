@@ -21,7 +21,6 @@ import androidx.room.Room
 import com.hadiyarajesh.compose_app.R
 import com.hadiyarajesh.compose_app.database.FlowerDatabase
 import com.hadiyarajesh.compose_app.database.dao.ImageDao
-import com.hadiyarajesh.compose_app.database.dao.ImageRemoteKeyDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,8 +44,4 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideImageDao(db: FlowerDatabase): ImageDao = db.imageDao
-
-    @Provides
-    @Singleton
-    fun provideImageRemoteKeyDao(db: FlowerDatabase): ImageRemoteKeyDao = db.imageRemoteKeyDao
 }

@@ -21,19 +21,16 @@ import com.hadiyarajesh.compose_app.R
 
 sealed class Screens(
     val route: String,
-    @DrawableRes val icon: Int,
-    @DrawableRes val selectedIcon: Int
+    @DrawableRes val icon: Int
 ) {
     object Home : Screens(
         route = "Home",
-        icon = R.drawable.ic_outlined_home,
-        selectedIcon = R.drawable.ic_outlined_home
+        icon = R.drawable.ic_outlined_home
     )
 
-    object Orders : Screens(
-        route = "Orders",
-        icon = R.drawable.ic_outlined_image,
-        selectedIcon = R.drawable.ic_outlined_image
+    object ImageDetails : Screens(
+        route = "ImageDetails",
+        icon = R.drawable.ic_outlined_image
     )
 
     fun withArgs(vararg args: Any): String {

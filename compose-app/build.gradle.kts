@@ -3,8 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     kotlin("kapt")
-    kotlin("plugin.serialization") version "1.7.10"
-    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
 }
 
 android {
@@ -54,7 +52,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.0-rc02"
+        kotlinCompilerExtensionVersion = LibVersion.composeCompilerVersion
     }
     packagingOptions {
         resources {
@@ -64,7 +62,8 @@ android {
 }
 
 object LibVersion {
-    const val composeVersion = "1.2.0-beta03"
+    const val composeVersion = "1.2.0"
+    const val composeCompilerVersion = "1.3.0"
     const val roomVersion = "2.4.2"
     const val retrofitVersion = "2.9.0"
     const val moshiVersion = "1.13.0"
@@ -79,21 +78,25 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:${LibVersion.composeVersion}")
     implementation("androidx.compose.material:material:${LibVersion.composeVersion}")
     implementation("androidx.navigation:navigation-compose:2.5.1")
-    implementation("androidx.paging:paging-compose:1.0.0-alpha16")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
     kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
 
     implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
-    implementation("androidx.room:room-paging:${LibVersion.roomVersion}")
     kapt("androidx.room:room-compiler:${LibVersion.roomVersion}")
 
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation(project(":flower-retrofit"))
+
+    implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
+    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
 
     implementation("com.google.accompanist:accompanist-swiperefresh:${LibVersion.accompanistVersion}")
 
-    implementation(project(":flower-ktorfit"))
+    implementation("io.coil-kt:coil-compose:2.2.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
@@ -101,15 +104,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${LibVersion.composeVersion}")
     debugImplementation("androidx.compose.ui:ui-tooling:${LibVersion.composeVersion}")
     debugImplementation("androidx.compose.ui:ui-test-manifest:${LibVersion.composeVersion}")
-
-    implementation("io.ktor:ktor-client-core:2.0.3")
-    implementation("io.ktor:ktor-client-cio:2.0.3")
-    implementation("io.ktor:ktor-client-content-negotiation:2.0.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0-RC")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.3")
-
-    ksp("de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta09")
 }
+
 repositories {
     mavenCentral()
 }

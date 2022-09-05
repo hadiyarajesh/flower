@@ -20,13 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.paging.ExperimentalPagingApi
+import androidx.navigation.navArgument
+import com.hadiyarajesh.compose_app.ui.detail.ImageDetailsScreen
+import com.hadiyarajesh.compose_app.ui.detail.ImageDetailsViewModel
 import com.hadiyarajesh.compose_app.ui.home.HomeScreen
-import com.hadiyarajesh.compose_app.viewmodel.HomeViewModel
+import com.hadiyarajesh.compose_app.ui.home.HomeViewModel
 
-@ExperimentalPagingApi
 @Composable
 fun FlowerSampleNavigation(
     modifier: Modifier = Modifier,
@@ -39,9 +41,27 @@ fun FlowerSampleNavigation(
     ) {
         composable(route = Screens.Home.route) {
             val homViewModel = hiltViewModel<HomeViewModel>()
+
             HomeScreen(
                 navController = navController,
                 homeViewModel = homViewModel
+            )
+        }
+
+        composable(
+            route = Screens.ImageDetails.route + "/{imageId}",
+            arguments = listOf(
+                navArgument(name = "imageId") {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+            val imageDetailsViewModel = hiltViewModel<ImageDetailsViewModel>()
+
+            ImageDetailsScreen(
+                navController = navController,
+                imageDetailsViewModel = imageDetailsViewModel,
+                imageId = backStackEntry.arguments?.getLong("imageId")
             )
         }
     }

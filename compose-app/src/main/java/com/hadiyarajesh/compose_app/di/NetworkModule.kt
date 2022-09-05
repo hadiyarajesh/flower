@@ -16,47 +16,55 @@
 
 package com.hadiyarajesh.compose_app.di
 
+import com.hadiyarajesh.compose_app.BuildConfig
 import com.hadiyarajesh.compose_app.network.ImageApi
 import com.hadiyarajesh.compose_app.utility.Constants
-import com.hadiyarajesh.flower_ktorfit.FlowerResponseConverter
+import com.hadiyarajesh.flower_retrofit.FlowerCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import de.jensklingenberg.ktorfit.Ktorfit
-import de.jensklingenberg.ktorfit.create
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+    private fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
+            .setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
 
     @Provides
     @Singleton
-    fun provideHttpClient(): HttpClient {
-        return HttpClient(CIO) {
-            install(ContentNegotiation) {
-                json(Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                })
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .followRedirects(true)
+            .followSslRedirects(true)
+            .retryOnConnectionFailure(true)
+            .also {
+                if (BuildConfig.DEBUG) {
+                    it.addInterceptor(provideLoggingInterceptor())
+                }
             }
-        }
+            .build()
     }
 
     @Provides
     @Singleton
-    fun provideKtorfit(client: HttpClient): Ktorfit {
-        return Ktorfit(baseUrl = Constants.API_BASE_URL, httpClient = client).addResponseConverter(FlowerResponseConverter())
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Constants.API_BASE_URL)
+            .client(okHttpClient)
+            .addCallAdapterFactory(FlowerCallAdapterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
     }
 
     @Provides
     @Singleton
-    fun provideImageApi(ktorfit: Ktorfit): ImageApi = ktorfit.create<ImageApi>()
+    fun provideQuoteApi(retrofit: Retrofit): ImageApi = retrofit.create(ImageApi::class.java)
 }

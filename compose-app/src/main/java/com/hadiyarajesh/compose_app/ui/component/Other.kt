@@ -17,10 +17,6 @@
 package com.hadiyarajesh.compose_app.ui.component
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridItemScope
-import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -35,9 +31,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import coil.transform.Transformation
 import com.hadiyarajesh.compose_app.R
 
 /**
@@ -69,6 +66,28 @@ fun ImageItem(
         contentDescription = contentDescription,
         placeholder = painterResource(id = R.drawable.placeholder),
         contentScale = contentScale
+    )
+}
+
+@Composable
+fun SubComposeImageItem(
+    modifier: Modifier = Modifier,
+    data: Any?,
+    crossfadeValue: Int = 300,
+    contentDescription: String? = null,
+    contentScale: ContentScale = ContentScale.Crop,
+    transformation: Transformation? = null,
+) {
+    SubcomposeAsyncImage(
+        modifier = modifier,
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(data)
+            .crossfade(crossfadeValue)
+            .transformations(transformation?.let { listOf(transformation) } ?: emptyList())
+            .build(),
+        contentDescription = contentDescription,
+        contentScale = contentScale,
+        loading = { LoadingProgressBar() }
     )
 }
 
@@ -117,21 +136,4 @@ fun ErrorText(
         color = MaterialTheme.colors.error,
         style = MaterialTheme.typography.caption,
     )
-}
-
-inline fun <T : Any> LazyGridScope.items(
-    items: LazyPagingItems<T>,
-    noinline key: ((item: T) -> Any)? = null,
-    noinline span: (LazyGridItemSpanScope.(item: T?) -> GridItemSpan)? = null,
-    noinline contentType: (item: T?) -> Any? = { null },
-    crossinline itemContent: @Composable LazyGridItemScope.(item: T?) -> Unit
-) = items(
-    count = items.itemCount,
-    key = if (key != null) { index: Int -> items[index]?.let(key) ?: index } else null,
-    span = if (span != null) {
-        { span(items[it]) }
-    } else null,
-    contentType = { index: Int -> contentType(items[index]) }
-) {
-    itemContent(items[it])
 }
