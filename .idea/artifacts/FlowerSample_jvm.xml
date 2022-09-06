@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="FlowerSample-jvm">
-    <output-path>$PROJECT_DIR$/build/libs</output-path>
-    <root id="archive" name="FlowerSample-jvm.jar">
-      <element id="module-output" name="FlowerSample.jvmMain" />
-    </root>
-  </artifact>
-</component>
