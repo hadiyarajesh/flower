@@ -132,7 +132,7 @@ interface MyApi {
 }
 ```
 
-<br><br>
+<br></br>
 #### 1. Add CallAdapterFactory/ResponseConverter in networking client
 
 **Ktorfit**
@@ -157,7 +157,7 @@ Retrofit.Builder()
     .build()
 ```
 
-<br><br>
+<br></br>
 #### 2. Make network request (and save data) in Repository
 
 **2.1** If you want to fetch network resources and save into local database, 
