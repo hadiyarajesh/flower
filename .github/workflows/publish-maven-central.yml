@@ -1,40 +1,35 @@
-name: publish-maven-central
+# This is a workflow to publish flower library on Maven Central
+name: publish-to-maven-central
 
 on:
   release:
     # Run this workflow when a new GitHub release is created
-    types: [released]
+    types: [ released ]
 
 jobs:
   publish:
-    name: Release build and publish
+    name: Build and publish
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
-          distribution: adopt
+          distribution: 'temurin'
           java-version: 11
 
-      - name: Change wrapper permissions
+      # Provide required permission to gradle
+      - name: Change gradle wrapper permissions
         run: chmod +x ./gradlew
-        # Builds the release artifacts of the library
-      - name: Release build
-        run: ./gradlew :flower:assembleRelease
-
-        # Generates other artifacts (javadocJar is optional)
-      - name: Source jar
-        run: ./gradlew androidSourcesJar
 
         # Runs upload, and then closes & releases the repository
       - name: Publish to MavenCentral
-        run: ./gradlew publishReleasePublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew publish
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
+          ORG_GRADLE_PROJECT_MAVENCENTRALPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_MAVENCENTRALUSERNAME: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEY }}
+          ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYID: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYID }}
+          ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYPASSWORD }}
