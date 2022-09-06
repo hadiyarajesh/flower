@@ -20,8 +20,7 @@ fault-tolerant architecture.
 - It provides a fluid app experience by not blocking the `main thread` when accessing
   network/database resources.
 
-You can find companion medium
-article [here](https://medium.com/@hadiyarajesh/android-networking-and-database-caching-in-2020-mvvm-retrofit-room-flow-35b4f897d46a)
+Flower is recognised by [Google Dev Library](https://devlibrary.withgoogle.com/products/android/repos/hadiyarajesh-flower), a showcase of open-source projects.
 
 ## Installation
 
