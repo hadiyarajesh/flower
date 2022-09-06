@@ -6,6 +6,9 @@ on:
     # Run this workflow when a new GitHub release is created
     types: [ released ]
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 jobs:
   publish:
     name: Build and publish
