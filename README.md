@@ -5,7 +5,7 @@
     </picture>
 </p>
 
-Flower is a Kotlin library that makes networking and database caching easy. It enables developers to
+Flower is a Kotlin multi-platform (originally, Android) library that makes networking and database caching easy. It enables developers to
 fetch network resources and use them as is OR combine them with local database at single place with
 fault-tolerant architecture.
 
@@ -25,23 +25,20 @@ article [here](https://medium.com/@hadiyarajesh/android-networking-and-database-
 
 ## Installation
 
-Flower is mainly available as two specific modules, one for **Ktorfit** and one for **Retrofit**.
+Flower is primarily available in two modules, one for **Ktorfit** and the other for **Retrofit**.
 
-You may also use the **core** module if you want to handle networking yourself.
+If you want to handle networking yourself, you can also use the **core** module.
 
 `$flowerVersion=3.0.0`
-
-### Ktorfit
-
-This is a multiplatform module. It can be used in other Kotlin multiplatform projects, Android (
-Apps/Libs), on the JVM in general, with Kotlin-JS and so on...
-
-It uses and provides [Ktorfit](https://github.com/Foso/Ktorfit) and you need to apply KSP to your
-project.
+<br>
 `$ktorFitVersion=1.0.0-beta12`
 
-Apply the KSP Plugin to your project:
+### Ktorfit
+This module is multi-platform. It is suitable for use in Kotlin multi-platform projects, Android (Apps/Libraries), the JVM in general, Kotlin-JS, and so on...
 
+It uses and provides [Ktorfit](https://github.com/Foso/Ktorfit) and you must use KSP in your project.
+
+Apply the KSP Plugin to your project:
 ```gradle
 plugins {
   id("com.google.devtools.ksp") version "1.7.10-1.0.6"
@@ -49,7 +46,6 @@ plugins {
 ```
 
 **Multiplatform example**
-
 ```gradle
 dependencies {
     implementation("io.github.hadiyarajesh:flower-ktorfit:$flowerVersion")
@@ -64,7 +60,6 @@ dependencies {
 ```
 
 **Android example**
-
 ```gradle
 dependencies {
     implementation("io.github.hadiyarajesh:flower-ktorfit:$flowerVersion")
@@ -74,9 +69,7 @@ dependencies {
 ```
 
 ### Retrofit
-
-This is an Android-Only module, so it can only be used in Android Apps/Libs. It does not require the
-KSP plugin.
+This is an Android-only module, so it can only be used in Android Apps/Libs. It does not require the KSP plugin.
 
 ```gradle
 dependencies {
@@ -85,8 +78,7 @@ dependencies {
 ```
 
 ### Core
-
-This module only contains the core code and allows you to handle the networking yourself.
+This module only contains the _core code_ and allows you to handle the networking yourself.
 
 **We Highly recommend you to use either Ktorfit or Retrofit module. Only use this if you don't want
 to rely on Ktorfit or Retrofit.**
@@ -99,7 +91,7 @@ dependencies {
 
 ## Usage
 
-Let's say you have a model class `MyModel` which you are fetching from network
+Assume you have a model class called `MyModel` that you are retrieving from the network.
 
 ```kotlin
 data class MyModel(
@@ -109,10 +101,9 @@ data class MyModel(
 ```
 
 ### Prerequisite
+- If you want to save network response in a local database, your database caching system function must return a value of type `Flow<MyModel>`.
 
-- Return type of your caching system function must be `Flow<MyModel>`.
-
-Android Room example:
+**Android Room example:**
 
 ```kotlin
 @Dao
@@ -123,10 +114,9 @@ interface MyDao {
 ```
 
 - Return type of networking api function must be `ApiResponse<MyModel>` (
-  or `Flow<ApiResponse<MyModel>>` if you want to get as Flow from server)
+  or `Flow<ApiResponse<MyModel>>` if you're retrieving a flow of data from server)
 
-Ktorfit/Retrofit example:
-
+**Ktorfit/Retrofit example:**
 ```kotlin
 interface MyApi {
     @GET("data")
@@ -138,23 +128,20 @@ interface MyApi {
 ```
 
 <br><br>
-#### 1. Add CallAdapterFactory/ResponseConverter
+#### 1. Add CallAdapterFactory/ResponseConverter in networking client
 
 **Ktorfit**
-
-Add `FlowerResponseConverter` as *ResponseConverter* in Ktorfit builder
+Add `FlowerResponseConverter` as *ResponseConverter* in Ktorfit builder.
 
 ```kotlin
-Ktorfit(
-    BASE_URL,
-    httpClient
-).addResponseConverter(
-    FlowerResponseConverter()
-)
+Ktorfit.Builder()
+  .baseUrl(BASE_URL)
+  .httpClient(ktorClient)
+  .responseConverter(FlowerResponseConverter())
+  .build()
 ```
 
 **Retrofit**
-
 Add `FlowerCallAdapterFactory` as *CallAdapterFactory* in Retrofit builder
 
 ```kotlin
@@ -166,17 +153,19 @@ Retrofit.Builder()
 ```
 
 <br><br>
-####2. In Repository
+####2. Make network request (and save data) in Repository
 
-2.1. If you want to fetch network resources and cache into local database, use `dbBoundResource()`
-higher order function. It takes following functions as parameters
+2.1. If you want to fetch network resources and save into local database, 
+use `dbBoundResource()` higher order function 
+(or `dbBoundResourceFlow()` function if you're retrieving a flow of data from server). 
+It takes following functions as parameters.
 
 - *fetchFromLocal* -  A function to retrieve data from local database
-- *shouldFetchFromRemote* - Decide whether or not to make network request
-- *fetchFromRemote* - A function to make network request
-- *processRemoteResponse* - A function to process network response (e.g., saving response headers before saving actual data)
-- *saveRemoteData* - A function to save network response (`MyModel`) to local database
-- *onFetchFailed* - An action to perform when a network request fails
+- *shouldMakeNetworkRequest* - Decides whether or not to make network request
+- *makeNetworkRequest* - A function to make network request
+- *processNetworkResponse* - A function to process network response (e.g., saving response headers before saving actual data)
+- *saveResponseData* - A function to save network response (`MyModel`) to local database
+- *onNetworkRequestFailed* - An action to perform when a network request fails
 
 ```kotlin
 fun getMyData(): Flow<Resource<MyModel>> {
@@ -184,32 +173,33 @@ fun getMyData(): Flow<Resource<MyModel>> {
         fetchFromLocal = { myDao.getLocalData() },
         shouldMakeNetworkRequest = { localData -> localData == null },
         makeNetworkRequest = { myApi.getRemoteData() },
-        processRequestResponse = { },
-        saveRequestData = { myDao.saveMyData(it) },
-        onRequestFailed { errorMessage, statusCode -> }
+        processNetworkResponse = { },
+        saveResponseData = { myDao.saveMyData(it) },
+        onNetworkRequestFailed { errorMessage, statusCode -> }
     ).flowOn(Dispatchers.IO)
 }
 ```
 
 **OR**
 
-2.2 If you only want to fetch network resources, use `networkResource()` higher order function
+2.2 If you only want to fetch network resources without saving it in local database, 
+use `networkResource()` higher order function.
+(or `networkResourceFlow()` function if you're retrieving a flow of data from server)
 
 ```kotlin
 fun getMyData(): Flow<Resource<MyModel>> {
     return networkResource(
         makeNetworkRequest = { myApi.getRemoteData() },
-        onRequestFailed { errorMessage, statusCode -> }
+        onNetworkRequestFailed { errorMessage, statusCode -> }
     ).flowOn(Dispatchers.IO)
 }
 ```
 
 <br></br>
-**3. In ViewModel**
-<br>
-Collect/transform `Flow` to observe different state of resources (`Loading`, `Success`, `Error`)
+**3. Collect `Flow` to observe different state of resources (`Loading`, `Success`, `Error`) In ViewModel**
 
 ```kotlin
+// A model class to re-present UI state
 sealed class UiState<out T> {
     object Empty : UiState<Nothing>()
     data class Loading(val data: T?) : UiState<out T>()
@@ -220,7 +210,7 @@ sealed class UiState<out T> {
 
 ```kotlin
 private val _myData: MutableStateFlow<UiState<MyModel>> = MutableStateFlow(UiState.Empty)
-val myData: StateFlow<UiState<MyModel>> = _myData
+val myData: StateFlow<UiState<MyModel>> = _myData.asStateFlow()
 
 init {
     viewModelScope.launch {
@@ -230,19 +220,23 @@ init {
 
 suspend fun getMyData() = repository.getMyData().collect { response ->
     when (response.status) {
-        is Resource.Status.LOADING -> {
-            val status = response.status as Resource.Status.LOADING
+        is Resource.Status.Loading -> {
+            val status = response.status as Resource.Status.Loading
             _myData.value = UiState.Loading(status.data)
         }
-        is Resource.Status.SUCCESS -> {
-            val status = response.status as Resource.Status.SUCCESS
+      
+        is Resource.Status.Success -> {
+            val status = response.status as Resource.Status.Success
             _myData.value = UiState.Success(status.data)
         }
-        is Resource.Status.EMPTY -> {
+      
+        // EmptySuccess is for body-less successful HTTP responses like 201
+        is Resource.Status.EmptySuccess -> {
             _myData.value = UiState.Empty
         }
-        is Resource.Status.ERROR -> {
-            val status = response.status as Resource.Status.LOADING
+      
+        is Resource.Status.Error -> {
+            val status = response.status as Resource.Status.Error
             _myData.value = UiState.Error(status.message)
         }
     }
@@ -250,12 +244,10 @@ suspend fun getMyData() = repository.getMyData().collect { response ->
 ```
 
 <br></br>
-**4. In Activity/Fragment/Composable**
-<br>
-Observe view model data in Activity/Fragment/Composable function to drive UI changes
+**4. Observe data in Activity/Fragment/Composable function to drive UI changes**
 
 ```kotlin
-lifecycleScope.launchWhenCreated {
+lifecycleScope.launchWhenStarted {
     viewModel.myData.collect { data ->
         when (data) {
             is UiState.Loading -> {
@@ -268,7 +260,6 @@ lifecycleScope.launchWhenCreated {
                 // Show error
             }
             else -> {}
-
         }
     }
 }
@@ -276,10 +267,10 @@ lifecycleScope.launchWhenCreated {
 
 ## Sample
 
-Sample app is
-provided [in this repository](https://github.com/hadiyarajesh/flower/tree/master/app/src/main/java/com/hadiyarajesh/flowersample)
-. It fetch random quote from remote api and save it to local persistent database in order to display
-it on UI.
+Two sample apps are provided in this repository
+1. [XML View based app](https://github.com/hadiyarajesh/flower/tree/master/app) - It fetch random quote from remote api and save it to local database in order to display it on UI.
+2. [Jetpack Compose based app](https://github.com/hadiyarajesh/flower/tree/master/compose-app) - It fetches unsplash images from [Picsum](https://picsum.photos) and display it on UI.
+
 
 ## License
 
