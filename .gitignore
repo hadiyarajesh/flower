@@ -6,6 +6,7 @@ build/
 /.idea/**/*
 !.idea/codeStyles
 !.idea/codeStyles/*
+!.idea/copyright/*
 *.hprof
 
 # configuration
