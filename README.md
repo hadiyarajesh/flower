@@ -32,6 +32,8 @@ If you want to handle networking yourself, you can also use the **core** module.
 `$flowerVersion=3.0.0`
 <br>
 `$ktorFitVersion=1.0.0-beta12`
+<br>
+`$retrofitVersion=2.9.0`
 
 ### Ktorfit
 This module is multi-platform. It is suitable for use in Kotlin multi-platform projects, Android (Apps/Libraries), the JVM in general, Kotlin-JS, and so on...
@@ -64,16 +66,19 @@ dependencies {
 dependencies {
     implementation("io.github.hadiyarajesh:flower-ktorfit:$flowerVersion")
     
+    implementation("de.jensklingenberg.ktorfit:ktorfit-lib:$ktorFitVersion")
     ksp("de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorFitVersion")
 }
 ```
 
 ### Retrofit
-This is an Android-only module, so it can only be used in Android Apps/Libs. It does not require the KSP plugin.
+This is an Android-only module, so it can only be used in Android Apps/Libs.
 
 ```gradle
 dependencies {
     implementation("io.github.hadiyarajesh:flower-retrofit:$flowerVersion")
+    
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
 }
 ```
 
