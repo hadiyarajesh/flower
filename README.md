@@ -158,9 +158,9 @@ Retrofit.Builder()
 ```
 
 <br><br>
-####2. Make network request (and save data) in Repository
+#### 2. Make network request (and save data) in Repository
 
-2.1. If you want to fetch network resources and save into local database, 
+**2.1** If you want to fetch network resources and save into local database, 
 use `dbBoundResource()` higher order function 
 (or `dbBoundResourceFlow()` function if you're retrieving a flow of data from server). 
 It takes following functions as parameters.
@@ -187,7 +187,7 @@ fun getMyData(): Flow<Resource<MyModel>> {
 
 **OR**
 
-2.2 If you only want to fetch network resources without saving it in local database, 
+**2.2** If you only want to fetch network resources without saving it in local database, 
 use `networkResource()` higher order function.
 (or `networkResourceFlow()` function if you're retrieving a flow of data from server)
 
@@ -201,7 +201,7 @@ fun getMyData(): Flow<Resource<MyModel>> {
 ```
 
 <br></br>
-**3. Collect `Flow` to observe different state of resources (`Loading`, `Success`, `Error`) In ViewModel**
+#### 3. Collect `Flow` to observe different state of resources (`Loading`, `Success`, `Error`) In ViewModel
 
 ```kotlin
 // A model class to re-present UI state
@@ -249,7 +249,7 @@ suspend fun getMyData() = repository.getMyData().collect { response ->
 ```
 
 <br></br>
-**4. Observe data in Activity/Fragment/Composable function to drive UI changes**
+#### 4. Observe data in Activity/Fragment/Composable function to drive UI changes
 
 ```kotlin
 lifecycleScope.launchWhenStarted {
