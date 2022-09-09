@@ -35,7 +35,7 @@ If you want to handle networking yourself, you can also use the **core** module.
 `$retrofitVersion=2.9.0`
 
 ### Ktorfit
-This module is multi-platform. It is suitable for use in Kotlin multi-platform projects, Android (Apps/Libraries), the JVM in general, Kotlin-JS, and so on...
+This is a multiplatform module. It is suitable for use in Kotlin multiplatform projects, Android (Apps/Libraries), the JVM in general, Kotlin-JS, and so on...
 
 It uses and provides [Ktorfit](https://github.com/Foso/Ktorfit) and you must use KSP in your project.
 
@@ -49,7 +49,7 @@ plugins {
 **Multiplatform example**
 ```gradle
 dependencies {
-    implementation("io.github.hadiyarajesh:flower-ktorfit:$flowerVersion")
+    implementation("io.github.hadiyarajesh.flower-ktorfit:flower-ktorfit:$flowerVersion")
 
     add("kspCommonMainMetadata", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorFitVersion")
     add("kspJvm", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorFitVersion")
@@ -63,8 +63,8 @@ dependencies {
 **Android example**
 ```gradle
 dependencies {
-    implementation("io.github.hadiyarajesh:flower-ktorfit:$flowerVersion")
-    
+    implementation("io.github.hadiyarajesh.flower-ktorfit:flower-ktorfit:$flowerVersion")
+    //Ktorfit library
     implementation("de.jensklingenberg.ktorfit:ktorfit-lib:$ktorFitVersion")
     ksp("de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorFitVersion")
 }
@@ -75,8 +75,8 @@ This is an Android-only module, so it can only be used in Android Apps/Libs.
 
 ```gradle
 dependencies {
-    implementation("io.github.hadiyarajesh:flower-retrofit:$flowerVersion")
-    
+    implementation("io.github.hadiyarajesh.flower-retrofit:flower-retrofit:$flowerVersion")
+    // Retrofit library
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
 }
 ```
