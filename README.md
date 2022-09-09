@@ -234,7 +234,7 @@ suspend fun getMyData() = repository.getMyData().collect { response ->
             _myData.value = UiState.Success(status.data)
         }
       
-        // EmptySuccess is for body-less successful HTTP responses like 201
+        // EmptySuccess is for potentially body-less successful HTTP responses like 201, 204
         is Resource.Status.EmptySuccess -> {
             _myData.value = UiState.Empty
         }
