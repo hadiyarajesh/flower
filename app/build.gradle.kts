@@ -7,13 +7,13 @@ plugins {
 
 android {
     namespace = "com.hadiyarajesh.flowersample"
-    compileSdk = 32
+    compileSdk = 33
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.flowersample"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -62,8 +62,8 @@ object LibVersion {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.appcompat:appcompat:1.5.0")
+    implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
+    implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.material:material:1.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${LibVersion.lifecycleVersion}")

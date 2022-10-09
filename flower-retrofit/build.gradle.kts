@@ -12,11 +12,12 @@ group = "io.github.hadiyarajesh.flower-retrofit"
 version = "3.0.0"
 
 android {
-    compileSdk = 32
+    namespace = "com.hadiyarajesh.flower_retrofit"
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -37,6 +38,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        buildConfig = false
     }
 }
 
@@ -59,7 +63,7 @@ tasks.register<Jar>("androidSourcesJar") {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.S01)
+    publishToMavenCentral(host = SonatypeHost.S01, automaticRelease = true)
     signAllPublications()
 
     pom {
@@ -73,16 +77,21 @@ mavenPublishing {
                 url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
+
         scm {
             url.set("https://github.com/hadiyarajesh/flower")
             connection.set("scm:git:git://github.com/hadiyarajesh/flower.git")
         }
+
         developers {
             developer {
+                id.set("hadiyarajesh")
                 name.set("Rajesh Hadiya")
                 url.set("https://github.com/hadiyarajesh")
             }
+
             developer {
+                id.set("DatL4g")
                 name.set("Jeff Retz")
                 url.set("https://github.com/DatL4g")
             }

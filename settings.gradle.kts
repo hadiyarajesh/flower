@@ -1,4 +1,4 @@
-rootProject.name = "FlowerSample"
+rootProject.name = "flower"
 
 include(":flower-core")
 include(":app")

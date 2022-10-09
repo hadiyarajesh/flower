@@ -19,11 +19,12 @@ group = "io.github.hadiyarajesh.flower-core"
 version = "3.0.0"
 
 android {
-    compileSdk = 32
+    namespace = "com.hadiyarajesh.flower_core"
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -41,6 +42,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        buildConfig = false
     }
 }
 
@@ -91,12 +95,12 @@ kotlin {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.S01)
+    publishToMavenCentral(host = SonatypeHost.S01, automaticRelease = true)
     signAllPublications()
 
     pom {
         name.set(project.name)
-        description.set("Flower Core Library")
+        description.set("Flower is a Kotlin multi-platform (and Android) library that makes networking and database caching easy. It enables developers to fetch network resources and use them as is OR combine them with local database at single place with fault-tolerant architecture.")
         url.set("https://github.com/hadiyarajesh/flower")
 
         licenses {
@@ -105,16 +109,21 @@ mavenPublishing {
                 url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
+
         scm {
             url.set("https://github.com/hadiyarajesh/flower")
             connection.set("scm:git:git://github.com/hadiyarajesh/flower.git")
         }
+
         developers {
             developer {
+                id.set("hadiyarajesh")
                 name.set("Rajesh Hadiya")
                 url.set("https://github.com/hadiyarajesh")
             }
+
             developer {
+                id.set("DatL4g")
                 name.set("Jeff Retz")
                 url.set("https://github.com/DatL4g")
             }

@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.hadiyarajesh.compose_app"
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.compose_app"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -71,13 +71,13 @@ object LibVersion {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.5.1")
+    implementation("androidx.activity:activity-compose:1.6.0")
     implementation("androidx.compose.ui:ui:${LibVersion.composeVersion}")
     implementation("androidx.compose.ui:ui-tooling-preview:${LibVersion.composeVersion}")
     implementation("androidx.compose.material:material:${LibVersion.composeVersion}")
-    implementation("androidx.navigation:navigation-compose:2.5.1")
+    implementation("androidx.navigation:navigation-compose:2.5.2")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
