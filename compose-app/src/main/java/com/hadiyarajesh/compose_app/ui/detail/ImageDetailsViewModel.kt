@@ -50,8 +50,8 @@ class ImageDetailsViewModel @Inject constructor(
                 }
 
                 is Resource.Status.Error -> {
-                    val error = (response.status as Resource.Status.Error).message
-                    UiState.Error(error)
+                    val error = (response.status as Resource.Status.Error).errorMessage
+                    UiState.Error(error.message)
                 }
             }
         }

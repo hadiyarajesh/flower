@@ -30,9 +30,9 @@ import kotlinx.coroutines.flow.flow
  */
 inline fun <REMOTE> networkResourceFlow(
     crossinline makeNetworkRequest: () -> Flow<ApiResponse<REMOTE>>,
-    crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
+    crossinline onNetworkRequestFailed: (errorMessage: ErrorMessage, statusCode: HttpStatusCode) -> Unit = { _: ErrorMessage, _: HttpStatusCode -> }
 ) = flow<Resource<REMOTE>> {
-    emit(Resource.loading(null))
+    emit(Resource.loading(data = null))
 
     makeNetworkRequest().collect { apiResponse ->
         when (apiResponse) {
@@ -43,12 +43,15 @@ inline fun <REMOTE> networkResourceFlow(
             }
 
             is ApiErrorResponse -> {
-                onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
+                onNetworkRequestFailed(
+                    apiResponse.errorMessage,
+                    apiResponse.statusCode
+                )
                 emit(
                     Resource.error(
-                        msg = apiResponse.errorMessage,
+                        errorMessage = apiResponse.errorMessage,
                         statusCode = apiResponse.statusCode,
-                        null
+                        data = null
                     )
                 )
             }

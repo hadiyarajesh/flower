@@ -16,7 +16,11 @@
 
 package com.hadiyarajesh.flower_core
 
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Fetch the data from local database (if available), perform a network request (if instructed)
@@ -37,13 +41,14 @@ inline fun <DB, REMOTE> dbBoundResource(
     crossinline makeNetworkRequest: suspend () -> ApiResponse<REMOTE>,
     crossinline processNetworkResponse: (response: ApiSuccessResponse<REMOTE>) -> Unit = { },
     crossinline saveResponseData: suspend (REMOTE) -> Unit = { },
-    crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
+    crossinline onNetworkRequestFailed: (errorMessage: ErrorMessage, statusCode: HttpStatusCode) -> Unit = { _: ErrorMessage, _: HttpStatusCode -> }
 ) = flow<Resource<DB>> {
-    emit(Resource.loading(null))
+    emit(Resource.loading(data = null))
     val localData = fetchFromLocal().first()
 
     if (shouldMakeNetworkRequest(localData)) {
-        emit(Resource.loading(localData))
+        emit(Resource.loading(data = localData))
+
         when (val apiResponse = makeNetworkRequest()) {
             is ApiSuccessResponse -> {
                 processNetworkResponse(apiResponse)
@@ -57,11 +62,14 @@ inline fun <DB, REMOTE> dbBoundResource(
             }
 
             is ApiErrorResponse -> {
-                onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
+                onNetworkRequestFailed(
+                    apiResponse.errorMessage,
+                    apiResponse.statusCode
+                )
                 emitAll(
                     fetchFromLocal().map { dbData ->
                         Resource.error(
-                            msg = apiResponse.errorMessage,
+                            errorMessage = apiResponse.errorMessage,
                             statusCode = apiResponse.statusCode,
                             data = dbData
                         )
@@ -76,7 +84,7 @@ inline fun <DB, REMOTE> dbBoundResource(
     } else {
         emitAll(
             fetchFromLocal().map { dbData ->
-                dbData?.let { Resource.success(it) } ?: Resource.emptySuccess()
+                dbData?.let { Resource.success(data = it) } ?: Resource.emptySuccess()
             }
         )
     }
