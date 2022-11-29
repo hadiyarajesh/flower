@@ -16,6 +16,7 @@
 
 package com.hadiyarajesh.compose_app.ui.home
 
+//import androidx.compose.material3.rememberScaffoldState
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,11 +28,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -58,8 +61,8 @@ import com.hadiyarajesh.compose_app.ui.component.LoadingProgressBar
 import com.hadiyarajesh.compose_app.ui.component.SubComposeImageItem
 import com.hadiyarajesh.compose_app.ui.navigation.Screens
 import com.hadiyarajesh.compose_app.utility.UiState
-import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -67,7 +70,7 @@ fun HomeScreen(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
     val isLoading by remember { homeViewModel.isLoading }.collectAsState()
     val images by remember { homeViewModel.images }.collectAsState()
     var showToast by rememberSaveable { mutableStateOf(true) }
@@ -85,10 +88,10 @@ fun HomeScreen(
     }
 
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(title = { Text(text = stringResource(id = R.string.app_name)) })
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -101,7 +104,7 @@ fun HomeScreen(
                 }
 
                 is UiState.Success -> {
-                    (images as UiState.Success).data?.let {
+                    (images as UiState.Success).data.let {
                         SwipeRefresh(
                             state = rememberSwipeRefreshState(isRefreshing = isLoading),
                             onRefresh = { homeViewModel.refreshImages() }
@@ -117,8 +120,8 @@ fun HomeScreen(
                 }
 
                 is UiState.Error -> {
-                    scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.something_went_wrong))
+                    LaunchedEffect(images) {
+                        snackbarHostState.showSnackbar(context.getString(R.string.something_went_wrong))
                     }
 
                     Column(

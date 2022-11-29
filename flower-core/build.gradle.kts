@@ -10,7 +10,6 @@ plugins {
 
 repositories {
     google()
-    mavenLocal()
     mavenCentral()
     gradlePluginPortal()
 }

@@ -20,9 +20,15 @@ import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,7 +48,8 @@ import com.hadiyarajesh.compose_app.ui.component.LoadingProgressBar
 import com.hadiyarajesh.compose_app.ui.component.SubComposeImageItem
 import com.hadiyarajesh.compose_app.utility.UiState
 
-@androidx.compose.runtime.Composable
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun ImageDetailsScreen(
     navController: NavController,
     imageDetailsViewModel: ImageDetailsViewModel,
@@ -62,7 +69,10 @@ fun ImageDetailsScreen(
                     title = { Text(text = stringResource(id = R.string.image_details)) },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null
+                            )
                         }
                     }
                 )
@@ -80,14 +90,12 @@ fun ImageDetailsScreen(
                     }
 
                     is UiState.Success -> {
-                        (image as UiState.Success).data?.let {
-                            ImageContent(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(0.5f),
-                                image = it
-                            )
-                        }
+                        ImageDetailsContent(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(0.5f),
+                            image = (image as UiState.Success).data
+                        )
                     }
 
                     is UiState.Error -> {
@@ -106,13 +114,13 @@ fun ImageDetailsScreen(
 }
 
 @Composable
-private fun ImageContent(
+private fun ImageDetailsContent(
     modifier: Modifier = Modifier,
     image: Image
 ) {
     val uriHandler = LocalUriHandler.current
 
-    Column {
+    Column(modifier = modifier) {
         SubComposeImageItem(
             modifier = modifier
                 .padding(4.dp)
@@ -125,27 +133,26 @@ private fun ImageContent(
 
         Text(
             text = stringResource(id = R.string.author),
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold
         )
         Text(
             text = image.author,
-            style = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.titleSmall
         )
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = stringResource(id = R.string.url),
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold
         )
         Text(
             modifier = Modifier.clickable { uriHandler.openUri(image.url) },
             text = image.url,
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.titleSmall,
             color = Color.Blue,
             textDecoration = TextDecoration.Underline
         )
     }
-
 }

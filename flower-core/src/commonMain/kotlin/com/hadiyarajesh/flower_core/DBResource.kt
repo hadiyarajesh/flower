@@ -16,11 +16,15 @@
 
 package com.hadiyarajesh.flower_core
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
-inline fun <DB : Any> DBResource(
-    crossinline fetchFromLocal: suspend () -> DB,
+inline fun <DB : Any> dbResource(
+    crossinline fetchFromLocal: suspend () -> Flow<DB>,
 ) = flow<Resource<DB>> {
-    emit(Resource.loading(null))
-    emit(Resource.success(fetchFromLocal()))
+    emit(Resource.loading(data = null))
+
+    val localData = fetchFromLocal().first()
+    emit(Resource.success(data = localData))
 }
