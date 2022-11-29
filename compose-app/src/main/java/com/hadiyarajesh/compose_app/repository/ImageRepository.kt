@@ -21,6 +21,7 @@ import com.hadiyarajesh.compose_app.database.entity.Image
 import com.hadiyarajesh.compose_app.network.ImageApi
 import com.hadiyarajesh.flower_core.Resource
 import com.hadiyarajesh.flower_core.dbBoundResource
+import com.hadiyarajesh.flower_core.dbResource
 import com.hadiyarajesh.flower_core.networkResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -58,7 +59,11 @@ class ImageRepository @Inject constructor(
         ).flowOn(Dispatchers.IO)
     }
 
-    fun getImage(imageId: Long): Flow<Resource<Image>> {
+    fun getImageFromDb(imageId: Long): Flow<Resource<Image>> {
+        return dbResource { imageDao.getImageById(imageId) }.flowOn(Dispatchers.IO)
+    }
+
+    fun getImageFromNetwork(imageId: Long): Flow<Resource<Image>> {
         return networkResource(
             makeNetworkRequest = { imageApi.getImage(imageId = imageId) },
             onNetworkRequestFailed = { _, _ -> }

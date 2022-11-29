@@ -19,6 +19,7 @@ package com.hadiyarajesh.compose_app.ui.detail
 import androidx.lifecycle.ViewModel
 import com.hadiyarajesh.compose_app.database.entity.Image
 import com.hadiyarajesh.compose_app.repository.ImageRepository
+import com.hadiyarajesh.compose_app.utility.LoadResourceFrom
 import com.hadiyarajesh.compose_app.utility.UiState
 import com.hadiyarajesh.flower_core.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,8 +34,17 @@ class ImageDetailsViewModel @Inject constructor(
     private val _image = MutableStateFlow<UiState<Image>>(UiState.Empty)
     val image: StateFlow<UiState<Image>> get() = _image
 
-    suspend fun getImage(imageId: Long) = imageRepository
-        .getImage(imageId = imageId).collect { response ->
+    private val _loadFrom = MutableStateFlow<LoadResourceFrom>(LoadResourceFrom.Db)
+    val loadFrom: StateFlow<LoadResourceFrom> get() = _loadFrom
+
+    private fun getLoadFunction(imageId: Long, loadFrom: LoadResourceFrom) =
+        if (loadFrom == LoadResourceFrom.Db) imageRepository.getImageFromDb(imageId)
+        else imageRepository.getImageFromNetwork(imageId = imageId)
+
+    suspend fun getImage(imageId: Long, loadFrom: LoadResourceFrom) =
+        getLoadFunction(imageId, loadFrom).collect { response ->
+            _loadFrom.value = loadFrom
+
             when (response.status) {
                 is Resource.Status.Loading -> {
                     _image.value = UiState.Loading
@@ -45,9 +55,7 @@ class ImageDetailsViewModel @Inject constructor(
                     _image.value = UiState.Success(image)
                 }
 
-                is Resource.Status.EmptySuccess -> {
-
-                }
+                is Resource.Status.EmptySuccess -> {}
 
                 is Resource.Status.Error -> {
                     val error = (response.status as Resource.Status.Error).errorMessage

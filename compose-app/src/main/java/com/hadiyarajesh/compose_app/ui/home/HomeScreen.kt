@@ -17,7 +17,6 @@
 package com.hadiyarajesh.compose_app.ui.home
 
 //import androidx.compose.material3.rememberScaffoldState
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -41,10 +39,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -58,6 +54,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.hadiyarajesh.compose_app.R
 import com.hadiyarajesh.compose_app.database.entity.Image
 import com.hadiyarajesh.compose_app.ui.component.LoadingProgressBar
+import com.hadiyarajesh.compose_app.ui.component.RetryItem
 import com.hadiyarajesh.compose_app.ui.component.SubComposeImageItem
 import com.hadiyarajesh.compose_app.ui.navigation.Screens
 import com.hadiyarajesh.compose_app.utility.UiState
@@ -68,7 +65,6 @@ fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel
 ) {
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val isLoading by remember { homeViewModel.isLoading }.collectAsState()
@@ -77,11 +73,14 @@ fun HomeScreen(
 
     LaunchedEffect(showToast) {
         if (showToast) {
-            Toast.makeText(
-                context,
-                context.getString(R.string.swipe_down_to_refresh),
-                Toast.LENGTH_SHORT
-            ).show()
+            snackbarHostState.showSnackbar(
+                message = context.getString(R.string.swipe_down_to_refresh)
+            )
+//            Toast.makeText(
+//                context,
+//                context.getString(R.string.swipe_down_to_refresh),
+//                Toast.LENGTH_SHORT
+//            ).show()
 
             showToast = !showToast
         }
@@ -89,7 +88,9 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = stringResource(id = R.string.app_name)) })
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.app_name)) }
+            )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
@@ -124,15 +125,10 @@ fun HomeScreen(
                         snackbarHostState.showSnackbar(context.getString(R.string.something_went_wrong))
                     }
 
-                    Column(
+                    RetryItem(
                         modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        OutlinedButton(onClick = { homeViewModel.refreshImages() }) {
-                            Text(text = stringResource(id = R.string.retry))
-                        }
-                    }
+                        onRetryClick = { homeViewModel.refreshImages() }
+                    )
                 }
 
                 is UiState.Empty -> {}

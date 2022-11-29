@@ -31,6 +31,9 @@ interface ImageDao {
     @Query("SELECT * FROM Image ORDER BY id")
     fun getAllImages(): Flow<List<Image>>
 
+    @Query("SELECT * FROM Image WHERE id=:imageId ORDER BY id")
+    fun getImageById(imageId: Long): Flow<Image>
+
     @Query("DELETE FROM Image")
     suspend fun deleteAllImages()
 }

@@ -14,23 +14,9 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.flower_core
+package com.hadiyarajesh.compose_app.utility
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-
-/**
- * Fetch the data from local database (if available) and emit the response.
- * @author Rajesh Hadiya
- * @param fetchFromLocal - A function to retrieve data from local database
- * @return [DB] type
- */
-inline fun <DB : Any> dbResource(
-    crossinline fetchFromLocal: suspend () -> Flow<DB>,
-) = flow<Resource<DB>> {
-    emit(Resource.loading(data = null))
-
-    fetchFromLocal().collect { localData ->
-        emit(Resource.success(data = localData))
-    }
+enum class LoadResourceFrom {
+    Db,
+    Network
 }
