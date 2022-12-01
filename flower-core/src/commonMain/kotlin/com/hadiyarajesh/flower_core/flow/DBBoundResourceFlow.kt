@@ -20,8 +20,6 @@ import com.hadiyarajesh.flower_core.ApiEmptyResponse
 import com.hadiyarajesh.flower_core.ApiErrorResponse
 import com.hadiyarajesh.flower_core.ApiResponse
 import com.hadiyarajesh.flower_core.ApiSuccessResponse
-import com.hadiyarajesh.flower_core.ErrorMessage
-import com.hadiyarajesh.flower_core.HttpStatusCode
 import com.hadiyarajesh.flower_core.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
@@ -52,7 +50,7 @@ inline fun <DB, REMOTE> dbBoundResourceFlow(
     crossinline makeNetworkRequest: () -> Flow<ApiResponse<REMOTE>>,
     crossinline processNetworkResponse: (response: ApiSuccessResponse<REMOTE>) -> Unit = { },
     crossinline saveResponseData: suspend (REMOTE) -> Unit = { },
-    crossinline onNetworkRequestFailed: (errorMessage: ErrorMessage, statusCode: HttpStatusCode) -> Unit = { _: ErrorMessage, _: HttpStatusCode -> }
+    crossinline onNetworkRequestFailed: (errorMessage: String, httpStatusCode: Int) -> Unit = { _: String, _: Int -> }
 ) = flow<Resource<DB>> {
     emit(Resource.loading(data = null))
     val localData = fetchFromLocal().first()
@@ -74,12 +72,12 @@ inline fun <DB, REMOTE> dbBoundResourceFlow(
                 }
 
                 is ApiErrorResponse -> {
-                    onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
+                    onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.httpStatusCode)
                     emitAll(
                         fetchFromLocal().map { dbData ->
                             Resource.error(
                                 errorMessage = apiResponse.errorMessage,
-                                statusCode = apiResponse.statusCode,
+                                httpStatusCode = apiResponse.httpStatusCode,
                                 data = dbData
                             )
                         }

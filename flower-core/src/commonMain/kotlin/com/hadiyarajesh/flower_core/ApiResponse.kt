@@ -17,14 +17,13 @@
 package com.hadiyarajesh.flower_core
 
 import com.hadiyarajesh.flower_core.implement.Response
-import kotlin.jvm.JvmInline
 
 sealed class ApiResponse<T> {
     companion object {
         fun <T> create(error: Throwable): ApiErrorResponse<T> {
             return ApiErrorResponse(
-                errorMessage = ErrorMessage(error.message ?: "Unknown error"),
-                statusCode = HttpStatusCode(0)
+                errorMessage = error.message ?: "Unknown error",
+                httpStatusCode = 0
             )
         }
 
@@ -39,8 +38,8 @@ sealed class ApiResponse<T> {
                 }
             } else {
                 ApiErrorResponse(
-                    errorMessage = ErrorMessage(response.description),
-                    statusCode = HttpStatusCode(response.code)
+                    errorMessage = response.description,
+                    httpStatusCode = response.code
                 )
             }
         }
@@ -57,14 +56,13 @@ data class ApiSuccessResponse<T>(
  */
 class ApiEmptyResponse<T> : ApiResponse<T>()
 
-//data class ApiErrorResponse<T>(val errorMessage: String, val statusCode: Int) : ApiResponse<T>()
 data class ApiErrorResponse<T>(
-    val errorMessage: ErrorMessage,
-    val statusCode: HttpStatusCode
+    val errorMessage: String,
+    val httpStatusCode: Int
 ) : ApiResponse<T>()
 
-@JvmInline
-value class ErrorMessage(val message: String)
-
-@JvmInline
-value class HttpStatusCode(val code: Int)
+//@JvmInline
+//value class ErrorMessage(val message: String)
+//
+//@JvmInline
+//value class HttpStatusCode(val code: Int)

@@ -20,8 +20,6 @@ import com.hadiyarajesh.flower_core.ApiEmptyResponse
 import com.hadiyarajesh.flower_core.ApiErrorResponse
 import com.hadiyarajesh.flower_core.ApiResponse
 import com.hadiyarajesh.flower_core.ApiSuccessResponse
-import com.hadiyarajesh.flower_core.ErrorMessage
-import com.hadiyarajesh.flower_core.HttpStatusCode
 import com.hadiyarajesh.flower_core.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -39,7 +37,7 @@ import kotlinx.coroutines.flow.flow
  */
 inline fun <REMOTE> networkResourceFlow(
     crossinline makeNetworkRequest: () -> Flow<ApiResponse<REMOTE>>,
-    crossinline onNetworkRequestFailed: (errorMessage: ErrorMessage, statusCode: HttpStatusCode) -> Unit = { _: ErrorMessage, _: HttpStatusCode -> }
+    crossinline onNetworkRequestFailed: (errorMessage: String, httpStatusCode: Int) -> Unit = { _: String, _: Int -> }
 ) = flow<Resource<REMOTE>> {
     emit(Resource.loading(data = null))
 
@@ -54,12 +52,12 @@ inline fun <REMOTE> networkResourceFlow(
             is ApiErrorResponse -> {
                 onNetworkRequestFailed(
                     apiResponse.errorMessage,
-                    apiResponse.statusCode
+                    apiResponse.httpStatusCode
                 )
                 emit(
                     Resource.error(
                         errorMessage = apiResponse.errorMessage,
-                        statusCode = apiResponse.statusCode,
+                        httpStatusCode = apiResponse.httpStatusCode,
                         data = null
                     )
                 )

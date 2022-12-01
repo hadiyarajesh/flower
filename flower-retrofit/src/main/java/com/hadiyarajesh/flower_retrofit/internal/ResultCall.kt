@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.flower_retrofit
+package com.hadiyarajesh.flower_retrofit.internal
 
 import com.hadiyarajesh.flower_core.ApiResponse
 import com.hadiyarajesh.flower_retrofit.common.toCommonResponse
@@ -22,7 +22,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ResultCall<T>(
+internal class ResultCall<T>(
     proxy: Call<T>
 ) : CallDelegate<T, ApiResponse<T>>(proxy) {
     override fun enqueueImplementation(callback: Callback<ApiResponse<T>>) =

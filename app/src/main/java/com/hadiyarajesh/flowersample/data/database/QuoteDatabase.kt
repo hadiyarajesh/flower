@@ -21,7 +21,11 @@ import androidx.room.RoomDatabase
 import com.hadiyarajesh.flowersample.data.database.dao.QuoteDao
 import com.hadiyarajesh.flowersample.data.database.entity.Quote
 
-@Database(entities = [Quote::class], version = 1, exportSchema = true)
+@Database(
+    entities = [Quote::class],
+    version = 1,
+    exportSchema = true
+)
 abstract class QuoteDatabase : RoomDatabase() {
-        abstract val quoteDao: QuoteDao
+    abstract val quoteDao: QuoteDao
 }

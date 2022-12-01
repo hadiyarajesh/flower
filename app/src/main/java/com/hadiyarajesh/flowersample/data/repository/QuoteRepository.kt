@@ -17,7 +17,6 @@
 package com.hadiyarajesh.flowersample.data.repository
 
 import android.util.Log
-import com.hadiyarajesh.flower_core.ErrorMessage
 import com.hadiyarajesh.flower_core.Resource
 import com.hadiyarajesh.flower_core.dbBoundResource
 import com.hadiyarajesh.flowersample.data.database.dao.QuoteDao
@@ -44,8 +43,7 @@ class QuoteRepository @Inject constructor(
         return dbBoundResource(
             fetchFromLocal = {
                 Log.i(TAG, "Fetching from local cache")
-                val localResult = quoteDao.getQuote(pageNo)
-                localResult
+                quoteDao.getQuote(pageNo)
             },
             shouldMakeNetworkRequest = {
                 Log.i(TAG, "Checking if remote fetch is needed")
@@ -61,11 +59,8 @@ class QuoteRepository @Inject constructor(
                 val copiedQuotes = quotes.map { it.copy(primaryId = pageNo) }
                 copiedQuotes.forEach { quoteDao.insertOrUpdateQuote(it) }
             },
-            onNetworkRequestFailed = { errorBody, statusCode ->
-                onFailed(
-                    errorBody.message,
-                    statusCode.code
-                )
+            onNetworkRequestFailed = { errorMessage, httpStatusCode ->
+                onFailed(errorMessage, httpStatusCode)
             },
         ).map {
             when (it.status) {
@@ -84,7 +79,7 @@ class QuoteRepository @Inject constructor(
 
                 is Resource.Status.Error -> {
                     val error = it.status as Resource.Status.Error
-                    Resource.error(error.errorMessage, error.statusCode, error.data)
+                    Resource.error(error.errorMessage, error.httpStatusCode, error.data)
                 }
             }
         }.flowOn(Dispatchers.IO)

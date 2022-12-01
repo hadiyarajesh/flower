@@ -27,29 +27,35 @@ class Resource<out T> private constructor(
         class EmptySuccess : Status<Nothing>()
 
         data class Error<out T>(
-            val errorMessage: ErrorMessage,
-            val statusCode: HttpStatusCode,
+            val errorMessage: String,
+            val httpStatusCode: Int,
             val data: T?
         ) : Status<T>()
     }
 
     companion object {
         fun <T> loading(data: T? = null): Resource<T> {
-            return Resource(status = Status.Loading(data))
+            return Resource(status = Status.Loading(data = data))
         }
 
         fun <T> success(data: T & Any): Resource<T> {
-            return Resource(status = Status.Success(data))
+            return Resource(status = Status.Success(data = data))
         }
 
         fun emptySuccess(): Resource<Nothing> = Resource(status = Status.EmptySuccess())
 
         fun <T> error(
-            errorMessage: ErrorMessage,
-            statusCode: HttpStatusCode,
+            errorMessage: String,
+            httpStatusCode: Int,
             data: T?
         ): Resource<T> {
-            return Resource(status = Status.Error(errorMessage, statusCode, data))
+            return Resource(
+                status = Status.Error(
+                    errorMessage = errorMessage,
+                    httpStatusCode = httpStatusCode,
+                    data = data
+                )
+            )
         }
     }
 }

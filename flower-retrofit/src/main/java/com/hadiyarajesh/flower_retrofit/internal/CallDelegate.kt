@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.flower_retrofit
+package com.hadiyarajesh.flower_retrofit.internal
 
 import okhttp3.Request
 import okio.Timeout
@@ -22,9 +22,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-abstract class CallDelegate<TIn, TOut>(
+internal abstract class CallDelegate<TIn, TOut>(
     protected val proxy: Call<TIn>
-): Call<TOut> {
+) : Call<TOut> {
     override fun execute(): Response<TOut> = throw NotImplementedError()
     override fun enqueue(callback: Callback<TOut>) = enqueueImplementation(callback)
     override fun clone(): Call<TOut> = cloneImplementation()

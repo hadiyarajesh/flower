@@ -25,12 +25,13 @@ import com.squareup.moshi.JsonClass
 @Entity(tableName = "quote")
 @JsonClass(generateAdapter = true)
 data class Quote(
-        @ColumnInfo(name = "_internalId")
-        @Json(name = "id")
-        val _internalId: Int,
-        val title: String,
-        val quote: String,
-        val author: Int,
-        @ColumnInfo(name = "id")
-        @PrimaryKey(autoGenerate = false) val primaryId: Int
+    @ColumnInfo(name = "id")
+    @PrimaryKey(autoGenerate = false)
+    val primaryId: Int,
+    @ColumnInfo(name = "_internalId")
+    @Json(name = "id")
+    val _internalId: Int,
+    val title: String,
+    val quote: String,
+    val author: Int,
 )

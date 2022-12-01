@@ -17,6 +17,7 @@
 package com.hadiyarajesh.flower_retrofit
 
 import com.hadiyarajesh.flower_core.ApiResponse
+import com.hadiyarajesh.flower_retrofit.internal.ResultAdapter
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.CallAdapter
@@ -46,6 +47,7 @@ class FlowerCallAdapterFactory : CallAdapter.Factory() {
                     val resultType = getParameterUpperBound(0, callType as ParameterizedType)
                     ResultAdapter(resultType)
                 }
+
                 else -> null
             }
         }
