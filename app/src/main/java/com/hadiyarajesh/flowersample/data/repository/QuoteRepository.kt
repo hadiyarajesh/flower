@@ -43,8 +43,7 @@ class QuoteRepository @Inject constructor(
         return dbBoundResource(
             fetchFromLocal = {
                 Log.i(TAG, "Fetching from local cache")
-                val localResult = quoteDao.getQuote(pageNo)
-                localResult
+                quoteDao.getQuote(pageNo)
             },
             shouldMakeNetworkRequest = {
                 Log.i(TAG, "Checking if remote fetch is needed")
@@ -60,7 +59,9 @@ class QuoteRepository @Inject constructor(
                 val copiedQuotes = quotes.map { it.copy(primaryId = pageNo) }
                 copiedQuotes.forEach { quoteDao.insertOrUpdateQuote(it) }
             },
-            onNetworkRequestFailed = { errorBody, statusCode -> onFailed(errorBody, statusCode) },
+            onNetworkRequestFailed = { errorMessage, httpStatusCode ->
+                onFailed(errorMessage, httpStatusCode)
+            },
         ).map {
             when (it.status) {
                 is Resource.Status.Loading -> {
@@ -78,7 +79,7 @@ class QuoteRepository @Inject constructor(
 
                 is Resource.Status.Error -> {
                     val error = it.status as Resource.Status.Error
-                    Resource.error(error.message, error.statusCode, error.data)
+                    Resource.error(error.errorMessage, error.httpStatusCode, error.data)
                 }
             }
         }.flowOn(Dispatchers.IO)

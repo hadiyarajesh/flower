@@ -14,15 +14,22 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.flower_core
+package com.hadiyarajesh.flower_core.flow
 
+import com.hadiyarajesh.flower_core.ApiEmptyResponse
+import com.hadiyarajesh.flower_core.ApiErrorResponse
+import com.hadiyarajesh.flower_core.ApiResponse
+import com.hadiyarajesh.flower_core.ApiSuccessResponse
+import com.hadiyarajesh.flower_core.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 /**
  * Make a network request and emit the response. Additionally, takes an action to perform if a network request fails.
+ *
  * Difference between this function and [networkResource] is that, [networkResource] emits the data only once, while this function will emit [Flow] of data.
  * Moreover, the function called in [makeNetworkRequest] must NOT be a `suspend` function.
+ *
  * @author Rajesh Hadiya
  * @param makeNetworkRequest - A function to make network request
  * @param onNetworkRequestFailed - An action to perform when a network request fails
@@ -30,9 +37,9 @@ import kotlinx.coroutines.flow.flow
  */
 inline fun <REMOTE> networkResourceFlow(
     crossinline makeNetworkRequest: () -> Flow<ApiResponse<REMOTE>>,
-    crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
+    crossinline onNetworkRequestFailed: (errorMessage: String, httpStatusCode: Int) -> Unit = { _: String, _: Int -> }
 ) = flow<Resource<REMOTE>> {
-    emit(Resource.loading(null))
+    emit(Resource.loading(data = null))
 
     makeNetworkRequest().collect { apiResponse ->
         when (apiResponse) {
@@ -43,12 +50,15 @@ inline fun <REMOTE> networkResourceFlow(
             }
 
             is ApiErrorResponse -> {
-                onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
+                onNetworkRequestFailed(
+                    apiResponse.errorMessage,
+                    apiResponse.httpStatusCode
+                )
                 emit(
                     Resource.error(
-                        msg = apiResponse.errorMessage,
-                        statusCode = apiResponse.statusCode,
-                        null
+                        errorMessage = apiResponse.errorMessage,
+                        httpStatusCode = apiResponse.httpStatusCode,
+                        data = null
                     )
                 )
             }

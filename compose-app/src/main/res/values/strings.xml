@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">FlowerSample</string>
+    <string name="back">Back</string>
     <string name="retry">Retry</string>
+    <string name="data_fetched_from_local_db">This data is fetched from local database</string>
+    <string name="load_from_network">Load from network</string>
     <string name="author">Author</string>
     <string name="url">URL</string>
-    <string name="image_details">Image details</string>
+    <string name="image_details">Details</string>
     <string name="swipe_down_to_refresh">Swipe down to refresh</string>
     <string name="something_went_wrong">Something went wrong</string>
 </resources>

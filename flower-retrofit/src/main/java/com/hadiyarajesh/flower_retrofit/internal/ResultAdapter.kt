@@ -14,19 +14,16 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.compose_app.ui.theme
+package com.hadiyarajesh.flower_retrofit.internal
 
-import androidx.compose.ui.graphics.Color
+import com.hadiyarajesh.flower_core.ApiResponse
+import retrofit2.Call
+import retrofit2.CallAdapter
+import java.lang.reflect.Type
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+internal class ResultAdapter(
+    private val type: Type
+) : CallAdapter<Type, Call<ApiResponse<Type>>> {
+    override fun adapt(call: Call<Type>): Call<ApiResponse<Type>> = ResultCall(call)
+    override fun responseType(): Type = type
+}
