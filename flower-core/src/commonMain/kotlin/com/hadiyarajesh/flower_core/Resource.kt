@@ -16,7 +16,7 @@
 
 package com.hadiyarajesh.flower_core
 
-data class Resource<out T>(
+class Resource<out T> private constructor(
     val status: Status<T>
 ) {
     sealed class Status<out T> {
@@ -27,25 +27,35 @@ data class Resource<out T>(
         class EmptySuccess : Status<Nothing>()
 
         data class Error<out T>(
-            val message: String,
-            val statusCode: Int,
+            val errorMessage: String,
+            val httpStatusCode: Int,
             val data: T?
         ) : Status<T>()
     }
 
     companion object {
         fun <T> loading(data: T? = null): Resource<T> {
-            return Resource(status = Status.Loading(data))
+            return Resource(status = Status.Loading(data = data))
         }
 
         fun <T> success(data: T & Any): Resource<T> {
-            return Resource(status = Status.Success(data))
+            return Resource(status = Status.Success(data = data))
         }
 
         fun emptySuccess(): Resource<Nothing> = Resource(status = Status.EmptySuccess())
 
-        fun <T> error(msg: String, statusCode: Int, data: T?): Resource<T> {
-            return Resource(status = Status.Error(msg, statusCode, data))
+        fun <T> error(
+            errorMessage: String,
+            httpStatusCode: Int,
+            data: T?
+        ): Resource<T> {
+            return Resource(
+                status = Status.Error(
+                    errorMessage = errorMessage,
+                    httpStatusCode = httpStatusCode,
+                    data = data
+                )
+            )
         }
     }
 }

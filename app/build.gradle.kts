@@ -7,13 +7,12 @@ plugins {
 
 android {
     namespace = "com.hadiyarajesh.flowersample"
-    compileSdk = 32
-    buildToolsVersion = "30.0.3"
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.flowersample"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -62,13 +61,14 @@ object LibVersion {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.appcompat:appcompat:1.5.0")
+    implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
+    implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.android.material:material:1.6.1")
+    implementation("com.google.android.material:material:1.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${LibVersion.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${LibVersion.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibVersion.lifecycleVersion}")
+
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
     kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
 
@@ -83,6 +83,6 @@ dependencies {
     implementation(project(":flower-retrofit"))
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
 }

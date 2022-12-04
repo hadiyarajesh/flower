@@ -34,7 +34,7 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val API_BASE_URL = "https://quotesondesign.com/wp-json/wp/v2/"
 
-    private val customMoshi = Moshi.Builder()
+    private val moshi = Moshi.Builder()
         .add(QuoteAdapter())
         .build()
 
@@ -42,8 +42,6 @@ object NetworkModule {
     @Singleton
     fun getOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .followRedirects(true)
-            .followSslRedirects(true)
             .retryOnConnectionFailure(true)
             .build()
     }
@@ -55,7 +53,7 @@ object NetworkModule {
             .baseUrl(API_BASE_URL)
             .client(okHttpClient)
             .addCallAdapterFactory(FlowerCallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create(customMoshi))
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 

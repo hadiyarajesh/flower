@@ -70,8 +70,8 @@ class HomeViewModel @Inject constructor(
 
                     is Resource.Status.Error -> {
                         _isLoading.value = false
-                        val error = (response.status as Resource.Status.Error).message
-                        UiState.Error(error)
+                        val errorMessage = (response.status as Resource.Status.Error).errorMessage
+                        _images.value = UiState.Error(errorMessage)
                     }
                 }
             }

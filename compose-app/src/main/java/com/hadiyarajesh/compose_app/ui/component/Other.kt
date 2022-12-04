@@ -16,11 +16,18 @@
 
 package com.hadiyarajesh.compose_app.ui.component
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,7 +102,7 @@ fun SubComposeImageItem(
 fun LoadingProgressBar(
     modifier: Modifier = Modifier,
     size: Dp = 40.dp,
-    loadingCircleColor: Color = MaterialTheme.colors.onBackground,
+    loadingCircleColor: Color = MaterialTheme.colorScheme.onBackground,
     strokeWidth: Dp = 4.dp
 ) {
     Box(modifier = modifier) {
@@ -133,7 +140,7 @@ fun ErrorText(
     Text(
         modifier = modifier,
         text = text,
-        color = MaterialTheme.colors.error,
-        style = MaterialTheme.typography.caption,
+        color = MaterialTheme.colorScheme.error,
+        style = MaterialTheme.typography.labelMedium,
     )
 }

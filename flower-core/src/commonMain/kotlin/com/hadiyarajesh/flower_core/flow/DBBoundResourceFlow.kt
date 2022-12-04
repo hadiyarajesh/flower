@@ -14,16 +14,27 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.flower_core
+package com.hadiyarajesh.flower_core.flow
 
-import kotlinx.coroutines.flow.*
+import com.hadiyarajesh.flower_core.ApiEmptyResponse
+import com.hadiyarajesh.flower_core.ApiErrorResponse
+import com.hadiyarajesh.flower_core.ApiResponse
+import com.hadiyarajesh.flower_core.ApiSuccessResponse
+import com.hadiyarajesh.flower_core.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Fetch the data from local database (if available), perform a network request (if instructed).
  * and emit the response after saving it to local database.
  * Additionally, takes an action to perform if a network request fails.
+ *
  * Difference between this function and [dbBoundResource] is that, [dbBoundResource] emits the data only once, while this function will emit [Flow] of data.
  * Moreover, the function called in [makeNetworkRequest] must NOT be a `suspend` function.
+ *
  * @author Rajesh Hadiya
  * @param fetchFromLocal - A function to retrieve data from local database
  * @param shouldMakeNetworkRequest - Whether or not to make network request
@@ -39,13 +50,13 @@ inline fun <DB, REMOTE> dbBoundResourceFlow(
     crossinline makeNetworkRequest: () -> Flow<ApiResponse<REMOTE>>,
     crossinline processNetworkResponse: (response: ApiSuccessResponse<REMOTE>) -> Unit = { },
     crossinline saveResponseData: suspend (REMOTE) -> Unit = { },
-    crossinline onNetworkRequestFailed: (errorBody: String?, statusCode: Int) -> Unit = { _: String?, _: Int -> }
+    crossinline onNetworkRequestFailed: (errorMessage: String, httpStatusCode: Int) -> Unit = { _: String, _: Int -> }
 ) = flow<Resource<DB>> {
-    emit(Resource.loading(null))
+    emit(Resource.loading(data = null))
     val localData = fetchFromLocal().first()
 
     if (shouldMakeNetworkRequest(localData)) {
-        emit(Resource.loading(localData))
+        emit(Resource.loading(data = localData))
 
         makeNetworkRequest().collect { apiResponse ->
             when (apiResponse) {
@@ -61,12 +72,12 @@ inline fun <DB, REMOTE> dbBoundResourceFlow(
                 }
 
                 is ApiErrorResponse -> {
-                    onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.statusCode)
+                    onNetworkRequestFailed(apiResponse.errorMessage, apiResponse.httpStatusCode)
                     emitAll(
                         fetchFromLocal().map { dbData ->
                             Resource.error(
-                                msg = apiResponse.errorMessage,
-                                statusCode = apiResponse.statusCode,
+                                errorMessage = apiResponse.errorMessage,
+                                httpStatusCode = apiResponse.httpStatusCode,
                                 data = dbData
                             )
                         }
@@ -81,7 +92,7 @@ inline fun <DB, REMOTE> dbBoundResourceFlow(
     } else {
         emitAll(
             fetchFromLocal().map { dbData ->
-                dbData?.let { Resource.success(it) } ?: Resource.emptySuccess()
+                dbData?.let { Resource.success(data = it) } ?: Resource.emptySuccess()
             }
         )
     }
