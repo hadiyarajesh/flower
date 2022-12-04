@@ -18,29 +18,35 @@ package com.hadiyarajesh.flower_ktorfit
 
 import com.hadiyarajesh.flower_core.ApiResponse
 import com.hadiyarajesh.flower_ktorfit.common.toCommonResponse
-import de.jensklingenberg.ktorfit.converter.ResponseConverter
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.converter.request.ResponseConverter
 import de.jensklingenberg.ktorfit.converter.SuspendResponseConverter
+import de.jensklingenberg.ktorfit.internal.TypeData
 import io.ktor.client.statement.*
 import io.ktor.util.reflect.*
 import kotlinx.coroutines.flow.flow
 import kotlin.reflect.KClass
 
 class FlowerResponseConverter : ResponseConverter, SuspendResponseConverter {
-    override fun supportedType(returnTypeName: String, isSuspend: Boolean): Boolean {
+    override fun supportedType(typeData: TypeData, isSuspend: Boolean): Boolean {
         return if (isSuspend) {
-            returnTypeName == "com.hadiyarajesh.flower_core.ApiResponse"
+            typeData.qualifiedName == "com.hadiyarajesh.flower_core.ApiResponse"
         } else {
-            returnTypeName == "kotlinx.coroutines.flow.Flow"
+            typeData.qualifiedName == "kotlinx.coroutines.flow.Flow"
         }
     }
 
-    override fun <PRequest : Any> wrapResponse(
-        returnTypeName: String,
-        requestFunction: suspend () -> Pair<TypeInfo, HttpResponse>
+    override fun <RequestType> wrapResponse(
+        typeData: TypeData,
+        requestFunction: suspend () -> Pair<TypeInfo, HttpResponse?>,
+        ktorfit: Ktorfit
     ): Any {
         return flow<ApiResponse<Any>> {
             try {
                 val (info, response) = requestFunction()
+                if (response == null) {
+                    throw IllegalArgumentException("HttpResponse is null, are you sure you configured it correctly?")
+                }
 
                 val kotlinType = info.kotlinType
                     ?: throw IllegalArgumentException("Type must match Flow<ApiResponse<YourModel>>")
@@ -70,9 +76,10 @@ class FlowerResponseConverter : ResponseConverter, SuspendResponseConverter {
         }
     }
 
-    override suspend fun <PRequest : Any> wrapSuspendResponse(
-        returnTypeName: String,
-        requestFunction: suspend () -> Pair<TypeInfo, HttpResponse>
+    override suspend fun <RequestType> wrapSuspendResponse(
+        typeData: TypeData,
+        requestFunction: suspend () -> Pair<TypeInfo, HttpResponse>,
+        ktorfit: Ktorfit
     ): Any {
         return try {
             val (info, response) = requestFunction()
