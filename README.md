@@ -28,9 +28,9 @@ Flower is primarily available in two modules, one for **Ktorfit** and the other 
 
 If you want to handle networking yourself, you can also use the **core** module.
 
-`$flowerVersion=3.0.0`
+`$flowerVersion=3.1.0`
 <br>
-`$ktorFitVersion=1.0.0-beta12`
+`$ktorFitVersion=1.0.0-beta16`
 <br>
 `$retrofitVersion=2.9.0`
 
