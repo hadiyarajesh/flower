@@ -12,6 +12,16 @@ fault-tolerant architecture.
 ![release](https://img.shields.io/github/v/release/hadiyarajesh/flower)
 ![contributors](https://img.shields.io/github/contributors/hadiyarajesh/flower)
 
+## Special thanks
+A special thanks to [JetBrains](https://www.jetbrains.com/community/opensource) for sponsoring the [tools](https://www.jetbrains.com/lp/intellij-frameworks) required to develop this project.
+<p >
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="asset/flower-logo_white.png">
+      <img width="100" height="100" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png">
+    </picture>
+</p>
+
+
 ## Why Flower?
 
 - It helps you to handle different states (`Loading`, `Success`, `EmptySuccess`, `Error`) of
