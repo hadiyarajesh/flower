@@ -8,11 +8,13 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
+/*
 repositories {
     google()
     mavenCentral()
     gradlePluginPortal()
 }
+*/
 
 group = "io.github.hadiyarajesh.flower-core"
 version = "3.0.0"

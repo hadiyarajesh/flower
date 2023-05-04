@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/flower-core" />
             <option value="$PROJECT_DIR$/flower-ktorfit" />
             <option value="$PROJECT_DIR$/flower-retrofit" />
+            <option value="$PROJECT_DIR$/xml-app" />
           </set>
         </option>
       </GradleProjectSettings>
