@@ -1,4 +1,4 @@
-package com.example.xml_app
+package com.example.xml_app.fragment.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

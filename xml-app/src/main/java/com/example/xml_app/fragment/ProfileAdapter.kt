@@ -12,12 +12,13 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.example.xml_app.database.entity.Image
 import com.example.xml_app.databinding.ProfileItemBinding
+import com.example.xml_app.fragment.home.ProfileListFragmentDirections
 
 
 class ProfileAdapter : ListAdapter<Image, ProfileAdapter.ProfileViewHolder>(ProfileDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
         return ProfileViewHolder(
-            ProfileItemBinding.inflate(LayoutInflater.from(parent.context), parent,false)
+            ProfileItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 

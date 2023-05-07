@@ -17,4 +17,13 @@
 <resources>
     <string name="app_name">xml-app</string>
     <string name="profile">Profile</string>
+    <string name="db_profile_message">This data is fetched from local database</string>
+    <string name="load_from_network">Load from network</string>
+    <string name="author">Author</string>
+    <string name="url">URL</string>
+    <string name="author_name">Author name</string>
+    <string name="profile_url">Profile URL</string>
+    <string name="no_details_found">No details found for this user.</string>
+    <string name="loading_error_msg">Error has occured, Please try after sometime</string>
+    <string name="details">Details</string>
 </resources>

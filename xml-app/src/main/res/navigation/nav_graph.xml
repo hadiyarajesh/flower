@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/profileListFragment"
-        android:name="com.example.xml_app.fragment.ProfileListFragment"
+        android:name="com.example.xml_app.fragment.home.ProfileListFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile_list">
         <action
@@ -17,8 +17,8 @@
     </fragment>
     <fragment
         android:id="@+id/profileDetailFragment"
-        android:name="com.example.xml_app.fragment.ProfileDetailFragment"
-        android:label="fragment_profile_detail"
+        android:name="com.example.xml_app.fragment.detail.ProfileDetailFragment"
+        android:label="@string/details"
         tools:layout="@layout/fragment_profile_detail" >
         <argument
             android:name="profileId"

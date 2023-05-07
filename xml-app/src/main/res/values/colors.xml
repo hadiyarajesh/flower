@@ -18,5 +18,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="purple_700">#FF3700B3</color>
+    <color name="blue">#002041EA</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

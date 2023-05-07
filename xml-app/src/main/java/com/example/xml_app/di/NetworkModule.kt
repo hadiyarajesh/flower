@@ -31,9 +31,7 @@ class NetworkModule {
             .followSslRedirects(true)
             .retryOnConnectionFailure(true)
             .also {
-                if (/*BuildConfig.DEBUG*/true) {
-                    it.addInterceptor(provideLoggingInterceptor())
-                }
+                it.addInterceptor(provideLoggingInterceptor())
             }
             .build()
     }
