@@ -17,8 +17,11 @@
 package com.example.xml_app.fragment.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -32,17 +35,26 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfileListFragment : Fragment(R.layout.fragment_profile_list) {
+class ProfileListFragment : Fragment() {
 
     private val viewModel: ProfileListViewModel by viewModels()
 
-    private lateinit var lBinding: FragmentProfileListBinding
+    private lateinit var binding: FragmentProfileListBinding
 
-   lateinit var profileAdapter: ProfileAdapter
+    lateinit var profileAdapter: ProfileAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_profile_list, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lBinding = FragmentProfileListBinding.bind(view)
 
         setUpRecyclerView()
 
@@ -52,8 +64,8 @@ class ProfileListFragment : Fragment(R.layout.fragment_profile_list) {
     }
 
     private fun setupSwipeRefreshListener() {
-        lBinding.swipeRefreshLayout.setOnRefreshListener {
-            lBinding.swipeRefreshLayout.isRefreshing = false
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
             viewModel.refreshImages()
         }
     }
@@ -62,21 +74,25 @@ class ProfileListFragment : Fragment(R.layout.fragment_profile_list) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.images.collectLatest { profileListState ->
-                    when(profileListState) {
+                    when (profileListState) {
                         is UiState.Loading -> {
-                            // Show progress bar..
+                            showProgressBar()
                         }
 
                         is UiState.Success -> {
-                            profileListState.data.let {
+                            hideProgressBar()
+                            profileListState.data?.let {
                                 profileAdapter.submitList(it)
                             }
                         }
 
                         UiState.Empty -> {
-
+                            showNoUserInfoFound("") // initial state is set to empty.
                         }
-                        is UiState.Error -> TODO()
+
+                        is UiState.Error -> {
+                            showNoUserInfoFound(getString(R.string.loading_error_msg))
+                        }
 
                     }
                 }
@@ -86,15 +102,34 @@ class ProfileListFragment : Fragment(R.layout.fragment_profile_list) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.isLoading.collectLatest { loadingState ->
-                    lBinding.swipeRefreshLayout.isRefreshing = loadingState
+                    binding.swipeRefreshLayout.isRefreshing = loadingState
                 }
             }
         }
     }
 
+    private fun showProgressBar() {
+        binding.swipeRefreshLayout.visibility = View.GONE
+        binding.noInfoMsg.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.swipeRefreshLayout.visibility = View.VISIBLE
+        binding.noInfoMsg.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showNoUserInfoFound(message: String) {
+        binding.swipeRefreshLayout.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.tvErrMsg.text = message
+        binding.noInfoMsg.visibility = View.VISIBLE
+    }
+
     private fun setUpRecyclerView() {
         profileAdapter = ProfileAdapter()
-        lBinding.recyclerView.adapter = profileAdapter
+        binding.recyclerView.adapter = profileAdapter
     }
 
 }

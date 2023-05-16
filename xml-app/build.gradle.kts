@@ -54,7 +54,6 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         dataBinding = true
     }
 
@@ -68,45 +67,43 @@ android {
 object LibVersion {
     const val roomVersion = "2.4.2"
     const val retrofitVersion = "2.9.0"
-    const val moshiVersion = "1.13.0"
+    const val moshiVersion = "1.14.0"
+    const val navigationVersion = "2.5.3"
+    const val lifecycleVersion = "2.6.1"
+    const val coilVersion = "2.3.0"
+    const val loggingInterceptorVersion = "4.10.0"
+    const val swipeRefreshLayoutVersion = "1.1.0"
+    const val coreKtxVersion = "1.9.0"
+    const val appCompatVersion = "1.6.1"
+    const val materialVersion = "1.8.0"
+    const val constraintLayoutVersion = "2.1.4"
+    const val recyclerViewVersion = "1.3.0"
+    const val flowerRetrofitVersion = "3.1.0"
 }
 
 dependencies {
 
-   /* implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")*/
 
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-
-    // LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
-
-    // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
     // Kotlin-navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:${LibVersion.navigationVersion}")
+    implementation("androidx.navigation:navigation-ui-ktx:${LibVersion.navigationVersion}")
 
-    val nav_version = "2.5.3"
-    val lifecycle_version = "2.6.1"
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:${LibVersion.swipeRefreshLayoutVersion}")
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.core:core-ktx:${LibVersion.coreKtxVersion}")
+    implementation("androidx.appcompat:appcompat:${LibVersion.appCompatVersion}")
+    implementation("com.google.android.material:material:${LibVersion.materialVersion}")
+    implementation("androidx.constraintlayout:constraintlayout:${LibVersion.constraintLayoutVersion}")
 
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${LibVersion.lifecycleVersion}")
     // Lifecycles only (without ViewModel or LiveData)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibVersion.lifecycleVersion}")
     // Saved state module for ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:${LibVersion.lifecycleVersion}")
     // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
-    implementation("androidx.lifecycle:lifecycle-process:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-process:${LibVersion.lifecycleVersion}")
 
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
     kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
@@ -115,25 +112,25 @@ dependencies {
     kapt("androidx.room:room-compiler:${LibVersion.roomVersion}")
 
     //implementation(project(":flower-retrofit"))
-    implementation("io.github.hadiyarajesh.flower-retrofit:flower-retrofit:3.1.0") {
+    implementation("io.github.hadiyarajesh.flower-retrofit:flower-retrofit:${LibVersion.flowerRetrofitVersion}") {
         because("Flower simplifies networking and database caching on Android/Multiplatform")
     }
 
     //RecyclerView
-    implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation("androidx.recyclerview:recyclerview:${LibVersion.recyclerViewVersion}")
     // For control over item selection of both touch and mouse driven selection
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:${LibVersion.retrofitVersion}")
     implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:${LibVersion.loggingInterceptorVersion}")
 
-    implementation("com.squareup.moshi:moshi:1.14.0")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
 
     // Coil for image loading
-    implementation("io.coil-kt:coil:2.3.0")
+    implementation("io.coil-kt:coil:${LibVersion.coilVersion}")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

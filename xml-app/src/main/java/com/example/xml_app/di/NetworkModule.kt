@@ -49,5 +49,5 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideQuoteApi(retrofit: Retrofit): ImageApi = retrofit.create(ImageApi::class.java)
+    fun provideImageApi(retrofit: Retrofit): ImageApi = retrofit.create(ImageApi::class.java)
 }

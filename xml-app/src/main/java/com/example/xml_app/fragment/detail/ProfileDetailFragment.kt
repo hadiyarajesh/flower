@@ -24,8 +24,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -44,7 +47,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfileDetailFragment : Fragment(R.layout.fragment_profile_detail) {
+class ProfileDetailFragment : Fragment() {
 
     private val TAG = "ProfileDetailFragment"
 
@@ -52,14 +55,23 @@ class ProfileDetailFragment : Fragment(R.layout.fragment_profile_detail) {
 
     private val viewModel: ProfileDetailViewModel by viewModels()
 
-    private lateinit var lBinding: FragmentProfileDetailBinding
+    private lateinit var binding: FragmentProfileDetailBinding
 
     private lateinit var profileImage: Image
     private var isNetworkLoad: Boolean = false
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_profile_detail, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lBinding = FragmentProfileDetailBinding.bind(view)
         val profileId = args.profileId?.trim()?.toLong() ?: 0
         getProfileInfo(profileId)
         initClickListener()
@@ -70,7 +82,7 @@ class ProfileDetailFragment : Fragment(R.layout.fragment_profile_detail) {
         updateNetworkLoadBtnVisibility()
     }
     private fun initClickListener() {
-        lBinding.loadfromNetwork.setOnClickListener {
+        binding.loadfromNetwork.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     isNetworkLoad = true
@@ -79,8 +91,8 @@ class ProfileDetailFragment : Fragment(R.layout.fragment_profile_detail) {
             }
         }
 
-        lBinding.profileURL.highlightColor = Color.BLUE
-        lBinding.profileURL?.setOnClickListener { profileURL ->
+        binding.profileURL.highlightColor = Color.BLUE
+        binding.profileURL?.setOnClickListener { profileURL ->
             try {
                 var openURL = Intent(android.content.Intent.ACTION_VIEW)
                 openURL.data = Uri.parse("${profileURL.tag.toString()}")
@@ -149,40 +161,42 @@ class ProfileDetailFragment : Fragment(R.layout.fragment_profile_detail) {
         hideProgressBar()
 
         profileImage?.let {
-            lBinding.profileImage.load(profileImage.downloadUrl) {
+            binding.profileImage.load(profileImage.downloadUrl) {
                 crossfade(300)
                 transformations(RoundedCornersTransformation(4f))
             }
             //updateProfileUI()
-            lBinding.authorName.text = it.author
+            binding.authorName.text = it.author
             //lBinding.profileURL.setPaintFlags(lBinding.authorName.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
-            lBinding.profileURL.paint?.isUnderlineText = true
-            lBinding.profileURL.paint.underlineColor = Color.BLUE
-            lBinding.profileURL.text = it.url
-            lBinding.profileURL.tag = it.url
+            binding.profileURL.paint?.isUnderlineText = true
+            binding.profileURL.paint.underlineColor = Color.BLUE
+            binding.profileURL.text = it.url
+            binding.profileURL.tag = it.url
         }
         updateNetworkLoadBtnVisibility()
     }
 
     private fun updateNetworkLoadBtnVisibility() {
-        lBinding.imageDestInfo.visibility = if (isNetworkLoad) View.GONE else View.VISIBLE
+        binding.imageDestInfo.visibility = if (isNetworkLoad) View.GONE else View.VISIBLE
     }
 
     private fun showProgressBar() {
-        lBinding.profileDetailScreen.visibility = View.GONE
-        lBinding.progressBar.visibility = View.VISIBLE
+        binding.profileDetailScreen.visibility = View.GONE
+        binding.noInfoMsg.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
-        lBinding.profileDetailScreen.visibility = View.VISIBLE
-        lBinding.progressBar.visibility = View.GONE
+        binding.profileDetailScreen.visibility = View.VISIBLE
+        binding.noInfoMsg.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 
     private fun showNoUserInfoFound(message: String) {
-        lBinding.profileDetailScreen.visibility = View.GONE
-        lBinding.progressBar.visibility = View.GONE
-        lBinding.tvErrMsg.text = message
-        lBinding.noInfoMsg.visibility = View.VISIBLE
+        binding.profileDetailScreen.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.tvErrMsg.text = message
+        binding.noInfoMsg.visibility = View.VISIBLE
     }
 
 

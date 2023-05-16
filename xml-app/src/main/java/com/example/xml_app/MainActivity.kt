@@ -18,6 +18,7 @@ package com.example.xml_app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -31,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var lbinding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     lateinit var navController: NavController
     private lateinit var appbarConfiguration: AppBarConfiguration
@@ -39,8 +40,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lbinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(lbinding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -49,13 +49,13 @@ class MainActivity : AppCompatActivity() {
         /* this is used to mention that these two fragments are the topfragments in the appbarnavigation , and backbutton
         shoudnt be shown on navigating into these bottomNavbar fragments.*/
         appbarConfiguration =
-            AppBarConfiguration(setOf(R.id.profileListFragment), lbinding.navDrawer)
+            AppBarConfiguration(setOf(R.id.profileListFragment), binding.navDrawer)
 
-        setSupportActionBar(lbinding.toolbar)
+        setSupportActionBar(binding.toolbar)
         // applying the appbarconfiguration to avoid the backbutton in the toolbar/actionbar
         setupActionBarWithNavController(navController, appbarConfiguration)
 
-        lbinding.navigationView.setupWithNavController(navController)
+        binding.navigationView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
