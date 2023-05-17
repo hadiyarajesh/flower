@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/profileListFragment">
+
+    <fragment
+        android:id="@+id/profileListFragment"
+        android:name="com.example.xml_app.fragment.home.ProfileListFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile_list">
+        <action
+            android:id="@+id/action_profileListFragment_to_profileDetailFragment"
+            app:destination="@id/profileDetailFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/profileDetailFragment"
+        android:name="com.example.xml_app.fragment.detail.ProfileDetailFragment"
+        android:label="@string/details"
+        tools:layout="@layout/fragment_profile_detail" >
+        <argument
+            android:name="profileId"
+            app:argType="string" />
+    </fragment>
+</navigation>
