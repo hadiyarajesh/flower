@@ -8,14 +8,6 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
-/*
-repositories {
-    google()
-    mavenCentral()
-    gradlePluginPortal()
-}
-*/
-
 group = "io.github.hadiyarajesh.flower-core"
 version = "3.0.0"
 
@@ -41,8 +33,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         buildConfig = false

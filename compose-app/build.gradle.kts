@@ -2,17 +2,18 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
-    kotlin("kapt")
+//    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.hadiyarajesh.compose_app"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.compose_app"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -42,14 +43,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = LibVersion.composeCompilerVersion
@@ -62,15 +64,15 @@ android {
 }
 
 object LibVersion {
-    const val composeCompilerVersion = "1.3.2"
-    const val roomVersion = "2.4.2"
+    const val composeCompilerVersion = "1.5.3"
+    const val roomVersion = "2.6.0"
     const val retrofitVersion = "2.9.0"
-    const val moshiVersion = "1.13.0"
+    const val moshiVersion = "1.14.0"
     const val accompanistVersion = "0.27.0"
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2022.10.00")
+    val composeBom = platform("androidx.compose:compose-bom:2023.10.01")
 
     implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
@@ -82,10 +84,10 @@ dependencies {
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
-    kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
+    ksp("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
 
     implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
-    kapt("androidx.room:room-compiler:${LibVersion.roomVersion}")
+    ksp("androidx.room:room-compiler:${LibVersion.roomVersion}")
 
     implementation(project(":flower-retrofit"))
 
@@ -93,7 +95,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
 
     implementation("com.google.accompanist:accompanist-swiperefresh:${LibVersion.accompanistVersion}")
 
@@ -109,3 +111,13 @@ dependencies {
     // Android Studio Preview support
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
+
+//// Allow references to generated code
+//kapt {
+//    correctErrorTypes = true
+//}
+//
+//// Make Kapt-generated stubs to target JDK 17
+//tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask>().configureEach {
+//    kotlinOptions.jvmTarget = "17"
+//}

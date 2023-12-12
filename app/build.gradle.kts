@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.hadiyarajesh.flowersample"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.flowersample"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -40,8 +40,8 @@ android {
     }
 
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
@@ -49,22 +49,22 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 object LibVersion {
-    const val lifecycleVersion = "2.5.1"
-    const val roomVersion = "2.4.2"
+    const val lifecycleVersion = "2.6.1"
+    const val roomVersion = "2.6.0"
     const val retrofitVersion = "2.9.0"
-    const val moshiVersion = "1.13.0"
+    const val moshiVersion = "1.14.0"
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
-    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.android.material:material:1.7.0")
+    implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${LibVersion.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${LibVersion.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${LibVersion.lifecycleVersion}")
@@ -85,4 +85,14 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.4")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
+
+// Make Kapt-generated stubs to target JDK 17
+tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask>().configureEach {
+    kotlinOptions.jvmTarget = "17"
 }
