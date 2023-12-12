@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.compose_app"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

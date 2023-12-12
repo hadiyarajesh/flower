@@ -27,21 +27,21 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.hadiyarajesh.xml_app.R
-import com.hadiyarajesh.xml_app.databinding.FragmentProfileListBinding
-import com.hadiyarajesh.xml_app.fragment.ProfileAdapter
+import com.hadiyarajesh.xml_app.databinding.FragmentImageListBinding
+import com.hadiyarajesh.xml_app.fragment.ImageAdapter
 import com.hadiyarajesh.xml_app.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfileListFragment : Fragment() {
+class HomeScreenFragment : Fragment() {
 
-    private val viewModel: ProfileListViewModel by viewModels()
+    private val viewModel: HomeScreenViewModel by viewModels()
 
-    private lateinit var binding: FragmentProfileListBinding
+    private lateinit var binding: FragmentImageListBinding
 
-    lateinit var profileAdapter: ProfileAdapter
+    lateinit var imageAdapter: ImageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +49,7 @@ class ProfileListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_profile_list, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_image_list, container, false)
         return binding.root
     }
 
@@ -82,7 +82,7 @@ class ProfileListFragment : Fragment() {
                         is UiState.Success -> {
                             hideProgressBar()
                             profileListState.data?.let {
-                                profileAdapter.submitList(it)
+                                imageAdapter.submitList(it)
                             }
                         }
 
@@ -128,8 +128,7 @@ class ProfileListFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        profileAdapter = ProfileAdapter()
-        binding.recyclerView.adapter = profileAdapter
+        imageAdapter = ImageAdapter()
+        binding.recyclerView.adapter = imageAdapter
     }
-
 }

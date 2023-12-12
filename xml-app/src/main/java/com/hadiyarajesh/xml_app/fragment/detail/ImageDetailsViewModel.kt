@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileDetailViewModel @Inject constructor(
+class ImageDetailsViewModel @Inject constructor(
     private val imageRepository: ImageRepository
 ) : ViewModel() {
     private val _image = MutableStateFlow<UiState<Image>>(UiState.Empty)

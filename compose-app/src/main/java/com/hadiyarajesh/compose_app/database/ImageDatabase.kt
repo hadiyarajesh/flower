@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2023 Rajesh Hadiya
+ *  Copyright (C) 2022 Rajesh Hadiya
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.xml_app.network
+package com.hadiyarajesh.compose_app.database
 
-import com.hadiyarajesh.xml_app.database.entity.Image
-import com.hadiyarajesh.flower_core.ApiResponse
-import retrofit2.http.GET
-import retrofit2.http.Path
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.hadiyarajesh.compose_app.database.dao.ImageDao
+import com.hadiyarajesh.compose_app.database.entity.Image
 
-interface ImageApi {
-    @GET("v2/list")
-    suspend fun getAllImages(
-        @retrofit2.http.Query("page") page: Int,
-        @retrofit2.http.Query("size") size: Int = 50
-    ): ApiResponse<List<Image>>
-
-    @GET("id/{imageId}/info")
-    suspend fun getImage(@Path("imageId") imageId: Long): ApiResponse<Image>
+@Database(
+    version = 1,
+    exportSchema = true,
+    entities = [Image::class]
+)
+abstract class ImageDatabase : RoomDatabase() {
+    abstract val imageDao: ImageDao
 }

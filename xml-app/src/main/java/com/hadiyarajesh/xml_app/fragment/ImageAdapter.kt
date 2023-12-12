@@ -28,23 +28,22 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.hadiyarajesh.xml_app.database.entity.Image
 import com.hadiyarajesh.xml_app.databinding.ProfileItemBinding
-import com.hadiyarajesh.xml_app.fragment.home.ProfileListFragmentDirections
+import com.hadiyarajesh.xml_app.fragment.home.HomeScreenFragmentDirections
 
 
-class ProfileAdapter : ListAdapter<Image, ProfileAdapter.ProfileViewHolder>(ProfileDiffCallback()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
-        return ProfileViewHolder(
+class ImageAdapter : ListAdapter<Image, ImageAdapter.ImageViewHolder>(ProfileDiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        return ImageViewHolder(
             ProfileItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
-    override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val image = getItem(position)
         holder.bind(image)
     }
 
-
-    class ProfileViewHolder(
+    class ImageViewHolder(
         private val binding: ProfileItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -58,7 +57,7 @@ class ProfileAdapter : ListAdapter<Image, ProfileAdapter.ProfileViewHolder>(Prof
 
         private fun navigateToProfileDetails(profile: Image, view: View) {
             val direction =
-                ProfileListFragmentDirections.actionProfileListFragmentToProfileDetailFragment(
+                HomeScreenFragmentDirections.actionProfileListFragmentToProfileDetailFragment(
                     profileId = profile.id
                 )
             view.findNavController().navigate(direction)
@@ -85,7 +84,6 @@ class ProfileAdapter : ListAdapter<Image, ProfileAdapter.ProfileViewHolder>(Prof
 }
 
 private class ProfileDiffCallback : DiffUtil.ItemCallback<Image>() {
-
     override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
         return oldItem.id == newItem.id
     }

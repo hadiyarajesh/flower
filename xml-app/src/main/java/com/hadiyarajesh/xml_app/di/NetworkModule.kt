@@ -18,6 +18,8 @@ package com.hadiyarajesh.xml_app.di
 
 import com.hadiyarajesh.xml_app.network.ImageApi
 import com.hadiyarajesh.flower_retrofit.FlowerCallAdapterFactory
+import com.hadiyarajesh.xml_app.BuildConfig
+import com.hadiyarajesh.xml_app.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,9 +33,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
-
-    val API_BASE_URL = "https://picsum.photos/"
-
     private fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
             .setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -47,7 +46,9 @@ class NetworkModule {
             .followSslRedirects(true)
             .retryOnConnectionFailure(true)
             .also {
-                it.addInterceptor(provideLoggingInterceptor())
+                if (BuildConfig.DEBUG) {
+                    it.addInterceptor(provideLoggingInterceptor())
+                }
             }
             .build()
     }
@@ -56,7 +57,7 @@ class NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(API_BASE_URL)
+            .baseUrl(Constants.API_BASE_URL)
             .client(okHttpClient)
             .addCallAdapterFactory(FlowerCallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())

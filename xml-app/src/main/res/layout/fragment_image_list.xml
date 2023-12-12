@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.hadiyarajesh.xml_app.fragment.home.ProfileListFragment">
+        tools:context="com.hadiyarajesh.xml_app.fragment.home.HomeScreenFragment">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
@@ -43,13 +43,14 @@
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone">
+
             <TextView
                 android:id="@+id/tvErrMsg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@string/no_details_found"
                 android:gravity="center_horizontal"
+                android:text="@string/swipe_down_to_refresh"
                 android:textSize="28sp"
                 android:textStyle="bold" />
         </LinearLayout>

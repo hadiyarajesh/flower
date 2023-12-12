@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/profileListFragment"
-        android:name="com.hadiyarajesh.xml_app.fragment.home.ProfileListFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_profile_list">
+        android:name="com.hadiyarajesh.xml_app.fragment.home.HomeScreenFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_image_list">
         <action
             android:id="@+id/action_profileListFragment_to_profileDetailFragment"
             app:destination="@id/profileDetailFragment" />
@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/profileDetailFragment"
-        android:name="com.hadiyarajesh.xml_app.fragment.detail.ProfileDetailFragment"
+        android:name="com.hadiyarajesh.xml_app.fragment.detail.ImageDetailsFragment"
         android:label="@string/details"
-        tools:layout="@layout/fragment_profile_detail" >
+        tools:layout="@layout/fragment_image_details" >
         <argument
             android:name="profileId"
             app:argType="string" />

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2022 Rajesh Hadiya
+ *  Copyright (C) 2023 Rajesh Hadiya
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,10 +14,18 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.compose_app
+package com.hadiyarajesh.xml_app.database
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.hadiyarajesh.xml_app.database.entity.Image
+import com.hadiyarajesh.xml_app.database.dao.ImageDao
 
-@HiltAndroidApp
-class MyApplication: Application()
+@Database(
+    version = 1,
+    exportSchema = true,
+    entities = [Image::class]
+)
+abstract class ImageDatabase : RoomDatabase() {
+    abstract val imageDao: ImageDao
+}

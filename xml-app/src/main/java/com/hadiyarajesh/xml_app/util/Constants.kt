@@ -14,18 +14,8 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.compose_app.database
+package com.hadiyarajesh.xml_app.util
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import com.hadiyarajesh.compose_app.database.dao.ImageDao
-import com.hadiyarajesh.compose_app.database.entity.Image
-
-@Database(
-    version = 1,
-    exportSchema = true,
-    entities = [Image::class]
-)
-abstract class FlowerDatabase : RoomDatabase() {
-    abstract val imageDao: ImageDao
+object Constants {
+    const val API_BASE_URL = "https://picsum.photos/"
 }

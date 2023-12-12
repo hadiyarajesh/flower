@@ -19,7 +19,6 @@ package com.hadiyarajesh.xml_app.fragment.detail
 //import com.example.xml_app.fragment.ProfileDetailFragmentArgs
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -39,7 +38,7 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.hadiyarajesh.xml_app.R
 import com.hadiyarajesh.xml_app.database.entity.Image
-import com.hadiyarajesh.xml_app.databinding.FragmentProfileDetailBinding
+import com.hadiyarajesh.xml_app.databinding.FragmentImageDetailsBinding
 import com.hadiyarajesh.xml_app.util.LoadResourceFrom
 import com.hadiyarajesh.xml_app.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,15 +46,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfileDetailFragment : Fragment() {
+class ImageDetailsFragment : Fragment() {
 
     private val TAG = "ProfileDetailFragment"
 
-    private val args: ProfileDetailFragmentArgs by navArgs()
+    private val args: ImageDetailsFragmentArgs by navArgs()
 
-    private val viewModel: ProfileDetailViewModel by viewModels()
+    private val viewModel: ImageDetailsViewModel by viewModels()
 
-    private lateinit var binding: FragmentProfileDetailBinding
+    private lateinit var binding: FragmentImageDetailsBinding
 
     private lateinit var profileImage: Image
     private var isNetworkLoad: Boolean = false
@@ -66,7 +65,7 @@ class ProfileDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_profile_detail, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_image_details, container, false)
         return binding.root
     }
 

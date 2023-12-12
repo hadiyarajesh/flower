@@ -3,7 +3,7 @@
 
   <item
     android:id="@+id/profileListFragment"
-    android:title="@string/profile"
+    android:title="@string/app_name"
     android:icon="@drawable/ic_user"
     />
 </menu>

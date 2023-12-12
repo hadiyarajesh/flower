@@ -25,37 +25,26 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.hadiyarajesh.xml_app.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
-
-    lateinit var navController: NavController
     private lateinit var appbarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setSupportActionBar(binding.toolbar)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
+        appbarConfiguration = AppBarConfiguration(setOf(R.id.profileListFragment))
 
-        /* this is used to mention that these two fragments are the topfragments in the appbarnavigation , and backbutton
-        shoudnt be shown on navigating into these bottomNavbar fragments.*/
-        appbarConfiguration =
-            AppBarConfiguration(setOf(R.id.profileListFragment), binding.navDrawer)
-
-        setSupportActionBar(binding.toolbar)
-        // applying the appbarconfiguration to avoid the backbutton in the toolbar/actionbar
         setupActionBarWithNavController(navController, appbarConfiguration)
-
-        binding.navigationView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {

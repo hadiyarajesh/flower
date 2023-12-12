@@ -31,7 +31,7 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
-class ProfileListViewModel @Inject constructor(
+class HomeScreenViewModel @Inject constructor(
     private val imageRepository: ImageRepository
 ) : ViewModel() {
     private val _images = MutableStateFlow<UiState<List<Image>>>(UiState.Empty)

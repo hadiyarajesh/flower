@@ -19,7 +19,7 @@ package com.hadiyarajesh.xml_app.di
 import android.content.Context
 import androidx.room.Room
 import com.hadiyarajesh.xml_app.R
-import com.hadiyarajesh.xml_app.database.FlowerDatabase
+import com.hadiyarajesh.xml_app.database.ImageDatabase
 import com.hadiyarajesh.xml_app.database.dao.ImageDao
 import dagger.Module
 import dagger.Provides
@@ -33,15 +33,15 @@ import javax.inject.Singleton
 class DatabaseModule {
     @Provides
     @Singleton
-    fun provideFlowerDatabase(@ApplicationContext context: Context): FlowerDatabase {
+    fun provideImageDatabase(@ApplicationContext context: Context): ImageDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            FlowerDatabase::class.java,
+            ImageDatabase::class.java,
             "${context.getString(R.string.app_name)}.db"
         ).build()
     }
 
     @Provides
     @Singleton
-    fun provideImageDao(db: FlowerDatabase): ImageDao = db.imageDao
+    fun provideImageDao(db: ImageDatabase): ImageDao = db.imageDao
 }

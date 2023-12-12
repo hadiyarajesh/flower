@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.xml_app"
-        minSdk = 29
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -39,6 +39,7 @@ android {
 
     buildFeatures {
         dataBinding = true
+        buildConfig = true
     }
 
     packagingOptions {
