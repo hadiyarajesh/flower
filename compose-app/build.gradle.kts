@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
-//    kotlin("kapt")
     id("com.google.devtools.ksp")
 }
 
@@ -111,13 +110,3 @@ dependencies {
     // Android Studio Preview support
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
-
-//// Allow references to generated code
-//kapt {
-//    correctErrorTypes = true
-//}
-//
-//// Make Kapt-generated stubs to target JDK 17
-//tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask>().configureEach {
-//    kotlinOptions.jvmTarget = "17"
-//}

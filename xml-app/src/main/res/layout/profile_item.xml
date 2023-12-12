@@ -8,7 +8,7 @@
             type="android.view.View.OnClickListener"/>
         <variable
             name="profile"
-            type="com.example.xml_app.database.entity.Image"/>
+            type="com.hadiyarajesh.xml_app.database.entity.Image"/>
     </data>
 
 

@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".ProfileApplication"
+        android:name="com.hadiyarajesh.xml_app.ProfileApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -28,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Flower">
         <activity
-            android:name=".MainActivity"
+            android:name="com.hadiyarajesh.xml_app.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

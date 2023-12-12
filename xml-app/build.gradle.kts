@@ -1,35 +1,19 @@
-/*
- *  Copyright (C) 2023 Rajesh Hadiya
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.example.xml_app"
-    compileSdk = 33
+    namespace = "com.hadiyarajesh.xml_app"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.xml_app"
+        applicationId = "com.hadiyarajesh.xml_app"
         minSdk = 29
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -65,7 +49,7 @@ android {
 }
 
 object LibVersion {
-    const val roomVersion = "2.4.2"
+    const val roomVersion = "2.6.0"
     const val retrofitVersion = "2.9.0"
     const val moshiVersion = "1.14.0"
     const val navigationVersion = "2.5.3"
@@ -103,10 +87,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:${LibVersion.lifecycleVersion}")
 
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
-    kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
+    ksp("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
 
     implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
-    kapt("androidx.room:room-compiler:${LibVersion.roomVersion}")
+    ksp("androidx.room:room-compiler:${LibVersion.roomVersion}")
 
     //implementation(project(":flower-retrofit"))
     implementation("io.github.hadiyarajesh.flower-retrofit:flower-retrofit:${LibVersion.flowerRetrofitVersion}") {
@@ -124,7 +108,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:${LibVersion.loggingInterceptorVersion}")
 
     implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
 
     // Coil for image loading
     implementation("io.coil-kt:coil:${LibVersion.coilVersion}")
