@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("dagger.hilt.android.plugin")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -71,42 +71,57 @@ object LibVersion {
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2023.10.01")
+    implementation(libs.core.ktx)
+    implementation(libs.activity.compose)
+    implementation(libs.bundles.lifecycle)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose.ui.impl)
+    implementation(libs.material3)
+    implementation(libs.navigation.compose)
+//    val composeBom = platform("androidx.compose:compose-bom:2023.10.01")
 
-    implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation(composeBom)
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+//    implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
+//    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+//    implementation("androidx.activity:activity-compose:1.6.1")
+//    implementation(composeBom)
+//    implementation("androidx.compose.material3:material3")
+//    implementation("androidx.compose.ui:ui-tooling-preview")
+//    implementation("androidx.navigation:navigation-compose:2.5.3")
 
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
-    ksp("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.android.compiler)
 
-    implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
-    ksp("androidx.room:room-compiler:${LibVersion.roomVersion}")
+//    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+//    implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
+//    ksp("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
+
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
+//    implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
+//    ksp("androidx.room:room-compiler:${LibVersion.roomVersion}")
 
     implementation(project(":flower-retrofit"))
 
-    implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation(libs.bundles.retrofit)
+    implementation(libs.okhttp.interceptor.logging)
+//    implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
+//    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
-    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
+    implementation(libs.moshi)
+    ksp(libs.moshi.kotlin.codegen)
+//    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
+//    ksp("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
 
-    implementation("com.google.accompanist:accompanist-swiperefresh:${LibVersion.accompanistVersion}")
+//    implementation("com.google.accompanist:accompanist-swiperefresh:${LibVersion.accompanistVersion}")
 
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation(libs.coil)
+    implementation(libs.accompanist.swiperefresh)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.4")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
-    // UI Tests
-    androidTestImplementation(composeBom)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    // Android Studio Preview support
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.bundles.compose.ui.debug)
 }
