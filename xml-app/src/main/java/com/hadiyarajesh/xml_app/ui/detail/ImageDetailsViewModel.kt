@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.xml_app.fragment.detail
+package com.hadiyarajesh.xml_app.ui.detail
 
 import androidx.lifecycle.ViewModel
 import com.hadiyarajesh.xml_app.database.entity.Image

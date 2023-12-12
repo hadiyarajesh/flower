@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.hadiyarajesh.xml_app.fragment.home.HomeScreenFragment">
+        tools:context="com.hadiyarajesh.xml_app.ui.home.HomeScreenFragment">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
-                tools:listitem="@layout/profile_item" />
+                tools:listitem="@layout/image_item" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout

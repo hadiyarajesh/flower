@@ -14,15 +14,13 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.xml_app.fragment.detail
+package com.hadiyarajesh.xml_app.ui.detail
 
-//import com.example.xml_app.fragment.ProfileDetailFragmentArgs
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,29 +39,24 @@ import com.hadiyarajesh.xml_app.database.entity.Image
 import com.hadiyarajesh.xml_app.databinding.FragmentImageDetailsBinding
 import com.hadiyarajesh.xml_app.util.LoadResourceFrom
 import com.hadiyarajesh.xml_app.util.UiState
+import com.hadiyarajesh.xml_app.util.debugLog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ImageDetailsFragment : Fragment() {
-
-    private val TAG = "ProfileDetailFragment"
-
     private val args: ImageDetailsFragmentArgs by navArgs()
-
     private val viewModel: ImageDetailsViewModel by viewModels()
-
     private lateinit var binding: FragmentImageDetailsBinding
-
-    private lateinit var profileImage: Image
+    private lateinit var image: Image
     private var isNetworkLoad: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_image_details, container, false)
         return binding.root
@@ -71,8 +64,8 @@ class ImageDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val profileId = args.profileId?.trim()?.toLong() ?: 0
-        getProfileInfo(profileId)
+        val imageId = args.imageId.trim().toLong()
+        getImageDetails(imageId)
         initClickListener()
     }
 
@@ -80,57 +73,58 @@ class ImageDetailsFragment : Fragment() {
         super.onResume()
         updateNetworkLoadBtnVisibility()
     }
+
     private fun initClickListener() {
-        binding.loadfromNetwork.setOnClickListener {
+        binding.loadFromNetwork.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     isNetworkLoad = true
-                    viewModel.getImage(profileImage.id.toLong(), loadFrom = LoadResourceFrom.Network)
+                    viewModel.getImage(
+                        image.id.toLong(),
+                        loadFrom = LoadResourceFrom.Network
+                    )
                 }
             }
         }
 
-        binding.profileURL.highlightColor = Color.BLUE
-        binding.profileURL?.setOnClickListener { profileURL ->
+        binding.imageUrl.highlightColor = Color.BLUE
+        binding.imageUrl.setOnClickListener { imageUrl ->
             try {
-                var openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("${profileURL.tag.toString()}")
+                val openURL = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(imageUrl.tag.toString())
+                }
                 startActivity(openURL)
-            } catch (exception: Exception) {
-                Log.d(TAG, " exception occured : $exception ")
+            } catch (e: Exception) {
+                debugLog("Something went wrong while opening image url", e)
             }
-
         }
     }
 
-    private fun getProfileInfo(profileId: Long) {
+    private fun getImageDetails(imageId: Long) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 isNetworkLoad = false
-                viewModel.getImage(profileId, loadFrom = LoadResourceFrom.Db)
+                viewModel.getImage(imageId, loadFrom = LoadResourceFrom.Db)
             }
         }
-        // progressBar
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.image.collectLatest { profileState ->
-                    when (profileState) {
+                viewModel.image.collectLatest { imageState ->
+                    when (imageState) {
                         is UiState.Loading -> {
                             showProgressBar()
                         }
 
                         is UiState.Success -> {
-                            profileImage = (profileState as UiState.Success).data
-                            updateProfileUI()
+                            image = imageState.data
+                            updateImageUI()
                         }
 
-                        UiState.Empty -> {
-                            showNoUserInfoFound(getString(R.string.no_details_found))
-                        }
+                        UiState.Empty -> {}
 
                         is UiState.Error -> {
-                            showNoUserInfoFound(getString(R.string.loading_error_msg))
+                            showNoUserInfoFound(getString(R.string.something_went_wrong))
                         }
                     }
                 }
@@ -140,13 +134,13 @@ class ImageDetailsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loadFrom.collectLatest { loadingFrom ->
-                    when(loadingFrom) {
+                    isNetworkLoad = when (loadingFrom) {
                         LoadResourceFrom.Db -> {
-                            isNetworkLoad = false
+                            false
                         }
 
                         LoadResourceFrom.Network -> {
-                            isNetworkLoad = true
+                            true
                         }
                     }
                     updateNetworkLoadBtnVisibility()
@@ -155,23 +149,23 @@ class ImageDetailsFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun updateProfileUI() {
+    private fun updateImageUI() {
         hideProgressBar()
 
-        profileImage?.let {
-            binding.profileImage.load(profileImage.downloadUrl) {
+        with(binding) {
+            wallpaperImage.load(image.downloadUrl) {
                 crossfade(300)
                 transformations(RoundedCornersTransformation(4f))
             }
-            //updateProfileUI()
-            binding.authorName.text = it.author
-            //lBinding.profileURL.setPaintFlags(lBinding.authorName.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
-            binding.profileURL.paint?.isUnderlineText = true
-            binding.profileURL.paint.underlineColor = Color.BLUE
-            binding.profileURL.text = it.url
-            binding.profileURL.tag = it.url
+            authorName.text = image.author
+            imageUrl.paint?.isUnderlineText = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                binding.imageUrl.paint.underlineColor = Color.BLUE
+            }
+            imageUrl.text = image.url
+            imageUrl.tag = image.url
         }
+
         updateNetworkLoadBtnVisibility()
     }
 
@@ -180,23 +174,27 @@ class ImageDetailsFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        binding.profileDetailScreen.visibility = View.GONE
-        binding.noInfoMsg.visibility = View.GONE
-        binding.progressBar.visibility = View.VISIBLE
+        with(binding) {
+            imageDetailsScreen.visibility = View.GONE
+            noInfoMsg.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
     }
 
     private fun hideProgressBar() {
-        binding.profileDetailScreen.visibility = View.VISIBLE
-        binding.noInfoMsg.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
+        with(binding) {
+            imageDetailsScreen.visibility = View.VISIBLE
+            noInfoMsg.visibility = View.GONE
+            progressBar.visibility = View.GONE
+        }
     }
 
     private fun showNoUserInfoFound(message: String) {
-        binding.profileDetailScreen.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
-        binding.tvErrMsg.text = message
-        binding.noInfoMsg.visibility = View.VISIBLE
+        with(binding) {
+            imageDetailsScreen.visibility = View.GONE
+            progressBar.visibility = View.GONE
+            tvErrMsg.text = message
+            noInfoMsg.visibility = View.VISIBLE
+        }
     }
-
-
 }

@@ -9,12 +9,12 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/profileDetailScreen"
+            android:id="@+id/imageDetailsScreen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context="com.hadiyarajesh.xml_app.fragment.detail.ImageDetailsFragment"
-            android:visibility="visible">
+            android:visibility="visible"
+            tools:context="com.hadiyarajesh.xml_app.ui.detail.ImageDetailsFragment">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -24,11 +24,10 @@
                 app:cardPreventCornerOverlap="false">
 
                 <ImageView
-                    android:id="@+id/profileImage"
+                    android:id="@+id/wallpaperImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:contentDescription="profile"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_launcher_background" />
             </com.google.android.material.card.MaterialCardView>
@@ -69,7 +68,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/profileTitle"
+                    android:id="@+id/url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -79,16 +78,17 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/profileURL"
+                    android:id="@+id/imageUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_horizontal"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
-                    android:linksClickable="true"
-                    android:text="@string/profile_url"
-                    android:tag="Profile URL"
                     android:clickable="true"
+                    android:focusable="true"
+                    android:linksClickable="true"
+                    android:tag="Image URL"
+                    android:text="@string/image_url"
                     android:textColor="@color/purple_700"
                     android:textColorLink="@color/purple_700"
                     android:textSize="20sp"
@@ -111,12 +111,12 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="@string/db_profile_message"
+                    android:text="@string/data_fetched_from_local_db"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/loadfromNetwork"
+                    android:id="@+id/loadFromNetwork"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -153,13 +153,14 @@
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone">
+
             <TextView
                 android:id="@+id/tvErrMsg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@string/no_details_found"
                 android:gravity="center_horizontal"
+                android:text="@string/swipe_down_to_refresh"
                 android:textSize="28sp"
                 android:textStyle="bold" />
         </LinearLayout>

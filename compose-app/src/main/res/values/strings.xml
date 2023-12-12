@@ -2,7 +2,7 @@
     <string name="app_name">FlowerSample</string>
     <string name="back">Back</string>
     <string name="retry">Retry</string>
-    <string name="data_fetched_from_local_db">This data is fetched from local database</string>
+    <string name="data_fetched_from_local_db">This data is retrieved from local database</string>
     <string name="load_from_network">Load from network</string>
     <string name="author">Author</string>
     <string name="url">URL</string>

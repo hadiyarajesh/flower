@@ -16,12 +16,10 @@
 
 package com.hadiyarajesh.xml_app.util
 
-sealed class UiState<out T> {
-    data object Empty : UiState<Nothing>()
+import android.util.Log
 
-    data object Loading : UiState<Nothing>()
+const val TAG = "FlowerSample"
 
-    data class Success<out T>(val data: T) : UiState<T>()
-
-    data class Error(val data: String?) : UiState<Nothing>()
+fun debugLog(msg: String, tr: Throwable? = null) {
+    Log.d(TAG, msg, tr)
 }

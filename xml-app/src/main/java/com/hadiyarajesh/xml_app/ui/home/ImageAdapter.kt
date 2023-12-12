@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.xml_app.fragment
+package com.hadiyarajesh.xml_app.ui.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -27,14 +27,12 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.hadiyarajesh.xml_app.database.entity.Image
-import com.hadiyarajesh.xml_app.databinding.ProfileItemBinding
-import com.hadiyarajesh.xml_app.fragment.home.HomeScreenFragmentDirections
+import com.hadiyarajesh.xml_app.databinding.ImageItemBinding
 
-
-class ImageAdapter : ListAdapter<Image, ImageAdapter.ImageViewHolder>(ProfileDiffCallback()) {
+class ImageAdapter : ListAdapter<Image, ImageAdapter.ImageViewHolder>(ImageDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder(
-            ProfileItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ImageItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -44,35 +42,35 @@ class ImageAdapter : ListAdapter<Image, ImageAdapter.ImageViewHolder>(ProfileDif
     }
 
     class ImageViewHolder(
-        private val binding: ProfileItemBinding
+        private val binding: ImageItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.setClickListener { view ->
-                binding.profile?.let { profile ->
-                    navigateToProfileDetails(profile, view)
+                binding.image?.let { image ->
+                    navigateToImageDetails(image, view)
                 }
             }
         }
 
-        private fun navigateToProfileDetails(profile: Image, view: View) {
+        private fun navigateToImageDetails(image: Image, view: View) {
             val direction =
-                HomeScreenFragmentDirections.actionProfileListFragmentToProfileDetailFragment(
-                    profileId = profile.id
+                HomeScreenFragmentDirections.actionImageListFragmentToImageDetailsFragment(
+                    imageId = image.id
                 )
             view.findNavController().navigate(direction)
         }
 
         fun bind(item: Image) {
             binding.apply {
-                profile = item
+                image = item
 
                 val circularProgressDrawable = CircularProgressDrawable(itemView.context)
                 circularProgressDrawable.strokeWidth = 8f
                 circularProgressDrawable.centerRadius = 30f
                 circularProgressDrawable.start()
 
-                binding.profileImage.load(item.downloadUrl) {
+                binding.wallpaperImage.load(item.downloadUrl) {
                     crossfade(300)
                     placeholder(circularProgressDrawable)
                     transformations(RoundedCornersTransformation(4f))
@@ -83,7 +81,7 @@ class ImageAdapter : ListAdapter<Image, ImageAdapter.ImageViewHolder>(ProfileDif
     }
 }
 
-private class ProfileDiffCallback : DiffUtil.ItemCallback<Image>() {
+private class ImageDiffCallback : DiffUtil.ItemCallback<Image>() {
     override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
         return oldItem.id == newItem.id
     }

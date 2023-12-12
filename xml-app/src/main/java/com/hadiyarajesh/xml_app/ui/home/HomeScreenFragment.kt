@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.xml_app.fragment.home
+package com.hadiyarajesh.xml_app.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,7 +28,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.hadiyarajesh.xml_app.R
 import com.hadiyarajesh.xml_app.databinding.FragmentImageListBinding
-import com.hadiyarajesh.xml_app.fragment.ImageAdapter
 import com.hadiyarajesh.xml_app.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -36,18 +35,15 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeScreenFragment : Fragment() {
-
-    private val viewModel: HomeScreenViewModel by viewModels()
-
     private lateinit var binding: FragmentImageListBinding
-
-    lateinit var imageAdapter: ImageAdapter
+    private lateinit var imageAdapter: ImageAdapter
+    private val viewModel: HomeScreenViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_image_list, container, false)
         return binding.root
@@ -57,10 +53,13 @@ class HomeScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpRecyclerView()
-
         setupSwipeRefreshListener()
-
         fetchData()
+    }
+
+    private fun setUpRecyclerView() {
+        imageAdapter = ImageAdapter()
+        binding.recyclerView.adapter = imageAdapter
     }
 
     private fun setupSwipeRefreshListener() {
@@ -73,27 +72,22 @@ class HomeScreenFragment : Fragment() {
     private fun fetchData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.images.collectLatest { profileListState ->
-                    when (profileListState) {
+                viewModel.images.collectLatest { imagesState ->
+                    when (imagesState) {
                         is UiState.Loading -> {
                             showProgressBar()
                         }
 
                         is UiState.Success -> {
                             hideProgressBar()
-                            profileListState.data?.let {
-                                imageAdapter.submitList(it)
-                            }
-                        }
-
-                        UiState.Empty -> {
-                            showNoUserInfoFound("") // initial state is set to empty.
+                            imageAdapter.submitList(imagesState.data)
                         }
 
                         is UiState.Error -> {
-                            showNoUserInfoFound(getString(R.string.loading_error_msg))
+                            showErrorUi(getString(R.string.something_went_wrong))
                         }
 
+                        is UiState.Empty -> {}
                     }
                 }
             }
@@ -109,26 +103,27 @@ class HomeScreenFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        binding.swipeRefreshLayout.visibility = View.GONE
-        binding.noInfoMsg.visibility = View.GONE
-        binding.progressBar.visibility = View.VISIBLE
+        with(binding) {
+            swipeRefreshLayout.visibility = View.GONE
+            noInfoMsg.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
     }
 
     private fun hideProgressBar() {
-        binding.swipeRefreshLayout.visibility = View.VISIBLE
-        binding.noInfoMsg.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
+        with(binding) {
+            swipeRefreshLayout.visibility = View.VISIBLE
+            noInfoMsg.visibility = View.GONE
+            progressBar.visibility = View.GONE
+        }
     }
 
-    private fun showNoUserInfoFound(message: String) {
-        binding.swipeRefreshLayout.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
-        binding.tvErrMsg.text = message
-        binding.noInfoMsg.visibility = View.VISIBLE
-    }
-
-    private fun setUpRecyclerView() {
-        imageAdapter = ImageAdapter()
-        binding.recyclerView.adapter = imageAdapter
+    private fun showErrorUi(message: String) {
+        with(binding) {
+            swipeRefreshLayout.visibility = View.GONE
+            progressBar.visibility = View.GONE
+            tvErrMsg.text = message
+            noInfoMsg.visibility = View.VISIBLE
+        }
     }
 }

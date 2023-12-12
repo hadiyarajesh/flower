@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.xml_app.fragment.home
+package com.hadiyarajesh.xml_app.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
