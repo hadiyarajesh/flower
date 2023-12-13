@@ -10,12 +10,8 @@ plugins {
 }
 
 buildscript {
-    val coreKtxVersion by extra("1.10.1")
-    val hiltVersion by extra("2.48")
-    val navSafeArgsVersion by extra("2.5.3")
-
     dependencies {
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navSafeArgsVersion")
-        classpath("com.vanniktech:gradle-maven-publish-plugin:0.22.0")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.5")
+        classpath(libs.gradle.maven.publish.plugin)
     }
 }

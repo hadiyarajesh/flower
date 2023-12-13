@@ -43,5 +43,5 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideImageDao(db: ImageDatabase): ImageDao = db.imageDao
+    fun provideImageDao(db: ImageDatabase): ImageDao = db.imageDao()
 }

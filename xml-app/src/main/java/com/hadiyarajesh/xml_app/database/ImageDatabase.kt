@@ -27,5 +27,5 @@ import com.hadiyarajesh.xml_app.database.dao.ImageDao
     entities = [Image::class]
 )
 abstract class ImageDatabase : RoomDatabase() {
-    abstract val imageDao: ImageDao
+    abstract fun imageDao(): ImageDao
 }

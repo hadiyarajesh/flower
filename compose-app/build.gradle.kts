@@ -53,7 +53,7 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = LibVersion.composeCompilerVersion
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     packagingOptions {
         resources {
@@ -62,15 +62,9 @@ android {
     }
 }
 
-object LibVersion {
-    const val composeCompilerVersion = "1.5.3"
-    const val roomVersion = "2.6.0"
-    const val retrofitVersion = "2.9.0"
-    const val moshiVersion = "1.14.0"
-    const val accompanistVersion = "0.27.0"
-}
-
 dependencies {
+    implementation(project(":flower-retrofit"))
+
     implementation(libs.core.ktx)
     implementation(libs.activity.compose)
     implementation(libs.bundles.lifecycle)
@@ -78,42 +72,19 @@ dependencies {
     implementation(libs.bundles.compose.ui.impl)
     implementation(libs.material3)
     implementation(libs.navigation.compose)
-//    val composeBom = platform("androidx.compose:compose-bom:2023.10.01")
-
-//    implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
-//    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-//    implementation("androidx.activity:activity-compose:1.6.1")
-//    implementation(composeBom)
-//    implementation("androidx.compose.material3:material3")
-//    implementation("androidx.compose.ui:ui-tooling-preview")
-//    implementation("androidx.navigation:navigation-compose:2.5.3")
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
 
-//    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-//    implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
-//    ksp("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
-
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
-//    implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
-//    ksp("androidx.room:room-compiler:${LibVersion.roomVersion}")
-
-    implementation(project(":flower-retrofit"))
 
     implementation(libs.bundles.retrofit)
     implementation(libs.okhttp.interceptor.logging)
-//    implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
-//    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     implementation(libs.moshi)
     ksp(libs.moshi.kotlin.codegen)
-//    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
-//    ksp("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
-
-//    implementation("com.google.accompanist:accompanist-swiperefresh:${LibVersion.accompanistVersion}")
 
     implementation(libs.coil)
     implementation(libs.accompanist.swiperefresh)
@@ -124,4 +95,12 @@ dependencies {
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.bundles.compose.ui.debug)
+}
+
+// Pass options to Room ksp processor
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+    arg("room.expandProjection", "true")
+    arg("room.generateKotlin", "true")
 }

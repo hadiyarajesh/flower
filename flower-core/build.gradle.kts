@@ -1,23 +1,23 @@
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
-    kotlin("multiplatform")
-    id("com.android.library")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.gradleMavenPublish)
     id("maven-publish")
     id("signing")
-    id("com.vanniktech.maven.publish")
+    kotlin("multiplatform")
 }
 
 group = "io.github.hadiyarajesh.flower-core"
-version = "3.0.0"
+version = "3.3.0"
 
 android {
     namespace = "com.hadiyarajesh.flower_core"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -67,7 +67,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                api(libs.kotlinx.coroutines.core)
             }
         }
         val linuxX64Main by getting
