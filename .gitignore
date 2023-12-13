@@ -37,3 +37,5 @@ local.properties
 /projectFilesBackup*
 android_studio_ws
 android_studio_ws/*
+/compose-app/schemas/
+/xml-app/schemas/

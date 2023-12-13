@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2022 Rajesh Hadiya
+ *  Copyright (C) 2023 Rajesh Hadiya
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.compose_app.di
+package com.hadiyarajesh.xml_app.di
 
 import android.content.Context
 import androidx.room.Room
-import com.hadiyarajesh.compose_app.R
-import com.hadiyarajesh.compose_app.database.ImageDatabase
-import com.hadiyarajesh.compose_app.database.dao.ImageDao
+import com.hadiyarajesh.xml_app.R
+import com.hadiyarajesh.xml_app.database.ImageDatabase
+import com.hadiyarajesh.xml_app.database.dao.ImageDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,7 +33,7 @@ import javax.inject.Singleton
 class DatabaseModule {
     @Provides
     @Singleton
-    fun provideFlowerDatabase(@ApplicationContext context: Context): ImageDatabase {
+    fun provideImageDatabase(@ApplicationContext context: Context): ImageDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
             ImageDatabase::class.java,

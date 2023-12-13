@@ -1,18 +1,18 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("dagger.hilt.android.plugin")
-    kotlin("kapt")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.hadiyarajesh.compose_app"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.hadiyarajesh.compose_app"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = 24
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -42,17 +42,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = LibVersion.composeCompilerVersion
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     packagingOptions {
         resources {
@@ -61,51 +62,45 @@ android {
     }
 }
 
-object LibVersion {
-    const val composeCompilerVersion = "1.3.2"
-    const val roomVersion = "2.4.2"
-    const val retrofitVersion = "2.9.0"
-    const val moshiVersion = "1.13.0"
-    const val accompanistVersion = "0.27.0"
-}
-
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2022.10.00")
-
-    implementation("androidx.core:core-ktx:${rootProject.extra["coreKtxVersion"]}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation(composeBom)
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation("com.google.dagger:hilt-android:${rootProject.extra["hiltVersion"]}")
-    kapt("com.google.dagger:hilt-android-compiler:${rootProject.extra["hiltVersion"]}")
-
-    implementation("androidx.room:room-ktx:${LibVersion.roomVersion}")
-    kapt("androidx.room:room-compiler:${LibVersion.roomVersion}")
-
     implementation(project(":flower-retrofit"))
 
-    implementation("com.squareup.retrofit2:converter-moshi:${LibVersion.retrofitVersion}")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation(libs.core.ktx)
+    implementation(libs.activity.compose)
+    implementation(libs.bundles.lifecycle)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose.ui.impl)
+    implementation(libs.material3)
+    implementation(libs.navigation.compose)
 
-    implementation("com.squareup.moshi:moshi:${LibVersion.moshiVersion}")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:${LibVersion.moshiVersion}")
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.android.compiler)
 
-    implementation("com.google.accompanist:accompanist-swiperefresh:${LibVersion.accompanistVersion}")
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
 
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation(libs.bundles.retrofit)
+    implementation(libs.okhttp.interceptor.logging)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.4")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
-    // UI Tests
-    androidTestImplementation(composeBom)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    // Android Studio Preview support
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation(libs.moshi)
+    ksp(libs.moshi.kotlin.codegen)
+
+    implementation(libs.coil)
+    implementation(libs.accompanist.swiperefresh)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.bundles.compose.ui.debug)
+}
+
+// Pass options to Room ksp processor
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+    arg("room.expandProjection", "true")
+    arg("room.generateKotlin", "true")
 }

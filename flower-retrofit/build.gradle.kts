@@ -1,23 +1,23 @@
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.gradleMavenPublish)
     id("maven-publish")
     id("signing")
-    id("com.vanniktech.maven.publish")
 }
 
 group = "io.github.hadiyarajesh.flower-retrofit"
-version = "3.0.0"
+version = "3.3.0"
 
 android {
     namespace = "com.hadiyarajesh.flower_retrofit"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         buildConfig = false
@@ -46,8 +46,7 @@ android {
 
 dependencies {
     api(project(":flower-core"))
-
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit)
 }
 
 tasks.register<Jar>("androidSourcesJar") {

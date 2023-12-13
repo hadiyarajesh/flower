@@ -1,23 +1,23 @@
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
-    kotlin("multiplatform")
-    id("com.android.library")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.gradleMavenPublish)
     id("maven-publish")
     id("signing")
-    id("com.vanniktech.maven.publish")
+    kotlin("multiplatform")
 }
 
 group = "io.github.hadiyarajesh.flower-ktorfit"
-version = "3.0.0"
+version = "3.3.0"
 
 android {
     namespace = "com.hadiyarajesh.flower_ktorfit"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -33,8 +33,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         buildConfig = false
@@ -68,7 +68,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":flower-core"))
-                api("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta16")
+                api(libs.ktorfit.lib)
             }
         }
         val jvmMain by getting

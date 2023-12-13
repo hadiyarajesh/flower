@@ -60,9 +60,3 @@ data class ApiErrorResponse<T>(
     val errorMessage: String,
     val httpStatusCode: Int
 ) : ApiResponse<T>()
-
-//@JvmInline
-//value class ErrorMessage(val message: String)
-//
-//@JvmInline
-//value class HttpStatusCode(val code: Int)
