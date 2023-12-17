@@ -17,11 +17,11 @@
 package com.hadiyarajesh.xml_app.ui.detail
 
 import androidx.lifecycle.ViewModel
+import com.hadiyarajesh.flower_core.Resource
 import com.hadiyarajesh.xml_app.database.entity.Image
 import com.hadiyarajesh.xml_app.repository.ImageRepository
 import com.hadiyarajesh.xml_app.util.LoadResourceFrom
 import com.hadiyarajesh.xml_app.util.UiState
-import com.hadiyarajesh.flower_core.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

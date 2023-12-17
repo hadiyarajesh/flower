@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2022 Rajesh Hadiya
+ *  Copyright (C) 2023 Rajesh Hadiya
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.compose_app.ui.navigation
+package com.hadiyarajesh.compose_app.navigation
 
 import androidx.annotation.DrawableRes
 import com.hadiyarajesh.compose_app.R
@@ -23,12 +23,12 @@ sealed class Screens(
     val route: String,
     @DrawableRes val icon: Int
 ) {
-    object Home : Screens(
+    data object Home : Screens(
         route = "Home",
         icon = R.drawable.ic_outlined_home
     )
 
-    object ImageDetails : Screens(
+    data object ImageDetails : Screens(
         route = "ImageDetails",
         icon = R.drawable.ic_outlined_image
     )

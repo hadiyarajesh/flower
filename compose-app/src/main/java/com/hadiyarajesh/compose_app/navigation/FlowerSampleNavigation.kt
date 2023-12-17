@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2022 Rajesh Hadiya
+ *  Copyright (C) 2023 Rajesh Hadiya
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.compose_app.ui.navigation
+package com.hadiyarajesh.compose_app.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
