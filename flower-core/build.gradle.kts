@@ -42,7 +42,7 @@ android {
 }
 
 kotlin {
-    android {
+    androidTarget {
         publishLibraryVariants("release")
     }
     macosX64()
