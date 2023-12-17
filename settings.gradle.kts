@@ -16,7 +16,7 @@ dependencyResolutionManagement {
 rootProject.name = "flower"
 
 include(":flower-core")
-include(":compose-app")
 include(":flower-retrofit")
 include("flower-ktorfit")
+include(":compose-app")
 include(":xml-app")
