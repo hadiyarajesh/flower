@@ -53,10 +53,10 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.hadiyarajesh.compose_app.R
 import com.hadiyarajesh.compose_app.database.entity.Image
+import com.hadiyarajesh.compose_app.navigation.Screens
 import com.hadiyarajesh.compose_app.ui.component.LoadingProgressBar
 import com.hadiyarajesh.compose_app.ui.component.RetryItem
 import com.hadiyarajesh.compose_app.ui.component.SubComposeImageItem
-import com.hadiyarajesh.compose_app.ui.navigation.Screens
 import com.hadiyarajesh.compose_app.utility.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2022 Rajesh Hadiya
+ *  Copyright (C) 2023 Rajesh Hadiya
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,17 +14,18 @@
  *   limitations under the License.
  */
 
-package com.hadiyarajesh.compose_app.ui
+package com.hadiyarajesh.xml_app.di
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.rememberNavController
-import com.hadiyarajesh.compose_app.navigation.FlowerSampleNavigation
-import com.hadiyarajesh.compose_app.ui.theme.FlowerSampleTheme
+import com.hadiyarajesh.xml_app.repository.ImageRepository
+import com.hadiyarajesh.xml_app.repository.ImageRepositoryImpl
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 
-@Composable
-fun FlowerSampleApp() {
-    FlowerSampleTheme {
-        val navController = rememberNavController()
-        FlowerSampleNavigation(navController = navController)
-    }
+@Module
+@InstallIn(ViewModelComponent::class)
+abstract class RepositoryModule {
+    @Binds
+    abstract fun bindImageRepository(imageRepositoryImpl: ImageRepositoryImpl): ImageRepository
 }
